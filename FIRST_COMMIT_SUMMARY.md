@@ -3,7 +3,7 @@
 This commit establishes a single canonical PsyNova repository root and preserves operational + recovery history.
 
 Canonical root for active development: `/home/shane/PsyNova`.
-Legacy preserved copy: `/home/shane/Desktop/Projects/PsyNova`.
+Former Desktop working copy archived at: `/home/shane/Desktop/Projects/PsyNova.LEGACY_DESKTOP_20260423` (historical snapshot; not the active Git clone).
 
 Included:
 - Live runtime app under `app/`
