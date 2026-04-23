@@ -31,3 +31,6 @@ __pycache__/
 *.dump
 tmp/
 temp/
+
+# Packaged AI Studio bundle (folder is tracked; zip is local-only)
+/AI_STUDIO_RECOVERY_BUNDLE.zip
