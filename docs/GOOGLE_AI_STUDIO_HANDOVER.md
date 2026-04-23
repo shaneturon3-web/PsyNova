@@ -21,9 +21,9 @@ Mockup virtual psychology platform (Québec-oriented). NestJS REST API (`/api`),
 
 ---
 
-## Relocation note (2026-04-23)
+## Canonical path
 
-Active development moved from `/home/shane/Desktop/Projects/PsyNova` to **`/home/shane/PsyNova`**. An archived duplicate may exist under `Desktop/Projects/PsyNova.LEGACY_DESKTOP_20260423`. Prefer this clone only.
+Use **`/home/shane/PsyNova`** as the only Git working tree for active work. Older Desktop `Projects/PsyNova` paths are obsolete and must not be used in runbooks or tooling.
 
 ---
 

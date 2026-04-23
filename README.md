@@ -1,8 +1,10 @@
 # PsyNova Canonical Repository
 
-This is the canonical consolidated PsyNova root at `/home/shane/PsyNova`.
+This is the canonical consolidated PsyNova root at **`/home/shane/PsyNova`**. Treat this path as the only active clone; the former Desktop location under `Projects/PsyNova` is obsolete.
 
-Former Desktop duplicate (archived after relocation; do not use for active work): `/home/shane/Desktop/Projects/PsyNova.LEGACY_DESKTOP_20260423`.
+## External AI handover
+
+- [`docs/GOOGLE_AI_STUDIO_HANDOVER.md`](docs/GOOGLE_AI_STUDIO_HANDOVER.md) — repo root `backend/` is a symlink to `app/backend`.
 
 ## Layout
 - `app/` live operational codebase copied from `PsyNova Virtual Clinic/virtual-psychology-clinic`
@@ -14,9 +16,6 @@ Former Desktop duplicate (archived after relocation; do not use for active work)
 - `registry/` DB alignment/fix execution traces
 - `scripts/` root-level consolidation helpers
 - `archive/` retained legacy artifacts when classification is uncertain
-
-## External AI handover
-- See [`docs/GOOGLE_AI_STUDIO_HANDOVER.md`](docs/GOOGLE_AI_STUDIO_HANDOVER.md). Repo root `backend/` symlinks to `app/backend`.
 
 ## Running app
 - Backend: `cd app/backend && npm run start:dev`

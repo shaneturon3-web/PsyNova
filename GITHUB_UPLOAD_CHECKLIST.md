@@ -1,7 +1,7 @@
 # GitHub Upload Checklist
 
-- [x] Canonical root created at `/home/shane/PsyNova`
-- [x] Legacy Desktop copy archived at `/home/shane/Desktop/Projects/PsyNova.LEGACY_DESKTOP_20260423` after canonical move to `/home/shane/PsyNova`
+- [x] Canonical root at `/home/shane/PsyNova` (only path for active development)
+- [x] Obsolete Desktop `Projects/PsyNova` location retired; do not reference in docs or scripts
 - [x] Live app copied to `app/`
 - [x] Backend build verified from canonical root
 - [x] Stray PsyNova directories inventoried and classified
