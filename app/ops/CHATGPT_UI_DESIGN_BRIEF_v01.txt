@@ -1,0 +1,64 @@
+================================================================================
+BRIEF PARA CHATGPT — PsyNova Virtual Clinic — UI/UX revisable por humanos
+================================================================================
+Pega este bloque completo en ChatGPT. Objetivo: que diseñe (no implemente código) el
+resto del producto como experiencia navegable para revisión humana, con funciones
+aún no construidas visibles pero INACTIVAS (estado deshabilitado / gris / no clic).
+
+CONTEXTO TÉCNICO (estado real del repo, 2026-04)
+--------------------------------------------------------------------------------
+- Proyecto: PsyNova Virtual Clinic (Montreal, QC). Tag obligatorio en mockups:
+  [MOCKUP PURPOSE ONLY - NOT REAL DATA]
+- Stack local: Docker (Postgres, NestJS backend :3000, WordPress :8080, MariaDB),
+  frontend Vite placeholder :5173 (enlaces a health y Swagger; no es producto final).
+- Backend NestJS existente (parcial): auth con hash de contraseña, tokens con
+  expiración, refresh/revoke, GET /api/auth/me; citas (appointments) protegidas por
+  token; health con ping a DB si persistencia activa; tests e2e en repo.
+- WordPress: contenedor + bootstrap de plugins; no sustituye aún un portal
+  paciente unificado con el API.
+- Eliminado por decisión de operador: integración Notion (scripts y docs).
+
+LO QUE FALTA PARA “PRODUCTO COMPLETO” (README / visión)
+--------------------------------------------------------------------------------
+- Portal paciente, reservas/billing end-to-end, telemedicina, EHR, asistente IA
+  multilingüe, facturación/seguros, WCAG 2.1, hardening compliance (Ley 25 Québec,
+  PIPEDA, alineación HIPAA). La mayoría no está implementada en UI ni flujos.
+
+FALLOS / FICCIONES REGISTRADAS (sesiones previas; mitigaciones donde aplica)
+--------------------------------------------------------------------------------
+- Entorno sin Node/npm al inicio → bloqueo de tests hasta nvm/LTS.
+- Import supertest CJS → corregido a `import * as request from 'supertest'`.
+- Docker socket sin permiso → sudo o grupo docker.
+- `rg` ausente en host → scripts usan sed/awk.
+- Artefactos de pegado en terminal (^[[200~) mezclando comandos.
+- Validación runtime de algunos incrementos: pendiente confirmación local si no se
+  pegó salida.
+
+PEDIDO DE DISEÑO (ENTREGABLE QUE QUIERO DE TI, CHATGPT)
+--------------------------------------------------------------------------------
+1) Propón una arquitectura de información (mapa del sitio / app) que unifique:
+   - Superficie pública (marketing mínimo)
+   - Acceso paciente / clínico / admin
+   - Flujos: registro, login, agenda, sesión (placeholder tele), mensajes, facturación
+     (placeholder), registros clínicos (placeholder), ajustes, ayuda/legal
+2) Para cada pantalla o vista, indica:
+   - Qué está “conectado” hoy (solo lo listado arriba en backend/API)
+   - Qué debe mostrarse GRIS / disabled / con tooltip “Próximamente” o
+     “No conectado aún” sin romper la navegación
+3) Reglas de estado visual unificadas (colores, iconos, copy corto EN/FR donde aplique)
+   para que un revisor humano entienda qué es real y qué es cascarón.
+4) Lista priorizada de implementación en fases (Fase A: shell navegable + gris;
+   Fase B: conectar API existente; Fase C: nuevos endpoints).
+5) Checklist de accesibilidad mínima (contraste, foco, etiquetas) aunque parte
+   esté deshabilitada.
+6) Salida en un solo documento continuo (secciones numeradas), listo para que otro
+   agente (Cursor) implemente siguiendo el mismo orden.
+
+RESTRICCIONES
+--------------------------------------------------------------------------------
+- No inventar endpoints existentes: si no están en el backend, márcalos como gris.
+- No incluir datos reales de pacientes ni PII de ejemplo identificable.
+- Mantener tono clínico/profesional; sin lenguaje dramático.
+
+FIN DEL BRIEF
+================================================================================

@@ -1,0 +1,177 @@
+{
+  "generated_at": "2026-04-11 17:14:37",
+  "output_folder": "/home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436",
+  "best_matches": [
+    {
+      "target": "SHANE Profiles.README",
+      "source": "/home/shane/Desktop/PsyNova Virtual Clinic/SHANE Profiles.README",
+      "copied_to": "/home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/SHANE Profiles.README",
+      "score": 70
+    },
+    {
+      "target": ".cursorrules",
+      "source": "/home/shane/Desktop/PsyNova Virtual Clinic/.cursorrules",
+      "copied_to": "/home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/.cursorrules",
+      "score": 70
+    },
+    {
+      "target": "README.md",
+      "source": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/README.md",
+      "copied_to": "/home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/README.md",
+      "score": 135
+    },
+    {
+      "target": "docker-compose.yml",
+      "source": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/docker-compose.yml",
+      "copied_to": "/home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/docker-compose.yml",
+      "score": 130
+    },
+    {
+      "target": "main.ts",
+      "source": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/backend/src/main.ts",
+      "copied_to": "/home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/main.ts",
+      "score": 190
+    },
+    {
+      "target": "PORT_3000_POLICY.md",
+      "source": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/ops/PORT_3000_POLICY.md",
+      "copied_to": "/home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/PORT_3000_POLICY.md",
+      "score": 180
+    },
+    {
+      "target": "session_bootstrap.sh",
+      "source": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/ops/session_bootstrap.sh",
+      "copied_to": "/home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/session_bootstrap.sh",
+      "score": 180
+    },
+    {
+      "target": "lunch_autopilot.sh",
+      "source": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/ops/lunch_autopilot.sh",
+      "copied_to": "/home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/lunch_autopilot.sh",
+      "score": 180
+    }
+  ],
+  "all_matches": [
+    {
+      "target": "README.md",
+      "path": "/home/shane/.nvm/README.md",
+      "score": 5
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/.nvm/versions/node/v24.14.1/README.md",
+      "score": 5
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/Playground/README.md",
+      "score": 5
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/Playground/NOVELLA_PROJECT/README.md",
+      "score": 5
+    },
+    {
+      "target": ".cursorrules",
+      "path": "/home/shane/PROJECTS/PSYNOVA/.cursorrules",
+      "score": 50
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/REPOSITORIO_VERDAD_MICHIGAN/Playground/README.md",
+      "score": 5
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/REPOSITORIO_VERDAD_MICHIGAN/Playground/Caso_Michigan_1_Intento_Fallido/Caso_Michigan_6_Intento_Fallido/share/pipx/venvs/inkcut/lib/python3.12/site-packages/debugpy/_vendored/pydevd/pydevd_plugins/extensions/README.md",
+      "score": 5
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/REPOSITORIO_VERDAD_MICHIGAN/Playground/Caso_Michigan_1_Intento_Fallido/Caso_Michigan_6_Intento_Fallido/share/pipx/venvs/inkcut/lib/python3.12/site-packages/zmq/backend/cffi/README.md",
+      "score": 5
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/REPOSITORIO_VERDAD_MICHIGAN/Playground/Caso_Michigan_1_Intento_Fallido/Caso_Michigan_6_Intento_Fallido/share/pipx/venvs/openai-whisper/lib/python3.12/site-packages/torchgen/packaged/autograd/README.md",
+      "score": 5
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/REPOSITORIO_VERDAD_MICHIGAN/Playground/Caso_Michigan_1_Intento_Fallido/Caso_Michigan_6_Intento_Fallido/share/pipx/venvs/openai-whisper/lib/python3.12/site-packages/cuda/pathfinder/README.md",
+      "score": 5
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/REPOSITORIO_VERDAD_MICHIGAN/Playground/Caso_Michigan_1_Intento_Fallido/Caso_Michigan_27_Intento_Fallido/inkscape/extensions/README.md",
+      "score": 5
+    },
+    {
+      "target": ".cursorrules",
+      "path": "/home/shane/REPOSITORIO_VERDAD_MICHIGAN/Playground/C.DEFENSA_MICHIGAN/.cursorrules",
+      "score": 0
+    },
+    {
+      "target": "SHANE Profiles.README",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/SHANE Profiles.README",
+      "score": 70
+    },
+    {
+      "target": ".cursorrules",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/.cursorrules",
+      "score": 70
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/psynova/README.md",
+      "score": 75
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/analista-financiero-clinica-virtual/README.md",
+      "score": 75
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/README.md",
+      "score": 135
+    },
+    {
+      "target": "docker-compose.yml",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/docker-compose.yml",
+      "score": 130
+    },
+    {
+      "target": "session_bootstrap.sh",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/ops/session_bootstrap.sh",
+      "score": 180
+    },
+    {
+      "target": "PORT_3000_POLICY.md",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/ops/PORT_3000_POLICY.md",
+      "score": 180
+    },
+    {
+      "target": "lunch_autopilot.sh",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/ops/lunch_autopilot.sh",
+      "score": 180
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/tools/benchmark-armyknife/README.md",
+      "score": 135
+    },
+    {
+      "target": "README.md",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/tools/toolbox-cursor/README.md",
+      "score": 135
+    },
+    {
+      "target": "main.ts",
+      "path": "/home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/backend/src/main.ts",
+      "score": 190
+    }
+  ],
+  "missing": []
+}

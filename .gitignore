@@ -1,0 +1,33 @@
+# Node
+node_modules/
+
+# Builds and caches
+dist/
+build/
+coverage/
+.next/
+.cache/
+
+# Logs
+*.log
+logs/
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Python caches
+__pycache__/
+*.pyc
+
+# IDE/system
+.DS_Store
+.vscode/
+.cursor/
+
+# Temporary exports and dumps
+*.sql.gz
+*.dump
+tmp/
+temp/

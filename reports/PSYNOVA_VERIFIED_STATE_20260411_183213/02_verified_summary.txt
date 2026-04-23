@@ -1,0 +1,21 @@
+# VERIFIED_STATE
+- cwd: /home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic
+- report_dir: /home/shane/Desktop/PSYNOVA_VERIFIED_STATE_20260411_183213
+- packet-confirmed prior state: backend health had been healthy before, but deployment safety not established
+- current port 3000 raw evidence captured in 01_system_check.txt
+
+# BLOCKERS
+- Local process appears to be runtime authority candidate
+- Missing expected files detected
+
+# SAFE_NEXT_ACTION
+- Inspect local dev start scripts and confirm local-only path
+
+# EXACT_COMMANDS_TO_RUN
+sed -n '1,220p' docker-compose.yml
+sed -n '1,220p' README.md
+sed -n '1,220p' ops/PORT_3000_POLICY.md
+if command -v docker >/dev/null 2>&1; then docker compose ps; fi
+if command -v docker >/dev/null 2>&1; then docker compose logs --tail=120 backend; fi
+ss -ltnp '( sport = :3000 )'
+ps -ef | grep -E 'node|nest' | grep -v grep

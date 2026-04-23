@@ -1,0 +1,63 @@
+================================================================================
+BRIEF FOR CHATGPT — Port 3000 conflict (EADDRINUSE) — request persistent fix
+================================================================================
+Paste this entire block into ChatGPT. Project: PsyNova Virtual Clinic (Linux host).
+
+CONTEXT
+--------------------------------------------------------------------------------
+- Stack: NestJS backend listens on 0.0.0.0:3000 (PORT env, default 3000).
+- Docker Compose maps the same host port: backend service uses "3000:3000"
+  (container name often: psynova-backend).
+- Developers also run locally: `cd backend && npm run start:dev` (nest --watch).
+
+OBSERVED ISSUE
+--------------------------------------------------------------------------------
+- Error: `listen EADDRINUSE: address already in use 0.0.0.0:3000`
+- Nest logs show routes mapped, then immediate failure to bind — a second process
+  (or Docker-published service) already owns :3000.
+- Manual `fuser -k 3000/tcp` or `docker compose stop backend` fixes it until the
+  next time both paths run again. Problem returns after reboot if Docker auto-starts
+  stacks or user scripts start duplicate listeners.
+
+ALREADY IN REPO (mitigation, not permanent policy)
+--------------------------------------------------------------------------------
+- Script: `ops/free_port_3000.sh` — detects Docker publishing :3000 and suggests
+  `docker compose stop backend`; otherwise tries fuser/lsof on host.
+- Not a substitute for an architectural rule that survives reboots.
+
+REQUEST TO YOU (CHATGPT)
+--------------------------------------------------------------------------------
+Propose a **persistent, low-friction solution** that still works **after system
+restart**, with minimal human intervention. Address at least:
+
+1) **Single ownership of port 3000** — clear rule: either “API only via Docker”
+   OR “API only via local Node”, not both without coordination.
+
+2) **Concrete mechanisms** (pick/adapt as needed): systemd units ordering,
+   Docker Compose profiles, separate dev ports (e.g. 3001 local vs 3000 container)
+   with documented .env, `Restart=` policies, or a small wrapper script invoked
+   by a desktop/session autostart — whatever fits Linux best.
+
+3) **Documentation**: exact commands/files for the operator (one paragraph “daily
+   workflow”) and what NOT to run together.
+
+4) **Safety**: do not suggest killing arbitrary processes; prefer stopping the
+   correct service (named container or unit).
+
+5) **Optional**: how to verify in one command that nothing else is bound to
+   the chosen port before starting Nest.
+
+OUTPUT FORMAT
+--------------------------------------------------------------------------------
+- Numbered recommendation (primary + fallback).
+- Copy-pasteable config snippets only if you are confident they apply to
+  Docker Compose + NestJS on Ubuntu/Debian-style Linux.
+- End with a 5-line “after reboot checklist”.
+
+TAG
+--------------------------------------------------------------------------------
+[MOCKUP PURPOSE ONLY - NOT REAL DATA] — operational runbook, not legal advice.
+
+================================================================================
+END OF BRIEF
+================================================================================

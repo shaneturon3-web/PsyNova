@@ -1,0 +1,23 @@
+# [MOCKUP PURPOSE ONLY - NOT REAL DATA]
+NODE_ENV=development
+PORT=3000
+USE_PERSISTENCE=false
+JWT_SECRET=REDACTED_FOR_PUBLIC_REPO
+JWT_EXPIRES_IN_SECONDS=3600
+
+DB_HOST=psynova-db
+DB_PORT=5432
+DB_NAME=psynova
+DB_USER=psynova
+DB_PASSWORD=REDACTED_FOR_PUBLIC_REPO
+
+# Translation (optional — at least one improves FR copies for staff-side demo)
+# DeepL: https://www.deepl.com/pro-api
+DEEPL_API_KEY=
+# Optional override (default: https://api-free.deepl.com/v2/translate)
+# DEEPL_API_URL=https://api.deepl.com/v2/translate
+# Google Cloud Translation API key
+GOOGLE_TRANSLATE_API_KEY=
+
+# Comma-separated extra browser origins (e.g. your Vercel preview URL)
+# CORS_ORIGINS=https://your-app.vercel.app

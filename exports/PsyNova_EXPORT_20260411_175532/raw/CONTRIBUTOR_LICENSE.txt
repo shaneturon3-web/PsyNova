@@ -1,0 +1,30 @@
+CONTRIBUTOR AGREEMENT — CLINICAL OPERATIONS SYSTEM (COS)
+Version 1.0 — Internal reference
+
+1. DEFINITIONS
+   "The Architect" means the sole author of the COS workbook generation logic,
+   formulas, sheet structure, and Python build tooling in this repository.
+
+   "The Partner" means the party operating the clinic under this model (data entry,
+   roster, and day-to-day use of the workbook outputs).
+
+2. OWNERSHIP OF LOGIC
+   The Architect retains exclusive ownership of all logic, algorithms, sheet
+   layouts, naming conventions, and source code used to generate and maintain
+   the COS financial workbook. No transfer of intellectual property is granted
+   by use of generated files alone.
+
+3. ROLE OF THE PARTNER (OPERATOR)
+   The Partner is granted a limited, revocable right to use generated workbooks
+   and outputs for internal clinical and administrative operations. The Partner
+   does not acquire rights to the generator source code except as separately
+   licensed in writing.
+
+4. RESTRICTIONS
+   Redistribution of the generator or derivative build scripts, or removal of
+   proprietary notices, requires prior written authorization from The Architect
+   or the designated holding entity.
+
+5. GOVERNING DOCUMENT
+   For license terms on materials, see LICENSE.md. This file clarifies roles
+   only and is not a substitute for a executed contract where one exists.

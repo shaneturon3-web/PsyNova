@@ -1,0 +1,8 @@
+{
+  "timestamp": "20260411_175532",
+  "mode": "LOCAL_ONLY",
+  "source": "/home/shane/Desktop/PsyNova Virtual Clinic",
+  "target": "/home/shane/Desktop/PsyNova_EXPORT_20260411_175532",
+  "purpose": "safe snapshot export only",
+  "runtime_policy": "do_not_run_project_from_drive"
+}

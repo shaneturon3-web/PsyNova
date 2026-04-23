@@ -1,0 +1,7 @@
+Module,Status,Last_Update,Notes
+Project Root,Exported,20260411_175532,Snapshot created
+Backend,Pending Validation,20260411_175532,Check local runtime separately
+Frontend,Pending Validation,20260411_175532,Check local runtime separately
+Database,Pending Validation,20260411_175532,Do not export live DB blindly
+Ops Scripts,Exported,20260411_175532,Safe copy only
+Docs,Exported,20260411_175532,Safe copy only

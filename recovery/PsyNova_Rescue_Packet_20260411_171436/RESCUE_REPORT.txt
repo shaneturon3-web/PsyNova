@@ -1,0 +1,50 @@
+PSYNOVA RESCUE PACKET
+============================================================
+Generated: 2026-04-11 17:14:37
+Output: /home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436
+
+BEST MATCHES
+------------------------------------------------------------
+TARGET: SHANE Profiles.README
+SOURCE: /home/shane/Desktop/PsyNova Virtual Clinic/SHANE Profiles.README
+COPIED: /home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/SHANE Profiles.README
+SCORE : 70
+
+TARGET: .cursorrules
+SOURCE: /home/shane/Desktop/PsyNova Virtual Clinic/.cursorrules
+COPIED: /home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/.cursorrules
+SCORE : 70
+
+TARGET: README.md
+SOURCE: /home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/README.md
+COPIED: /home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/README.md
+SCORE : 135
+
+TARGET: docker-compose.yml
+SOURCE: /home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/docker-compose.yml
+COPIED: /home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/docker-compose.yml
+SCORE : 130
+
+TARGET: main.ts
+SOURCE: /home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/backend/src/main.ts
+COPIED: /home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/main.ts
+SCORE : 190
+
+TARGET: PORT_3000_POLICY.md
+SOURCE: /home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/ops/PORT_3000_POLICY.md
+COPIED: /home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/PORT_3000_POLICY.md
+SCORE : 180
+
+TARGET: session_bootstrap.sh
+SOURCE: /home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/ops/session_bootstrap.sh
+COPIED: /home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/session_bootstrap.sh
+SCORE : 180
+
+TARGET: lunch_autopilot.sh
+SOURCE: /home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/ops/lunch_autopilot.sh
+COPIED: /home/shane/Desktop/PsyNova_Rescue_Packet_20260411_171436/found/lunch_autopilot.sh
+SCORE : 180
+
+MISSING
+------------------------------------------------------------
+None

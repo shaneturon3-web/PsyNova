@@ -1,0 +1,112 @@
+================================================================================
+PAIR 02 — RECURSOS · RESULTADOS · PROMPT PARA AUDITORIA ChatGPT
+================================================================================
+Proyecto: PsyNova Virtual Clinic
+Tag: [MOCKUP PURPOSE ONLY - NOT REAL DATA]
+
+--------------------------------------------------------------------------------
+A) RECURSOS (RUTAS Y REFERENCIAS)
+--------------------------------------------------------------------------------
+
+Raiz workspace sugerida:
+  /home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic/
+
+Perfil maestro (fuera del subrepo):
+  ../SHANE Profiles.README
+
+Toolbox Cursor:
+  tools/toolbox-cursor/INDEX.md
+  tools/toolbox-cursor/apps/run-stack-batch.sh
+  tools/toolbox-cursor/apps/run-migrate-password-hash.sh
+  tools/toolbox-cursor/apps/run-free-port-3000.sh
+  tools/toolbox-cursor/apps/psynova-prompt-tail.sh
+  .cursor/toolbox-cursor-POINTER.md
+
+Operaciones / politica puerto / migracion:
+  ops/stack_batch_db_migrate_v01.sh
+  ops/migrate_db_password_hash.sh
+  ops/port_guard_3000.sh
+  ops/free_port_3000.sh
+  ops/PORT_3000_POLICY.md
+  ops/lunch_autopilot.sh  (usa --profile with-api)
+  database/03-alter-users-password-hash.sql
+  docker-compose.yml  (backend: profiles: [with-api])
+
+Frontend (mock + booking + proxy):
+  frontend/vite.config.js
+  frontend/src/api.js
+  frontend/src/app.js
+  frontend/src/booking-wizard.js
+  frontend/src/styles.css
+  frontend/.env.example
+
+Referencia UX publica (patron, no codigo copiado):
+  https://monimpotpro.ca/#From
+
+Backend (sin cambios estructurales mayores en esta sesion; CORS en main.ts):
+  backend/src/main.ts
+  backend/src/auth/* , backend/src/appointments/*
+
+
+--------------------------------------------------------------------------------
+B) RESULTADOS OBSERVABLES
+--------------------------------------------------------------------------------
+
+- Build frontend: vite build -> dist-psynova/ (salida configurada).
+- Politica :3000: docker compose up sin perfil no levanta backend container; evita
+  choque con Nest local si el operador sigue la politica.
+- Migracion password_hash: ALTER idempotente + script contra contenedor psynova-db.
+- UI citas: flujo por pasos con calendario y slots; POST /api/appointments con token.
+- Delegacion de eventos en #app: mitiga fugas de listeners al re-renderizar.
+
+
+--------------------------------------------------------------------------------
+C) RIESGOS / PENDIENTES (PARA AUDITOR)
+--------------------------------------------------------------------------------
+
+- Volumen Postgres antiguo: requiere migracion manual o down -v en dev.
+- Grupo docker: usuario debe newgrp docker o re-login tras usermod.
+- Preview estatico sin Vite: definir VITE_API_BASE en build si no hay proxy.
+- Notas de sesion en booking: mock (no persistidas en API actual).
+
+
+--------------------------------------------------------------------------------
+D) BLOQUE PARA PEGAR EN ChatGPT (AUDITOR EXTERNO)
+--------------------------------------------------------------------------------
+
+Copia desde la linea siguiente hasta FIN PROMPT:
+
+--- INICIO PROMPT AUDITORIA ---
+
+Eres auditor tecnico externo. Lee PAIR_01 y PAIR_02 del paquete "Shane's Armyknives"
+para el proyecto PsyNova Virtual Clinic (mock clinico online).
+
+Tareas:
+1) Verifica coherencia entre "orden interpretada" y "acciones realizadas" (PAIR 01).
+2) Comprueba si la evidencia en rutas (PAIR 02) soporta cada afirmacion; marca
+   "Falta de Evidencia" donde no se pueda verificar sin el repo.
+3) Evalua riesgos listados en seccion C) de este archivo.
+4) Indica si la solucion puerto 3000 (perfil Compose + guard + politica) es razonable
+   para Linux dev + Docker.
+5) Indica si el booking wizard (vanilla JS + delegacion) evita antipatrones obvios.
+6) Salida: tabla PASS/PARTIAL/FAIL por area + max 10 lineas de recomendaciones
+   accionables. Tono clinico, sin lenguaje dramatico.
+
+Material de entrada: texto de PAIR_01 y PAIR_02 unicamente (no asumas codigo no citado).
+
+--- FIN PROMPT AUDITORIA ---
+
+
+--------------------------------------------------------------------------------
+E) METADATOS DEL PAQUETE
+--------------------------------------------------------------------------------
+
+Nombre carpeta: Shane's Armyknives
+Archivos del par:
+  PAIR_01_ORDER_INTERPRETATION_ACTIONS_v01.txt
+  PAIR_02_RESOURCES_RESULTS_AUDIT_PROMPT_v01.txt
+Indice: INDEX.txt
+
+================================================================================
+FIN PAIR 02
+================================================================================

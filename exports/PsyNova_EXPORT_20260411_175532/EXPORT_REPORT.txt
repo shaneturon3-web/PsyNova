@@ -1,0 +1,18 @@
+PSYNOVA SAFE EXPORT REPORT
+Timestamp: 20260411_175532
+Mode: LOCAL_ONLY
+Source: /home/shane/Desktop/PsyNova Virtual Clinic
+Target: /home/shane/Desktop/PsyNova_EXPORT_20260411_175532
+
+ROI_DECISION:
+- Use Google Drive for exports, backups, reports, handoffs, snapshots
+- Do NOT use Google Drive as live runtime for the project
+- Do NOT run backend/frontend/database from synced folders
+- Safe value: continuity, recovery, low-friction transfer, history
+
+RESULT:
+- tree.txt created
+- raw safe-copy bundle created
+- export_status.json created
+- notion CSV created
+- tar.gz created if possible

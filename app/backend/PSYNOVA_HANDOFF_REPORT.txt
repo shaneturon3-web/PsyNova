@@ -1,0 +1,128 @@
+[HANDOFF] PsyNova Backend Incident + Deployment State
+
+PROJECT:
+PsyNova Virtual Clinic — Backend (Dockerized NestJS)
+
+OBJECTIVE:
+Stabilize backend, resolve HTTP 500 on /api/health, prepare for deployment.
+
+---
+
+[BLOCKER]
+HTTP 500 on endpoint:
+GET /api/health
+
+Error:
+Invalid character in header content ["X-PsyNova-Maquette"]
+
+---
+
+[ROOT CAUSE]
+Backend was injecting unsafe HTTP header:
+
+res.setHeader('X-PsyNova-Maquette', maquetteHeader);
+
+The variable "maquetteHeader" contained:
+- square brackets []
+- spaces
+→ invalid per HTTP header spec → Express crash → 500
+
+Location found INSIDE container:
+- /app/src/main.ts
+- /app/dist/main.js
+
+IMPORTANT:
+Runtime uses compiled file → /app/dist/main.js
+Fixing only src DOES NOT resolve issue unless rebuild occurs.
+
+---
+
+[FAILED ATTEMPTS]
+1) sed patch on /app/src/main.ts
+   → NO EFFECT (compiled JS still used)
+
+2) docker compose rebuild from wrong directory
+   → service not found
+
+3) node_modules patching attempts (earlier phase)
+   → unstable, NOT deterministic, MUST NOT repeat
+
+4) assumption header came from env vars
+   → FALSE
+
+---
+
+[SOLUTION APPLIED]
+Direct patch on runtime file:
+
+/app/dist/main.js
+
+Replaced:
+res.setHeader('X-PsyNova-Maquette', maquetteHeader);
+
+With:
+res.setHeader('X-PsyNova-Maquette', 'MOCKUP-PURPOSE-ONLY');
+
+Then:
+docker restart psynova-backend
+
+---
+
+[RESULT]
+- /api/health returns OK
+- backend stable
+- database connected
+- no runtime crash
+
+---
+
+[CRITICAL DIRECTIVES — DO NOT VIOLATE]
+
+1) NEVER patch node_modules
+2) NEVER assume src changes apply without rebuild
+3) ALWAYS verify runtime path (/app/dist) in container
+4) DO NOT inject headers with:
+   - brackets []
+   - spaces
+   - non-ASCII characters
+5) If modifying headers → sanitize or hardcode safe value
+
+---
+
+[CURRENT SYSTEM STATE]
+
+Containers:
+- psynova-backend → RUNNING
+- psynova-db → HEALTHY
+- wordpress stack → RUNNING
+
+Endpoint:
+- http://localhost:3000/api/health → OK
+
+---
+
+[NEXT OBJECTIVE]
+Deploy backend online (public access)
+
+Options pending:
+A) Temporary tunnel (localtunnel / serveo)
+B) Production deploy (VPS / cloud)
+
+---
+
+[NEXT AI INSTRUCTIONS]
+
+DO:
+- continue from stable state
+- prepare deployment pipeline
+- externalize config safely
+- enforce header safety globally
+
+DO NOT:
+- reattempt node_modules patching
+- reintroduce maquetteHeader unsafe value
+- rebuild blindly without verifying compose path
+
+---
+
+[END OF REPORT]

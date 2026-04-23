@@ -1,0 +1,31 @@
+{
+  "PSYNOVA_DB_NOT_CONNECTED_LOOP": {
+    "type": "RECURRING_FAILURE",
+    "severity": "HIGH",
+    "date": "2026-04-23",
+    "symptom": "health: persistence enabled but database not-connected",
+    "root_cause": [
+      "DB pool initialized before env load",
+      "DB_HOST mismatch (localhost vs docker service)",
+      "USE_PERSISTENCE default false"
+    ],
+    "fix": [
+      "USE_PERSISTENCE=true",
+      "DB_HOST=localhost (local dev)",
+      "Initialize pool in onModuleInit"
+    ],
+    "validation": "curl /api/health → database=connected",
+    "prevention": [
+      "fix env.example",
+      "avoid constructor DB init",
+      "enforce host mode distinction"
+    ],
+    "tags": [
+      "psynova",
+      "database",
+      "postgres",
+      "env",
+      "startup-order"
+    ]
+  }
+}

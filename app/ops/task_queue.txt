@@ -1,0 +1,6 @@
+# Una tarea por linea. Se ejecutan en orden.
+bash ops/session_bootstrap.sh
+bash ops/run_backend_checks.sh --skip-install
+cd backend && npm run build
+cd backend && npm run test -- --passWithNoTests
+cd backend && npm run test:e2e

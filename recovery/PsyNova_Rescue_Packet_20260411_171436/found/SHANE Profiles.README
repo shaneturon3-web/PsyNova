@@ -1,0 +1,428 @@
+# SHANE Profiles.README
+
+Perfil maestro de operacion para Shane. Este archivo define como trabajar en todos los proyectos y como mantener continuidad entre usuarios, AIs y developers.
+
+Uso principal:
+- Arrancar cada sesion con contexto claro.
+- Evitar perdida de directivas entre proyectos.
+- Estandarizar reportes de progreso y handoff.
+
+## STARTUP CHECK (OBLIGATORIO)
+
+Al iniciar una nueva sesion, ejecutar este flujo:
+1) Preguntar: "Que proyecto vamos a trabajar ahora?"
+2) Si ya existe, confirmar nombre exacto del proyecto.
+3) Si es nuevo, solicitar:
+   - nombre del proyecto
+   - objetivos
+   - stack
+   - directivas especiales
+   - compliance/seguridad
+   - formato de reportes esperado
+4) Confirmar el modo de trabajo antes de editar codigo.
+
+## TAGS OPERATIVOS
+
+- `[GLOBAL-DIRECTIVE]`: aplica a todos los proyectos
+- `[PROJECT-DIRECTIVE]`: aplica a un proyecto especifico
+- `[REPORTING]`: reglas de progreso y estado
+- `[COMPLIANCE]`: requisitos regulatorios o legales
+- `[HANDOFF]`: continuidad entre sesiones/equipos
+- `[MOCKUP-DATA]`: contenido no real o de ejemplo
+- `[BLOCKER]`: impedimento actual
+- `[DECISION]`: decision tomada con fecha
+- `[TOOLBOX-CURSOR]`: mini-apps y envoltorios documentados en `virtual-psychology-clinic/tools/toolbox-cursor/`
+
+## TOOLBOX CURSOR [GLOBAL-DIRECTIVE] [PROJECT-DIRECTIVE] [TOOLBOX-CURSOR]
+
+Ubicacion (PsyNova): `virtual-psychology-clinic/tools/toolbox-cursor/`
+
+- **Indice maestro:** `INDEX.md` (herramientas, uso, combinaciones, reglas para nuevas herramientas).
+- **Pointer Cursor:** `virtual-psychology-clinic/.cursor/toolbox-cursor-POINTER.md` apunta al indice (evitar duplicar logica fuera de `ops/`).
+- **Funcion:** accesos cortos ejecutables (`apps/*.sh`) que envuelven scripts en `ops/` — una sola fuente de verdad en `ops/`, sin copiar logica.
+- **Por que existe:** reducir errores de ruta, comandos en lote con salvaguarda, y documentar como reutilizar y combinar herramientas nuevas con las existentes.
+- **Uso tipico:** `bash tools/toolbox-cursor/apps/run-stack-batch.sh` (desde raiz del repo PsyNova); ver tabla en `INDEX.md`.
+- **Combinaciones:** registradas en `INDEX.md` (ej. no mezclar API Docker en :3000 con `npm run start:dev` local).
+- Al anadir una mini-app nueva: actualizar `INDEX.md` + esta seccion si cambia politica operativa + marca `[DECISION]` si aplica.
+
+### Shane's Armyknives (paquete auditoria ChatGPT) [TOOLBOX-CURSOR]
+
+- **Ubicacion:** `virtual-psychology-clinic/tools/Shane's Armyknives/`
+- **Contenido:** par de archivos `.txt` — `PAIR_01_ORDER_INTERPRETATION_ACTIONS_v01.txt` (orden optimizada del operador, interpretacion, acciones) y `PAIR_02_RESOURCES_RESULTS_AUDIT_PROMPT_v01.txt` (rutas, resultados, riesgos, **bloque listo para pegar en ChatGPT** como auditor externo). Indice: `INDEX.txt`.
+- **Funcion:** congelar en texto lo ejecutado en sesion (toolbox, puerto 3000, migracion DB, proxy Vite, booking wizard) para revision independiente sin depender del chat de Cursor.
+- **Uso:** entregar ambos PAIR a ChatGPT junto con el prompt del final de PAIR_02; o adjuntar carpeta en otro LLM.
+
+### Benchmark Armyknife Protocol v1.0 [TOOLBOX-CURSOR] [PROJECT-DIRECTIVE]
+
+- **Ubicacion:** `virtual-psychology-clinic/tools/benchmark-armyknife/`
+- **Autoria:** diseno conceptual y arquitectura — Shane; implementacion motor TypeScript en repo.
+- **Funcion:** pipeline INPUT (URLs) → normalizacion (HTML) → scoring (power, popularity, performance, cost) → arbol DOM heuristico → estado de seleccion → export JSON/Markdown.
+- **Uso:** `npm install && npm run build && node dist/index.js <url>` (ver README en carpeta).
+- **Especificacion:** `SPEC_BENCHMARK_ARMYKNIFE_PROTOCOL_v1.md` dentro de la misma carpeta.
+
+## GLOBAL DIRECTIVES [GLOBAL-DIRECTIVE]
+
+- Mantener un tono directo, accionable y profesional.
+- Priorizar implementacion ejecutable sobre teoria.
+- No asumir contexto de proyecto sin confirmacion.
+- Cada cambio debe ser verificable (build/test/lint o pasos de validacion).
+- Usar rutas y comandos exactos para evitar errores de entorno.
+
+## REPORTING STANDARD [REPORTING]
+
+Entregar reportes de avance con este formato:
+- `Overall readiness: ~X%`
+- `Delta since last report: +Y%`
+- `tasks: ~A of ~130`
+- `Current blockers: ...`
+- `Next actions: ...`
+
+Frecuencia:
+- Reporte completo cada vez que se alcance ~10% adicional de avance general.
+- Si no hay avance porcentual, reportar `+0%` y el bloqueo.
+
+## HANDOFF PROTOCOL [HANDOFF]
+
+Objetivo: que otra persona o AI continue sin perder cadena de contexto.
+
+Incluir siempre:
+- estado actual resumido
+- ultimo hito completado
+- proximo hito recomendado
+- comandos de verificacion
+- bloqueos activos
+- riesgos conocidos
+
+## MASTER PORTFOLIO MAP [PROJECT-DIRECTIVE]
+
+| Proyecto | Objetivo Estrategico | Formato de Salida / Entregable | Herramienta de Gestion | Prioridad de Datos |
+| --- | --- | --- | --- | --- |
+| 1. Obra Literaria | Transformar blog Impermanence en novela (166 pags). | PDF / Manuscrito en capitulos. | Master Prompt de Escritura. | Estilo y Narrativa. |
+| 2. Cluster Computacional | Integrar 2 PCs para procesamiento paralelo (TTS/Data). | Scripts Python / Celery / Syncthing. | Sincronizacion Local / Git. | Rendimiento y Uptime. |
+| 3. Caso Michigan | Defensa legal basada en evidencia cronologica. | Base de datos Verbatim (SQLite/Markdown). | Google Drive Federado. | Veracidad y Fechas. |
+| 4. Identidad Operativa | Mantener coherencia entre multiples cuentas de Gmail. | Master User Profile and Directives. | Archivo .txt o Google Keep. | Reglas de Comunicacion. |
+| 5. Sistema de Respaldo | Asegurar integridad de datos local y en la nube. | Backup Hibrido (Local + Google Takeout). | SQLite + Google Drive Central. | Integridad de Archivos. |
+
+## PROTOCOLO FORENSE DELTA-MICHIGAN [COMPLIANCE] [PROJECT-DIRECTIVE]
+
+Objetivo: blindar analisis tecnico-legal en Cursor, eliminando residuos semanticos de novela/blog y priorizando evidencia verificable.
+
+### Directiva de Sistema
+
+Rol operativo:
+- Actuar exclusivamente como Analista Tecnico de Evidencia Forense y Estratega Legal.
+- Objetivo primario: identificar discrepancias, validar lineas de tiempo y estructurar argumentos con Pruebas Duras.
+
+Reglas inviolables:
+1) Jerarquia de Verdad
+   - Nivel 1 (Verdad Absoluta): logs de sistema, metadatos de archivos, registros GPS/vuelos, audio (Whisper), transcripciones de mensajes.
+   - Nivel 2 (Documentacion Oficial): reportes policiales, multas, denuncias.
+   - Nivel 0 (Exclusion Total): narrativa emocional, interpretaciones subjetivas, lenguaje literario, blogposts, material de novela.
+2) Deteccion de contradicciones
+   - Cruzar Nivel 1 contra Nivel 2.
+   - Si documento oficial contradice log tecnico, marcar como `Punto de Quiebre de Credibilidad`.
+3) Restriccion semantica
+   - Prohibido lenguaje dramatico o adjetivacion valorativa.
+   - Respuestas clinicas y precisas, siempre con fuente (ej: `@Llamada_01.txt`).
+4) Modo doble ciego
+   - No asumir intenciones.
+   - No completar huecos con creatividad.
+   - Si falta dato, responder `Falta de Evidencia`.
+
+### Tactica de ejecucion en Cursor
+
+1) Indexacion de evidencia
+   - Consolidar OCR, Whisper, logs y PDFs en una carpeta de caso.
+   - Verificar indexacion completa antes de analisis.
+2) Primera tarea (Matriz de Verdad)
+   - Generar `MASTER_TIMELINE.md` unificando fechas desde evidencia documental y transcripciones.
+   - Detectar anomalias de presencia.
+3) Segunda tarea (Analisis de Admisiones)
+   - Escanear transcripciones buscando admision de culpabilidad u ocultacion.
+   - Extraer citas textuales y emparejarlas con contradicciones del reporte oficial.
+
+### Entregables minimos del caso
+
+- `MASTER_TIMELINE.md`
+- `MATRIZ_CONTRADICCIONES.md`
+- `RESUMEN_PARA_ABOGADO.md`
+
+### Nomenclatura recomendada para indexacion perfecta
+
+Formato:
+- `YYYY-MM-DD__FUENTE__TIPO__ID__v01.ext`
+
+Reglas:
+- Fecha ISO al inicio.
+- Sin espacios; usar `_` o `-`.
+- Incluir fuente y tipo documental.
+- Versionado incremental `v01`, `v02`.
+
+Ejemplos:
+- `2024-11-03__WHISPER__LLAMADA__001__v01.txt`
+- `2024-11-03__POLICIA__REPORTE__MI-4587__v01.pdf`
+- `2024-11-04__GPS__TRAZA__VEHICULO-A__v01.csv`
+- `2024-11-05__AEROLINEA__PASE_ABORDAJE__AA102__v01.pdf`
+- `2024-11-06__SISTEMA__METADATOS_ARCHIVOS__BATCH-01__v01.json`
+
+## PROJECT REGISTRY [PROJECT-DIRECTIVE]
+
+### Proyecto: PsyNova Virtual Clinic
+
+- Nombre: PsyNova Virtual Clinic
+- Tipo: Virtual psychology clinic (online-only)
+- Ubicacion: Montreal, Quebec, Canada
+- Idiomas: EN/FR (+ ES solo interfaz/asistente)
+- Compliance: Quebec Law 25, PIPEDA, HIPAA-aligned safeguards, Canadian data residency
+- Mockup tag requerido: `[MOCKUP PURPOSE ONLY - NOT REAL DATA]`
+
+Directivas activas:
+- Mantener documentacion ejecutiva limpia y consistente.
+- Reportar avance en saltos de ~10%.
+- Incluir siempre linea de tareas: `tasks: ~A of ~130`.
+- Priorizar readiness para implementacion y testing.
+- Toolbox Cursor: usar `tools/toolbox-cursor/INDEX.md` como registro de mini-apps; envoltorios en `tools/toolbox-cursor/apps/` deben delegar en `ops/`.
+
+## NEW PROJECT INTAKE TEMPLATE [PROJECT-DIRECTIVE]
+
+Para registrar un proyecto nuevo, completar:
+- Project name:
+- One-line mission:
+- PM/Owner:
+- Primary stack:
+- Compliance constraints:
+- Data handling rules:
+- Reporting format overrides:
+- Known blockers:
+- Target readiness milestone:
+
+## TECHNICAL NOTES (PARA AI/DEVS)
+
+- Este archivo se lee primero en cada proyecto.
+- Si faltan datos del proyecto, detener implementacion y pedirlos.
+- Si hay conflicto entre directivas globales y de proyecto, gana la directiva de proyecto.
+- Mantener historial de decisiones con marca `[DECISION]` cuando aplique.
+
+## AUTOGUARD STRATEGY [GLOBAL-DIRECTIVE] [REPORTING]
+
+Objetivo: minimizar back-and-forward humano con salvaguarda automatizada por sesion.
+
+### 1) Inventario de sistema al inicio de sesion
+
+- Ejecutar siempre al inicio:
+  - `cd "<project-root>"`
+  - `bash ops/session_bootstrap.sh`
+- El bootstrap debe registrar:
+  - runtimes disponibles (node/npm/python/docker/git)
+  - herramientas faltantes
+  - archivos criticos del proyecto
+  - recomendaciones de instalacion
+
+### 2) Politica de dependencias (fail-fast)
+
+- Antes de usar librerias, verificar instalacion real en entorno.
+- Si una dependencia no existe:
+  - registrar estado `FAIL` en checks
+  - ejecutar instalacion recomendada
+  - revalidar con comando de version o smoke test
+- Prohibido asumir disponibilidad de `npm`, `pip`, `docker`, etc.
+
+### 3) Registro de cambios del sistema y proyecto
+
+- Mantener bitacora incremental en:
+  - `virtual-psychology-clinic/ops/SESSION_CHANGELOG.md`
+- Cada incremento debe registrar:
+  - que funciono
+  - que no funciono
+  - solucion aplicada
+  - riesgo remanente
+  - siguiente comando exacto
+
+### 4) Loop de optimizacion por incremento
+
+- En cada incremento, ejecutar ciclo:
+  1) Hipotesis tecnica
+  2) Cambio minimo aplicable
+  3) Validacion (build/test/lint/runtime)
+  4) Registro de resultado
+  5) Ajuste de directiva si aplica
+- Si el resultado falla, registrar explicitamente causa y rollback/mitigacion.
+
+### 5) Reporte para auditor externo
+
+- Generar/actualizar reporte en:
+  - `virtual-psychology-clinic/ops/AUDIT_INCREMENT_REPORT.md`
+- Debe incluir evidencia dura:
+  - comandos ejecutados
+  - resultados verificables
+  - versiones de herramientas
+  - riesgos y decision de siguiente paso
+
+### 6) Directiva de Adaptacion Dinamica de Recursos [GLOBAL-DIRECTIVE]
+
+Regla: ajustar automaticamente estrategia segun recursos reales detectados.
+
+- Si falta runtime clave (ej: npm):
+  - priorizar habilitar entorno antes de implementar features.
+- Si recurso existe pero es inestable:
+  - usar ruta alternativa mas estable (ej: tests parciales + smoke endpoints).
+- Si recursos son completos:
+  - ejecutar pipeline normal (install -> lint -> test -> run).
+- Toda adaptacion debe quedar registrada como `[DECISION]` con fecha y motivo.
+
+### 7) Trigger de actualizacion del Master Profile
+
+- En la siguiente visita a terminal donde se solicite pegar comandos,
+  integrar automaticamente aprendizaje nuevo al master profile:
+  - directiva nueva
+  - falla recurrente detectada
+  - mejora permanente aplicada
+
+### 8) Parrafo final obligatorio por incremento [REPORTING]
+
+- Todo output operativo (checklist, changelog, reporte auditor) debe cerrar con:
+  - `Proxima accion para Shane`
+- El contenido de ese parrafo debe ser adaptativo:
+  - Si el resultado esperado se cumplio: dar siguiente comando de avance.
+  - Si fallo: pedir copia exacta del error con instruccion literal:
+    - `copia este error back to Cursor's chat`
+- Regla: siempre incluir criterio de exito esperado (PASS/FAIL, comando o endpoint).
+
+### 9) Ejecucion sin pegado manual [GLOBAL-DIRECTIVE]
+
+- Evitar secuencias multilinea pegadas en terminal cuando existan pasos recurrentes.
+- Convertir flujos en scripts ejecutables en `ops/`.
+- Para PsyNova backend, usar comando unico:
+  - `bash ops/run_backend_checks.sh`
+- Si solo quieres correr pruebas sin reinstalar:
+  - `bash ops/run_backend_checks.sh --skip-install`
+- Objetivo: reducir errores de paste mode (`^[[200~`) y concatenaciones accidentales.
+
+### 10) Execution-First Mode (Smart) [GLOBAL-DIRECTIVE] [REPORTING]
+
+- Respuesta operativa minima:
+  - sugerir solo la siguiente accion logica
+  - si falla, resolver y continuar
+  - si pasa, avanzar sin pausa
+- Reporte amplio solo al cierre de seccion (~10%):
+  - `Overall readiness`, `Delta`, `tasks`, `blockers`, `next`
+  - pedir confirmacion para siguiente seccion
+- Comandos en lote (1-2 pegados maximo por ciclo):
+  - preferir scripts en `ops/` sobre pasos manuales
+- Loop de avance:
+  - avanzar solo si checks pasan
+  - si falla, detener y pedir solo error minimo
+- Alerta sonora:
+  - emitir `BEL` (`printf '\a'`) cuando se requiera asistencia humana
+- Prioridad tecnica:
+  - primero procesamiento local
+  - preferir librerias gratuitas existentes
+  - modificar e integrar antes de crear soluciones nuevas desde cero
+
+### 11) Handshake de estado minimo [REPORTING]
+
+- Mensaje operativo unico en terminal:
+  - `OK for Next Step o pega la FALLA`
+- Si no hay falla:
+  - Shane responde solo: `OK`
+- Si hay falla:
+  - Shane pega solo el error.
+- Mantener silencio operativo: solo instrucciones de ejecucion y fallas.
+
+### 12) Reporte ultra-minimo por defecto [REPORTING]
+
+- En progreso:
+  - mostrar solo comando unico de terminal + `OK for Next Step o pega la FALLA`
+- Cierre de seccion:
+  - solo `Overall readiness`, `Delta`, `tasks`, `blockers`, `next`, `confirm`
+- Si se requiere auditoria:
+  - usar logs/markdown dedicados; no saturar pantalla operativa.
+
+### 13) UPDATE Protocol (obligatorio en cada reporte) [REPORTING]
+
+- En cada reporte incluir bloque `UPDATE` con:
+  1) Analisis: estado real actual (hecho/faltante/bloqueo)
+  2) Optimizacion: ajuste aplicado para reducir tiempo/riesgo
+  3) Estrategia actualizada: siguiente lote exacto
+- Formato minimo, sin texto extra.
+- Repetir en todos los reportes siguientes.
+
+## [DECISION] 2026-04-09 - Compatibilidad de imports CJS/ESM
+
+Contexto:
+- Dependencia `supertest` estaba instalada, pero los tests e2e fallaron con:
+  - `TypeError: (0 , supertest_1.default) is not a function`
+
+Aprendizaje operativo:
+- No basta validar existencia de libreria; hay que validar modo de import segun modulo (`commonjs` vs `esm`).
+- Regla para proyectos Nest + Jest en CommonJS:
+  - preferir `import * as request from 'supertest'`
+  - evitar `default import` si no hay `esModuleInterop` confirmado.
+
+Accion permanente:
+- Agregar chequeo de "compatibilidad de import" dentro del loop de optimizacion antes de escalar a debugging extenso.
+
+## [DECISION] 2026-04-09 - Node/NVM en automatizacion (patron ChatGPT asimilado) [GLOBAL-DIRECTIVE]
+
+Evidencia cruzada:
+- Fallo `ERROR: Node.js/npm not detected` con usuario `root` y `HOME=/root` mientras nvm vive en `/home/shane/.nvm`.
+- Exito completo del mismo pipeline tras: `source ops/load_node_env.sh` + modo `node` en pasos npm y en `run_backend_checks.sh`.
+
+Reglas permanentes:
+1) Nunca asumir que `node`/`npm` existen en scripts, CI, cron, `bash -c`, o `sudo` sin cargar entorno.
+2) Todo comando que use npm/node debe precederse de:
+   - `source "<project>/ops/load_node_env.sh"` (o equivalente centralizado).
+3) Preferir NVM en `/home/shane/.nvm` cuando exista; fallback `$HOME/.nvm`.
+4) Anti-patron: confiar en `.bashrc` en shells no interactivos.
+5) Anti-patron: `npm run` directo en automatizacion sin loader.
+6) Patron dorado: un solo archivo `load_node_env.sh` + fallo temprano si falta nvm.
+
+## [DECISION] 2026-04-09 - Toolbox Cursor (mini-apps + indice) [TOOLBOX-CURSOR]
+
+Contexto:
+- Comandos en lote, rastreo de herramientas y combinaciones seguras sin duplicar logica fuera de `ops/`.
+
+Decision:
+- Carpeta `virtual-psychology-clinic/tools/toolbox-cursor/` con `INDEX.md`, `README.md`, envoltorios ejecutables en `apps/`, y puntero `virtual-psychology-clinic/.cursor/toolbox-cursor-POINTER.md`.
+- Los envoltorios solo delegan en `ops/` (ej. `run-stack-batch.sh` -> `stack_batch_db_migrate_v01.sh`).
+- Nuevas mini-apps: anadir fila y combinaciones en `INDEX.md`, actualizar esta seccion del perfil si cambia politica.
+
+Regla:
+- Preferir implementar logica en `ops/`; toolbox-cursor es documentacion + entrada corta, no segunda implementacion.
+
+## FIXES en LINUX Zorin [GLOBAL-DIRECTIVE]
+
+Zorin OS es familia Ubuntu/Debian: mismos patrones que Ubuntu para Docker, permisos y rutas de usuario.
+
+### Docker (socket permission denied)
+
+- Sintoma: `permission denied` al conectar a `/var/run/docker.sock`.
+- Fix persistente (una vez, como usuario Shane):
+  - `sudo usermod -aG docker "$USER"`
+  - cerrar sesion o `newgrp docker`
+- Alternativa operativa: `sudo docker compose ...` (validado en logs de exito).
+
+### Docker Compose / Buildx
+
+- Aviso comun: `buildx isn't installed` — no bloquea si el build termina en `Built`/`Started`.
+- Si hiciera falta buildx mas adelante: instalar plugin oficial segun doc Docker para Ubuntu/Zorin.
+
+### NVM + root + automatizacion
+
+- `root` no tiene nvm en `/root/.nvm` si solo se instalo para Shane.
+- Scripts deben cargar `/home/shane/.nvm/nvm.sh` via `ops/load_node_env.sh`, no depender de `HOME`.
+
+### Terminal: no pegar logs como comandos
+
+- Sintoma: `AUTOPILOT: command not found`, `CMD:: command not found`, `bash: syntax error`.
+- Causa: pegar salida de log multilinea en la shell (no es fallo del proyecto).
+- Regla: solo pegar **un** comando a la vez; logs van al chat o a archivo, no a la linea de comandos.
+
+### Rutas con espacios (ej. `PsyNova Virtual Clinic`)
+
+- Usar comillas en rutas: `cd "/home/shane/Desktop/PsyNova Virtual Clinic/..."`.
+- Scripts del proyecto ya usan `PROJECT_ROOT` con comillas en `bash -c`.
+
+### Verificacion rapida ante fallo node/npm
+
+- `whoami`, `echo $HOME`, `command -v node`, `command -v npm`, `echo $PATH` (solo si falla el loader).

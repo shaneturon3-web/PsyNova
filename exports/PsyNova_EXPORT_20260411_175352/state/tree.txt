@@ -1,0 +1,118 @@
+/home/shane/Desktop/PsyNova Virtual Clinic
+├── analista-financiero-clinica-virtual
+│   ├── analista_financiero_clinica_virtual
+│   │   ├── build_prelaunch_workbook.py
+│   │   ├── health_check.py
+│   │   ├── __init__.py
+│   │   ├── __main__.py
+│   │   └── __pycache__
+│   ├── CONTRIBUTOR_LICENSE.txt
+│   ├── INFRASTRUCTURE_ASSETS.csv
+│   ├── INITIAL_CAPITAL_VALUATION.csv
+│   ├── LICENSE.md
+│   ├── output
+│   │   ├── ANALISIS_FINANCIERO_PRE_LAUNCH.xlsx
+│   │   ├── COS_PROGRESS_REPORT_2026-04-10.pdf
+│   │   ├── MODEL.csv
+│   │   ├── PSYNOVA-PR-001_PROGRESS_REPORT_MERGED_2026-04-10.pdf
+│   │   └── PSYNOVA_PROGRESS_REPORT_MERGED_2026-04-10.pdf
+│   ├── PROGRESS_REPORT.md
+│   ├── README.md
+│   ├── requirements.txt
+│   └── SYSTEM_LOG.md
+├── psynova
+│   ├── cos -> /home/shane/Desktop/PsyNova Virtual Clinic/analista-financiero-clinica-virtual
+│   ├── lib
+│   │   └── npm_cache
+│   ├── ops
+│   │   ├── load_dependencies.sh
+│   │   ├── patch_backend_dist_header.sh
+│   │   └── PLOTTER_QUEUE.md
+│   ├── platform -> /home/shane/Desktop/PsyNova Virtual Clinic/virtual-psychology-clinic
+│   └── README.md
+├── SAVEPOINT_STATUS.md
+├── SHANE Profiles.README
+├── SHANE Profiles.README.bak.20260411_173852
+└── virtual-psychology-clinic
+    ├── backend
+    │   ├── AI_ADMIN_HANDOFF_20260411_165557.txt
+    │   ├── config
+    │   ├── dist
+    │   ├── Dockerfile
+    │   ├── jest.config.ts
+    │   ├── nest-cli.json
+    │   ├── node_modules
+    │   ├── package.json
+    │   ├── package-lock.json
+    │   ├── PSYNOVA_HANDOFF_REPORT.txt
+    │   ├── src
+    │   ├── test
+    │   ├── tests
+    │   ├── tsconfig.build.json
+    │   └── tsconfig.json
+    ├── database
+    │   ├── 03-alter-users-password-hash.sql
+    │   ├── 04-alter-appointments-service-category.sql
+    │   ├── 05-cms-schema.sql
+    │   ├── 06-cms-seed.sql
+    │   ├── 07-notes-and-contact.sql
+    │   ├── schema.sql
+    │   ├── seed_draft_service_categories_reference.sql
+    │   └── seed.sql
+    ├── docker-compose.yml
+    ├── docs
+    │   ├── ai-assistant.md
+    │   ├── api-testing-checklist.md
+    │   ├── architecture.md
+    │   ├── DEPLOYMENT.md
+    │   ├── multilingual-disclaimer.md
+    │   └── SPEC_MAQUETTE_PSYnova_Master_BRIEF_v01.md
+    ├── frontend
+    │   ├── dist
+    │   ├── dist-psynova
+    │   ├── index.html
+    │   ├── node_modules
+    │   ├── package.json
+    │   ├── package-lock.json
+    │   ├── patient-portal
+    │   ├── src
+    │   ├── vite.config.js
+    │   └── wordpress
+    ├── infrastructure
+    │   └── docker
+    ├── integrations
+    ├── legal
+    │   └── compliance-checklist.md
+    ├── novela
+    ├── ops
+    │   ├── advance_loop.sh
+    │   ├── AUDIT_INCREMENT_REPORT.md
+    │   ├── auto_pipeline.sh
+    │   ├── CHATGPT_BRIEF_PORT_3000_PERSISTENT_v01.txt
+    │   ├── CHATGPT_PORT3000_DOC_ALIGNMENT_v01.md
+    │   ├── CHATGPT_UI_DESIGN_BRIEF_v01.txt
+    │   ├── free_port_3000.sh
+    │   ├── load_node_env.sh
+    │   ├── logs
+    │   ├── lunch_autopilot.sh
+    │   ├── migrate_db_password_hash.sh
+    │   ├── PORT_3000_POLICY.md
+    │   ├── port_guard_3000.sh
+    │   ├── reports
+    │   ├── run_backend_checks.sh
+    │   ├── session_bootstrap.sh
+    │   ├── SESSION_CHANGELOG.md
+    │   ├── stack_batch_db_migrate_v01.sh
+    │   ├── start_lunch_autopilot.sh
+    │   ├── task_queue.txt
+    │   └── wp_bootstrap.sh
+    ├── psynova
+    ├── PSYNOVA_MOCKUP_SPEC_CHATGPT_LINK_v01.pdf
+    ├── README.md
+    └── tools
+        ├── benchmark-armyknife
+        ├── benchmark-armyknife-bundle-20260409.zip
+        ├── Shane's Armyknives
+        └── toolbox-cursor
+
+41 directories, 75 files

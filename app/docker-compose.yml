@@ -1,0 +1,106 @@
+# Backend API is behind Compose profiles "prod" and "with-api" (either flag starts the API container).
+# Plain `docker compose up` does NOT bind host :3000 for the API.
+# Rule: one owner of 3000 — Docker API (`--profile prod` or `--profile with-api`) OR local `npm run start:dev`, not both.
+# Full stack: docker compose --profile prod up -d   (or: --profile with-api)
+# Local API + DB/WordPress without container API: docker compose up -d  then  cd backend && npm run start:dev
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: psynova-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-psynova}
+      POSTGRES_USER: ${DB_USER:-psynova}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-psynova_password_change_me}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - ./database/03-alter-users-password-hash.sql:/docker-entrypoint-initdb.d/03-alter-users-password-hash.sql:ro
+      - ./database/04-alter-appointments-service-category.sql:/docker-entrypoint-initdb.d/04-alter-appointments-service-category.sql:ro
+      - ./database/05-cms-schema.sql:/docker-entrypoint-initdb.d/05-cms-schema.sql:ro
+      - ./database/06-cms-seed.sql:/docker-entrypoint-initdb.d/06-cms-seed.sql:ro
+      - ./database/07-notes-and-contact.sql:/docker-entrypoint-initdb.d/07-notes-and-contact.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-psynova} -d ${DB_NAME:-psynova}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    profiles:
+      - prod
+      - with-api
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: psynova-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env.example
+    environment:
+      USE_PERSISTENCE: true
+      DB_HOST: db
+      DB_PORT: 5432
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  wpdb:
+    image: mariadb:11
+    container_name: psynova-wpdb
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${WP_DB_NAME:-psynova_wp}
+      MARIADB_USER: ${WP_DB_USER:-psynova_wp}
+      MARIADB_PASSWORD: ${WP_DB_PASSWORD:-psynova_wp_password_change_me}
+      MARIADB_ROOT_PASSWORD: ${WP_DB_ROOT_PASSWORD:-psynova_wp_root_change_me}
+    ports:
+      - "${WP_DB_PORT:-3306}:3306"
+    volumes:
+      - wp_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 8
+
+  wordpress:
+    image: wordpress:6.8-php8.3-apache
+    container_name: psynova-wordpress
+    restart: unless-stopped
+    environment:
+      WORDPRESS_DB_HOST: wpdb:3306
+      WORDPRESS_DB_NAME: ${WP_DB_NAME:-psynova_wp}
+      WORDPRESS_DB_USER: ${WP_DB_USER:-psynova_wp}
+      WORDPRESS_DB_PASSWORD: ${WP_DB_PASSWORD:-psynova_wp_password_change_me}
+    ports:
+      - "${WP_PORT:-8080}:80"
+    volumes:
+      - wp_data:/var/www/html
+    depends_on:
+      wpdb:
+        condition: service_healthy
+
+  wpcli:
+    image: wordpress:cli
+    container_name: psynova-wpcli
+    environment:
+      WORDPRESS_DB_HOST: wpdb:3306
+      WORDPRESS_DB_NAME: ${WP_DB_NAME:-psynova_wp}
+      WORDPRESS_DB_USER: ${WP_DB_USER:-psynova_wp}
+      WORDPRESS_DB_PASSWORD: ${WP_DB_PASSWORD:-psynova_wp_password_change_me}
+    volumes:
+      - wp_data:/var/www/html
+    depends_on:
+      wpdb:
+        condition: service_healthy
+
+volumes:
+  db_data:
+  wp_db_data:
+  wp_data:
