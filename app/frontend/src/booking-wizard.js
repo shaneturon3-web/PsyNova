@@ -221,7 +221,15 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
           <textarea id="booking-notes" name="notes" rows="4" class="input-textarea" maxlength="8000" aria-describedby="booking-notes-hint">${esc(booking.notes)}</textarea>
         </div>
         <p id="booking-notes-hint" class="muted">${esc(t('booking_notes_hint'))}</p>
-        <p class="muted">${esc(user?.email || '')} · ${tx('Langue UI', 'UI language', 'Idioma UI')}: ${esc(lang)}</p>
+        <p class="muted">${
+          user?.email
+            ? `${esc(user.email)} · ${tx('Langue UI', 'UI language', 'Idioma UI')}: ${esc(lang)}`
+            : tx(
+                'Compte requis seulement à l’étape de confirmation (ci-dessous).',
+                'An account is only required at the confirmation step (below).',
+                'Solo se pedirá cuenta al confirmar (más abajo).',
+              )
+        }</p>
         <div class="booking-actions">
           <button type="button" class="btn btn--ghost" id="booking-back-4">${tx('Retour', 'Back', 'Atrás')}</button>
           <button type="button" class="btn" id="booking-next-3">${tx('Suivant', 'Next', 'Siguiente')}</button>
