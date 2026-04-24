@@ -26,6 +26,10 @@ import { legalPageHtml } from './legal-content.js';
 
 const MOCK_CLINICIAN_ID = '00000000-0000-4000-8000-000000000001';
 
+/** Kept in sync with compliance shell for the same handoff. */
+const SS_BOOKING = 'psynova_booking_draft';
+const SS_RETURN = 'psynova_post_auth_route';
+
 const state = {
   route: '/',
   user: null,
@@ -46,6 +50,30 @@ function routeFromHash() {
 
 function navigate(path) {
   window.location.hash = path;
+}
+
+function mergeBookingFromSession() {
+  if (typeof sessionStorage === 'undefined') return;
+  const raw = sessionStorage.getItem(SS_BOOKING);
+  if (!raw) return;
+  try {
+    const p = JSON.parse(raw);
+    if (p && typeof p === 'object') {
+      state.booking = { ...defaultBookingState(), ...p };
+    }
+  } catch {
+    /* invalid draft */
+  }
+}
+
+function clearBookingHandoff() {
+  if (typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.removeItem(SS_BOOKING);
+    sessionStorage.removeItem(SS_RETURN);
+  } catch {
+    /* */
+  }
 }
 
 function requireAuth() {
@@ -171,6 +199,7 @@ function publicNav(currentPath) {
     ${item('/team', 'nav_team')}
     ${item('/blog', 'nav_blog')}
     ${item('/contact', 'nav_contact')}
+    ${item('/book', 'nav_book')}
     <span class="public-nav__sp" aria-hidden="true"></span>
     ${langSwitcher()}
     <a class="public-nav__a" href="/api/docs" target="_blank" rel="noreferrer">${esc(t('nav_api'))}</a>
@@ -507,6 +536,22 @@ function viewRegister() {
   `;
 }
 
+function viewBookPublic() {
+  const signed = state.user?.sub
+    ? `<p class="pill" role="status">Signed in as ${esc(state.user?.email || '')} — you can confirm your booking below.</p>`
+    : '<p class="muted public-lead" style="margin-top:0">Choose a visit reason, date, and time first. You will be asked to <strong>create an account</strong> (or sign in) only on the <strong>last</strong> step to confirm the appointment (maquette / mock API).</p>';
+  return publicPageWrap(
+    `<h1 class="public-h1">${esc(t('nav_book'))}</h1>
+    ${signed}
+    <div class="main main--booking" style="margin-top:1rem">
+      ${bookingWizardHtml(state.booking, esc, state.user, state.cms?.bundle?.services)}
+    </div>
+    ${state.formError ? `<p class="error-msg" role="alert" style="margin-top:1rem">${esc(state.formError)}</p>` : ''}
+    <p class="muted" style="margin-top:1rem">Already use the app? <a href="#/app/appointments">Appointments (signed-in)</a> · <a href="#/login">Sign in</a></p>`,
+    '/book',
+  );
+}
+
 function viewDashboard() {
   const h = state.health;
   const he = state.healthError;
@@ -835,6 +880,19 @@ async function onAppSubmitBooking(e) {
   if (form.id !== 'form-appt-booking') return;
   e.preventDefault();
   state.formError = null;
+  if (!state.user?.sub) {
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem(SS_BOOKING, JSON.stringify(state.booking));
+        sessionStorage.setItem(SS_RETURN, '/book');
+      }
+    } catch {
+      /* full storage */
+    }
+    state.banner = 'Create a patient account (or sign in) to confirm this time slot — your choices are saved for this session.';
+    navigate('/register');
+    return;
+  }
   const start = new Date(`${state.booking.dateStr}T${state.booking.timeStr}:00`);
   const ends = new Date(start.getTime() + 50 * 60 * 1000);
   try {
@@ -848,6 +906,7 @@ async function onAppSubmitBooking(e) {
       sessionNotes: state.booking.notes?.trim() || undefined,
       sessionNotesClientLanguage: uiLang(),
     });
+    clearBookingHandoff();
     await refreshAppointments();
     state.booking = defaultBookingState();
     render();
@@ -881,6 +940,8 @@ function render() {
     html = viewLogin();
   } else if (r === '/register') {
     html = viewRegister();
+  } else if (r === '/book') {
+    html = viewBookPublic();
   } else if (r === '/legal') {
     html = viewLegal();
   } else if (r.startsWith('/app')) {
@@ -931,7 +992,16 @@ function bind() {
       await refreshUser();
       state.banner = null;
       state.formError = null;
-      navigate('/app');
+      let next = null;
+      try {
+        next = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(SS_RETURN) : null;
+        if (next && typeof sessionStorage !== 'undefined') {
+          sessionStorage.removeItem(SS_RETURN);
+        }
+      } catch {
+        /* */
+      }
+      navigate(next || '/app');
     } catch (err) {
       state.formError = err.body?.message || err.message;
       render();
@@ -1093,6 +1163,9 @@ export async function init() {
 
 async function routeChange() {
   state.route = routeFromHash();
+  if (state.route === '/book') {
+    mergeBookingFromSession();
+  }
   state.formError = null;
   await refreshUser();
   await refreshHealth();

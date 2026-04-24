@@ -32,5 +32,8 @@ __pycache__/
 tmp/
 temp/
 
+# Reversible compliance-gateway apply/revert backups (local only)
+.pre-compliance-gateway/
+
 # Packaged AI Studio bundle (folder is tracked; zip is local-only)
 /AI_STUDIO_RECOVERY_BUNDLE.zip

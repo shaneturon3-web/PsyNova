@@ -9,6 +9,7 @@ import { DatabaseModule } from './database/database.module';
 import { FormsModule } from './forms/forms.module';
 import { HealthModule } from './health/health.module';
 import { TranslationModule } from './translation/translation.module';
+import { VendorLinksModule } from './vendor-links/vendor-links.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TranslationModule } from './translation/translation.module';
     FormsModule,
     AppointmentsModule,
     HealthModule,
+    VendorLinksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,6 @@
+Task_ID,Date,Description,Hours,Market_Rate_CAD,Total_Value_CAD
+T-GEM,2026-04-10,Gemini Architecture,18.5,125,2312.50
+T-GPT,2026-04-10,ChatGPT Mockups,8.0,125,1000.00
+T-GRK,2026-04-10,Grok Research,4.0,125,500.00
+T-CUR,2026-04-10,Systems Integration (Cursor),2.0,125,250.00
+T-SUB,2026-04-10,Software Subscriptions (Cursor/Tools),0,0,0.00
