@@ -178,12 +178,26 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
   const mark = (n) => (step > n ? '✓' : String(n));
   const stepper = `
     <ol class="booking-steps" aria-label="${tx('Progression', 'Progress', 'Progreso')}">
-      <li class="${sc(1)}"><span class="booking-steps__mark" aria-hidden="true">${mark(1)}</span> ${tx('Motif', 'Reason', 'Motivo')}</li>
-      <li class="${sc(2)}"><span class="booking-steps__mark" aria-hidden="true">${mark(2)}</span> ${tx('Date', 'Date', 'Fecha')}</li>
-      <li class="${sc(3)}"><span class="booking-steps__mark" aria-hidden="true">${mark(3)}</span> ${tx('Heure', 'Time', 'Hora')}</li>
-      <li class="${sc(4)}"><span class="booking-steps__mark" aria-hidden="true">${mark(4)}</span> ${tx('Séance', 'Session', 'Sesión')}</li>
-      <li class="${sc(5)}"><span class="booking-steps__mark" aria-hidden="true">${mark(5)}</span> ${tx('Confirmer', 'Confirm', 'Confirmar')}</li>
+      <li class="${sc(1)}"><span class="booking-steps__mark" aria-hidden="true">${mark(1)}</span> <span class="booking-steps__icon" aria-hidden="true">🧭</span> ${tx('Motif', 'Reason', 'Motivo')}</li>
+      <li class="${sc(2)}"><span class="booking-steps__mark" aria-hidden="true">${mark(2)}</span> <span class="booking-steps__icon" aria-hidden="true">📅</span> ${tx('Date', 'Date', 'Fecha')}</li>
+      <li class="${sc(3)}"><span class="booking-steps__mark" aria-hidden="true">${mark(3)}</span> <span class="booking-steps__icon" aria-hidden="true">🕒</span> ${tx('Heure', 'Time', 'Hora')}</li>
+      <li class="${sc(4)}"><span class="booking-steps__mark" aria-hidden="true">${mark(4)}</span> <span class="booking-steps__icon" aria-hidden="true">💻</span> ${tx('Séance', 'Session', 'Sesión')}</li>
+      <li class="${sc(5)}"><span class="booking-steps__mark" aria-hidden="true">${mark(5)}</span> <span class="booking-steps__icon" aria-hidden="true">✅</span> ${tx('Confirmer', 'Confirm', 'Confirmar')}</li>
     </ol>`;
+  const visualCard = `
+    <aside class="booking-visual-card" aria-label="${tx('Guided booking', 'Guided booking', 'Reserva guiada')}">
+      <h3 class="booking-visual-card__h">${tx('Guided booking', 'Guided booking', 'Reserva guiada')}</h3>
+      <p class="booking-visual-card__p">${tx(
+        'Parcours simple et sécurisé : choisissez un motif, puis date et heure.',
+        'Simple and guided flow: pick a reason, then date and time.',
+        'Flujo simple y guiado: primero motivo, después fecha y hora.',
+      )}</p>
+      <ul class="booking-visual-card__list">
+        <li>✅ ${tx('Aucune note clinique ici', 'No clinical notes here', 'Sin notas clínicas aquí')}</li>
+        <li>🛡️ ${tx('Sélection avant connexion', 'Choose before sign-in', 'Elegir antes de iniciar sesión')}</li>
+        <li>📌 ${tx('Confirmation à la fin', 'Confirm at the end', 'Confirmar al final')}</li>
+      </ul>
+    </aside>`;
 
   let leftCol = '';
   if (step === 1) {
@@ -341,6 +355,7 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
         'Columna izquierda: contexto. Derecha: calendario, horarios, confirmación. Solo maqueta.',
       )}</p>
       ${stepper}
+      ${visualCard}
       <div class="booking-inline-split">
         ${leftCol}
         ${rightCol}

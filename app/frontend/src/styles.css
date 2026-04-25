@@ -1842,3 +1842,268 @@ button.category-card:hover {
 }
 /* PSYNOVA_UI_WRAP_END */
 
+/* PSYNOVA_VISIBLE_UI_WRAP_START */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body {
+  background:
+    radial-gradient(1100px 500px at -10% -10%, rgba(111, 211, 192, 0.2), transparent 55%),
+    radial-gradient(900px 450px at 110% -20%, rgba(79, 124, 172, 0.22), transparent 52%),
+    linear-gradient(180deg, #f8fbff 0%, #eef4fb 45%, #f7f9fc 100%);
+}
+
+.public-page {
+  animation: fadeInUp 0.45s ease-out both;
+}
+
+.public-inner {
+  padding: 0.8rem 0.35rem 0.4rem;
+}
+
+.public-nav {
+  position: sticky;
+  top: 0.45rem;
+  z-index: 20;
+}
+
+.public-nav--bar {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(201, 212, 224, 0.82);
+  box-shadow: 0 10px 26px rgba(31, 42, 55, 0.09);
+}
+
+.public-nav__a {
+  font-weight: 600;
+}
+
+.hero.hero--split {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1.2rem;
+  align-items: stretch;
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero__visual {
+  margin: 0;
+  padding: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 212, 224, 0.85);
+  background: #fff;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero__image {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.hero__visual-caption {
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  background: linear-gradient(180deg, #ffffff, #f5f8fc);
+  border-top: 1px solid var(--border);
+}
+
+.home-card {
+  border-radius: 14px;
+  padding: 1.05rem 1.1rem;
+}
+
+.home-card__icon {
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  margin-bottom: 0.4rem;
+  font-size: 1.05rem;
+  background: linear-gradient(145deg, #edf5ff, #ffffff);
+  border: 1px solid #d7e4f5;
+}
+
+.card {
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(31, 42, 55, 0.08);
+}
+
+.team-card,
+.service-card,
+.category-card,
+.booking-plugin {
+  border-radius: 14px;
+}
+
+button.service-card {
+  position: relative;
+  padding-top: 2.8rem;
+}
+
+.service-card__icon {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.75rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef5ff;
+  border: 1px solid #d1e2fb;
+}
+
+.team-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.25rem 0 0.65rem;
+}
+
+.team-card__chips span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #355375;
+  background: #edf3fb;
+  border: 1px solid #d5e2f2;
+  border-radius: 999px;
+  padding: 0.2rem 0.45rem;
+}
+
+.team-card__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.btn.btn--small {
+  padding: 0.32rem 0.7rem;
+  font-size: 0.76rem;
+}
+
+.booking-steps {
+  border-radius: 14px;
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+.booking-steps__i {
+  gap: 0.32rem;
+}
+
+.booking-steps__icon {
+  font-size: 0.9rem;
+}
+
+.booking-inline-split {
+  margin-top: 0.8rem;
+}
+
+.booking-visual-card {
+  border: 1px solid #d8e6f8;
+  border-radius: 14px;
+  background: linear-gradient(150deg, #eef6ff 0%, #f6fbff 55%, #eefaf6 100%);
+  box-shadow: 0 7px 22px rgba(53, 83, 117, 0.12);
+  padding: 0.8rem 1rem 0.9rem;
+  margin-bottom: 0.95rem;
+}
+
+.booking-visual-card__h {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.booking-visual-card__p {
+  margin: 0 0 0.45rem;
+  font-size: 0.83rem;
+  color: var(--muted);
+}
+
+.booking-visual-card__list {
+  margin: 0;
+  padding-left: 1rem;
+  font-size: 0.8rem;
+  color: #2a3f56;
+}
+
+.booking-plugin {
+  box-shadow: 0 7px 20px rgba(31, 42, 55, 0.07);
+}
+
+.cal {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.btn {
+  transition: transform 0.16s ease, box-shadow 0.18s ease, background 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(79, 124, 172, 0.22);
+}
+
+.home-card:hover,
+.team-card:hover,
+button.service-card:hover,
+button.category-card:hover,
+.booking-plugin:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(31, 42, 55, 0.12);
+}
+
+@media (max-width: 760px) {
+  .hero.hero--split {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__visual {
+    order: -1;
+    min-height: 180px;
+  }
+
+  .hero__image {
+    min-height: 170px;
+  }
+
+  .booking-inline-split {
+    flex-direction: column;
+  }
+
+  .booking-steps {
+    gap: 0.25rem 0.45rem;
+  }
+
+  .booking-steps__i {
+    font-size: 0.72rem;
+  }
+
+  .public-nav {
+    position: static;
+  }
+}
+/* PSYNOVA_VISIBLE_UI_WRAP_END */
+

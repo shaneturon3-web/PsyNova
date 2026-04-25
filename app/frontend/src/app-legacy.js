@@ -29,6 +29,14 @@ const MOCK_CLINICIAN_ID = '00000000-0000-4000-8000-000000000001';
 
 /** Local-only “UI preview” sign-in: empty password skips API. Not a real JWT. */
 const PSYNOVA_DEMO_UI_TOKEN = 'psynova-demo-ui-bypass';
+const HOME_CARD_ICONS = ['🧠', '💬', '🌿', '📅', '🛡️', '✨'];
+const SERVICE_CARD_ICONS = ['🧠', '🌙', '💬', '🌿', '🤝', '✨'];
+const TEAM_FALLBACK_IMAGES = [
+  'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80',
+  'https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=400&q=80',
+  'https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=400&q=80',
+  'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=400&q=80',
+];
 
 /** Kept in sync with compliance shell for the same handoff. */
 const SS_BOOKING = 'psynova_booking_draft';
@@ -286,11 +294,12 @@ function viewLanding() {
     ? ts.payload.heading[lang] || ts.payload.heading.en || ''
     : '';
   const cardHtml = gridCards
-    .map((c) => {
+    .map((c, idx) => {
       const title = c.title?.[lang] || c.title?.en || '';
       const blurb = c.blurb?.[lang] || c.blurb?.en || '';
       const href = c.href || '#';
-      return `<a class="home-card" href="${esc(href)}"><h3>${esc(title)}</h3><p class="muted">${esc(blurb)}</p></a>`;
+      const icon = HOME_CARD_ICONS[idx % HOME_CARD_ICONS.length];
+      return `<a class="home-card" href="${esc(href)}"><div class="home-card__icon" aria-hidden="true">${icon}</div><h3>${esc(title)}</h3><p class="muted">${esc(blurb)}</p></a>`;
     })
     .join('');
   const tests = [...(b.testimonials || [])].sort((a, x) => (a.sortOrder ?? 0) - (x.sortOrder ?? 0));
@@ -309,14 +318,20 @@ function viewLanding() {
       ${globalContentDisclaimer()}
       ${adminHumanCorrectionHint()}
       ${publicNav('/')}
-      <div class="hero hero--wide" id="main">
-        <h1>${esc(hero.title)}</h1>
-        <div class="muted hero__lead">${hero.lead}</div>
-        <p class="hero__actions">
-          <a class="btn" href="${esc(hero.ctaPrimary?.href || '#/register')}">${esc(hero.ctaPrimary?.label || '')}</a>
-          <a class="btn btn--ghost" href="${esc(hero.ctaSecondary?.href || '#/legal')}">${esc(hero.ctaSecondary?.label || '')}</a>
-          <a class="btn btn--ghost" href="${esc(hero.ctaBook?.href || '#/book')}">${esc(hero.ctaBook?.label || '')}</a>
-        </p>
+      <div class="hero hero--wide hero--split" id="main">
+        <div class="hero__content">
+          <h1>${esc(hero.title)}</h1>
+          <div class="muted hero__lead">${hero.lead}</div>
+          <p class="hero__actions">
+            <a class="btn" href="${esc(hero.ctaPrimary?.href || '#/register')}">${esc(hero.ctaPrimary?.label || '')}</a>
+            <a class="btn btn--ghost" href="${esc(hero.ctaSecondary?.href || '#/legal')}">${esc(hero.ctaSecondary?.label || '')}</a>
+            <a class="btn btn--ghost" href="${esc(hero.ctaBook?.href || '#/book')}">${esc(hero.ctaBook?.label || '')}</a>
+          </p>
+        </div>
+        <div class="hero__visual card" aria-hidden="true">
+          <img class="hero__image" src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80" alt="" loading="lazy" />
+          <div class="hero__visual-caption">🌿 Calm, guided virtual support</div>
+        </div>
         <div class="home-cards">${cardHtml}</div>
         ${
           th
@@ -348,11 +363,13 @@ function viewServices() {
   const svcs = [...(b.services || [])].sort((a, x) => (a.sortOrder ?? 0) - (x.sortOrder ?? 0));
   const titleKey = lang === 'fr' ? 'titleFr' : lang === 'es' ? 'titleEs' : 'titleEn';
   const cards = svcs
-    .map((s) => {
+    .map((s, idx) => {
       const title = pickLocalizedText(s, 'title', lang);
       const body = pickLocalizedText(s, 'body', lang);
+      const icon = SERVICE_CARD_ICONS[idx % SERVICE_CARD_ICONS.length];
       // BOOKING_FLOW_RESTORE: actionable specialty → opens `#/book` with category prefilled (see `onServiceCardOpenBooking`)
       return `<button type="button" class="service-card" data-booking-category="${esc(s.slug)}" aria-label="${esc(title)} — ${esc(t('nav_book'))}">
+        <div class="service-card__icon" aria-hidden="true">${icon}</div>
         <h3 class="service-card__h"${cmsInlinePatchAttr('service', s.id, titleKey)}>${esc(title)}</h3>
         <div class="muted service-card__p">${body}</div>
       </button>`;
@@ -379,24 +396,26 @@ function viewTeam() {
   const nameKey = lang === 'fr' ? 'nameFr' : lang === 'es' ? 'nameEs' : 'nameEn';
   const roleKey = lang === 'fr' ? 'roleFr' : lang === 'es' ? 'roleEs' : 'roleEn';
   const cards = team
-    .map((m) => {
+    .map((m, idx) => {
       const name = pickLocalizedText(m, 'name', lang);
       const role = pickLocalizedText(m, 'role', lang);
       const bio = pickLocalizedText(m, 'bio', lang);
       const url = resolveMediaUrl(b, m.avatarMediaId);
+      const fallbackImg = TEAM_FALLBACK_IMAGES[idx % TEAM_FALLBACK_IMAGES.length];
       const ill = m.illustrationNote || '';
       return `
     <article class="team-card">
       ${
         url
           ? `<div class="team-card__avatar team-card__avatar--img"><img src="${esc(url)}" alt="" width="96" height="96" loading="lazy" /></div>`
-          : `<div class="team-card__avatar" aria-hidden="true">${esc(name.charAt(0))}</div>`
+          : `<div class="team-card__avatar team-card__avatar--img"><img src="${esc(fallbackImg)}" alt="" width="96" height="96" loading="lazy" /></div>`
       }
       <h3 class="team-card__name"${cmsInlinePatchAttr('doctor', m.id, nameKey)}>${esc(name)}</h3>
       <p class="team-card__role"${cmsInlinePatchAttr('doctor', m.id, roleKey)}>${esc(role)}</p>
+      <div class="team-card__chips"><span>CBT</span><span>Mindfulness</span><span>Virtual care</span></div>
       <div class="team-card__bio">${bio}</div>
       <p class="team-card__illust muted"><em>${esc(ill)}</em></p>
-      <p class="team-card__cta"><a class="btn btn--ghost" href="#/team/${encodeURIComponent(m.id)}">${esc(t('team_view_profile'))}</a></p>
+      <p class="team-card__cta"><a class="btn btn--small btn--ghost" href="#/book">Book session</a> <a class="btn btn--small btn--ghost" href="#/team/${encodeURIComponent(m.id)}">${esc(t('team_view_profile'))}</a></p>
     </article>`;
     })
     .join('');

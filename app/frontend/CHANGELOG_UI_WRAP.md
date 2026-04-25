@@ -62,9 +62,46 @@ All entries confirm: **no backend changes**, **no API contract changes**, **no r
 
 ---
 
+## 2026-04-24 (visible pass) — homepage/services/team/booking emphasis
+
+### `frontend/src/app-legacy.js`
+- Landing hero upgraded to a **split two-column layout**: existing title/lead/CTAs unchanged on the left, added decorative image panel on the right (`.hero__visual`, `.hero__image`) using the provided Unsplash URL.
+- Home feature cards now render a `home-card__icon` badge with rotating icons (`🧠 💬 🌿 📅 🛡️ ✨`) before each title.
+- Services cards now render `service-card__icon` using index-based icon mapping (`🧠 🌙 💬 🌿 🤝 ✨`) without touching slugs or booking category wiring.
+- Team cards now use photo fallback images (provided Unsplash set) when CMS avatar is missing; initials fallback removed for this view.
+- Team cards now include visual specialty pills (`CBT`, `Mindfulness`, `Virtual care`) and `Book session` CTA in addition to existing profile CTA.
+
+### `frontend/src/booking-wizard.js`
+- Booking step labels now include icons while preserving original step numbers and progression:
+  - `1 🧭 Reason`
+  - `2 📅 Date`
+  - `3 🕒 Time`
+  - `4 💻 Session`
+  - `5 ✅ Confirm`
+- Added a presentational `booking-visual-card` block (guided reassurance/check rows) before the split columns.
+- No state transitions, validators, button IDs, or handlers changed.
+
+### `frontend/src/styles.css`
+- Added `/* PSYNOVA_VISIBLE_UI_WRAP_START */` … `/* PSYNOVA_VISIBLE_UI_WRAP_END */` at file bottom.
+- Implemented visibly stronger styling:
+  - gradient page background
+  - glassy/sticky public nav
+  - split hero with image card
+  - icon badges for home/services/booking steps
+  - larger rounded cards + deeper soft shadows
+  - hover lift on cards/buttons
+  - `fadeInUp` entry animation
+  - improved team card visuals/chips/CTA spacing
+  - booking visual card + stronger booking panel/stepper look
+  - responsive stacking at `max-width: 760px`
+
+**Confirmation:** This pass changed presentation only in allowed frontend files. No backend, API contract, route names, CMS schema, disclaimer/legal text, booking state machine, or persistence logic were modified.
+
+---
+
 ## Build
 
-_Updated after `npm run build` (2026-04-24)._
+_Updated after `npm run build` (2026-04-24, visible pass)._
 
 ```
 > psynova-frontend@0.1.0 build
@@ -73,9 +110,9 @@ _Updated after `npm run build` (2026-04-24)._
 vite v5.4.21 building for production.
 ✓ 20 modules transformed.
 dist-psynova/index.html                  0.58 kB │ gzip:  0.40 kB
-dist-psynova/assets/index-5pfHU8dQ.css  26.22 kB │ gzip:  5.94 kB
-dist-psynova/assets/index-CPE5z2L1.js   93.33 kB │ gzip: 25.73 kB
-✓ built in ~970ms
+dist-psynova/assets/index-DnhOd-X8.css  29.75 kB │ gzip:  6.67 kB
+dist-psynova/assets/index-BvpCw32Z.js   95.77 kB │ gzip: 26.61 kB
+✓ built in ~1.44s
 ```
 
 **Exit code:** 0
