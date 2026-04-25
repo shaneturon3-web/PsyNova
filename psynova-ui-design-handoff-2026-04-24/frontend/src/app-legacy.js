@@ -187,18 +187,12 @@ function langSwitcher() {
 function publicNav(currentPath) {
   const item = (path, key) => {
     const cur =
-      currentPath === path ||
-      (path === '/blog' && currentPath.startsWith('/blog/')) ||
-      (path === '/team' && (currentPath === '/team' || currentPath.startsWith('/team/')))
+      currentPath === path || (path === '/blog' && currentPath.startsWith('/blog/'))
         ? ' public-nav__a--current'
         : '';
     return `<a class="public-nav__a${cur}" href="#${path}">${esc(t(key))}</a>`;
   };
   return `<nav class="public-nav public-nav--bar" aria-label="Site">
-    <button type="button" class="public-nav__menu-btn" id="public-nav-menu" aria-expanded="false" aria-controls="public-nav-links">
-      ${esc(t('nav_menu'))}
-    </button>
-    <div class="public-nav__links" id="public-nav-links">
     ${item('/', 'nav_home')}
     ${item('/about', 'nav_about')}
     ${item('/services', 'nav_services')}
@@ -206,14 +200,11 @@ function publicNav(currentPath) {
     ${item('/blog', 'nav_blog')}
     ${item('/contact', 'nav_contact')}
     ${item('/book', 'nav_book')}
-    </div>
     <span class="public-nav__sp" aria-hidden="true"></span>
-    <div class="public-nav__tools">
     ${langSwitcher()}
     <a class="public-nav__a" href="/api/docs" target="_blank" rel="noreferrer">${esc(t('nav_api'))}</a>
     ${item('/login', 'nav_login')}
     ${item('/register', 'nav_register')}
-    </div>
   </nav>`;
 }
 
@@ -382,7 +373,6 @@ function viewTeam() {
       <p class="team-card__role"${cmsInlinePatchAttr('doctor', m.id, roleKey)}>${esc(role)}</p>
       <div class="team-card__bio">${bio}</div>
       <p class="team-card__illust muted"><em>${esc(ill)}</em></p>
-      <p class="team-card__cta"><a class="btn btn--ghost" href="#/team/${encodeURIComponent(m.id)}">${esc(t('team_view_profile'))}</a></p>
     </article>`;
     })
     .join('');
@@ -392,53 +382,6 @@ function viewTeam() {
     <div class="team-grid">${cards}</div>`,
     '/team',
   );
-}
-
-function viewTeamMember(memberId) {
-  const lang = uiLang();
-  const b = state.cms?.bundle;
-  if (state.cms?.loading && !b) {
-    return publicPageWrap(`<p class="muted">Loading…</p>`, `/team/${memberId}`);
-  }
-  if (!b || state.cms?.error) {
-    return publicPageWrap(
-      `<p class="error-msg">${esc(state.cms?.error || 'CMS unavailable')}</p>`,
-      `/team/${memberId}`,
-    );
-  }
-  const team = [...(b.doctors || [])];
-  const m = team.find((x) => x.id === memberId);
-  if (!m) {
-    return publicPageWrap(
-      `<p class="back-link"><a href="#/team">← ${esc(t('nav_team'))}</a></p>
-      <h1 class="public-h1">${esc(t('team_not_found'))}</h1>
-      <p class="muted">${esc(t('team_not_found_lead'))}</p>`,
-      '/team',
-    );
-  }
-  const nameKey = lang === 'fr' ? 'nameFr' : lang === 'es' ? 'nameEs' : 'nameEn';
-  const roleKey = lang === 'fr' ? 'roleFr' : lang === 'es' ? 'roleEs' : 'roleEn';
-  const name = pickLocalizedText(m, 'name', lang);
-  const role = pickLocalizedText(m, 'role', lang);
-  const bio = pickLocalizedText(m, 'bio', lang);
-  const url = resolveMediaUrl(b, m.avatarMediaId);
-  const ill = m.illustrationNote || '';
-  const body = `<p class="back-link"><a href="#/team">← ${esc(t('nav_team'))}</a></p>
-  <article class="team-profile card">
-    ${
-      url
-        ? `<div class="team-profile__hero"><div class="team-profile__avatar team-profile__avatar--img"><img src="${esc(url)}" alt="" width="120" height="120" loading="eager" /></div></div>`
-        : `<div class="team-profile__hero"><div class="team-profile__avatar" aria-hidden="true">${esc(name.charAt(0))}</div></div>`
-    }
-    <h1 class="public-h1 team-profile__h"${cmsInlinePatchAttr('doctor', m.id, nameKey)}>${esc(name)}</h1>
-    <p class="team-profile__role"${cmsInlinePatchAttr('doctor', m.id, roleKey)}>${esc(role)}</p>
-    <div class="team-profile__bio">${bio}</div>
-    <p class="team-card__illust muted team-profile__illust"><em>${esc(ill)}</em></p>
-    <p class="team-profile__actions">
-      <a class="btn" href="#/book">${esc(t('nav_book'))}</a>
-    </p>
-  </article>`;
-  return publicPageWrap(body, `/team/${memberId}`);
 }
 
 function viewBlog() {
@@ -1007,14 +950,6 @@ function render() {
     html = viewServices();
   } else if (r === '/team') {
     html = viewTeam();
-  } else if (r.startsWith('/team/')) {
-    let tid = r.slice('/team/'.length);
-    try {
-      tid = decodeURIComponent(tid);
-    } catch {
-      /* keep raw */
-    }
-    html = viewTeamMember(tid);
   } else if (r === '/blog') {
     html = viewBlog();
   } else if (r.startsWith('/blog/')) {
@@ -1140,25 +1075,6 @@ function bind() {
   document.getElementById('btn-disable-inline')?.addEventListener('click', () => {
     sessionStorage.setItem('psynova_cms_inline', '0');
     render();
-  });
-
-  const navMenu = document.getElementById('public-nav-menu');
-  const closePublicNav = () => {
-    const nav = document.querySelector('.public-nav--bar');
-    nav?.classList.remove('public-nav--open');
-    const btn = document.getElementById('public-nav-menu');
-    btn?.setAttribute('aria-expanded', 'false');
-  };
-  navMenu?.addEventListener('click', (e) => {
-    e.preventDefault();
-    const nav = e.currentTarget?.closest?.('.public-nav--bar');
-    if (!nav) return;
-    const open = !nav.classList.contains('public-nav--open');
-    nav.classList.toggle('public-nav--open', open);
-    e.currentTarget.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-  document.getElementById('public-nav-links')?.addEventListener('click', (e) => {
-    if (e.target.closest('a[href^="#"]')) closePublicNav();
   });
 
   document.getElementById('btn-contact-preview')?.addEventListener('click', async () => {

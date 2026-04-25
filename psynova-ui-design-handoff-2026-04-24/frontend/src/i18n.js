@@ -27,12 +27,6 @@ const STR = {
     team_title: 'Équipe — personnages fictifs',
     team_lead:
       'Illustrations décrites comme cartoon professionnel (pastel doux, semi-plat). Aucune photo réelle ; noms inventés.',
-    team_view_profile: 'Voir la fiche',
-    team_not_found: 'Membre introuvable',
-    team_not_found_lead: 'Cette fiche n’existe pas dans le contenu chargé (maquette CMS).',
-    nav_menu: 'Menu',
-    disclaimer_collapsed_hint:
-      'Avis légaux et sécurité — cliquez pour afficher le texte complet (le pied de page reprend aussi ces mentions).',
     blog_title: 'Blogue — articles fictifs',
     blog_lead: 'Contenus pédagogiques d’exemple, adaptés au contexte montréalais.',
     blog_read: 'Lire',
@@ -120,12 +114,6 @@ const STR = {
     team_title: 'Team — fictional characters',
     team_lead:
       'Illustrations described as professional cartoon (soft pastel, semi-flat). No real photos; invented names.',
-    team_view_profile: 'View profile',
-    team_not_found: 'Profile not found',
-    team_not_found_lead: 'This team member is not in the loaded CMS content (mockup).',
-    nav_menu: 'Menu',
-    disclaimer_collapsed_hint:
-      'Legal & safety notice — click to read the full text (the footer also repeats this information).',
     blog_title: 'Blog — sample posts',
     blog_lead: 'Educational placeholders for Greater Montreal context.',
     blog_read: 'Read',
@@ -211,12 +199,6 @@ const STR = {
     team_title: 'Equipo — personajes ficticios',
     team_lead:
       'Ilustración tipo cartoon profesional (pastel suave, semi-plano). Sin fotos reales.',
-    team_view_profile: 'Ver perfil',
-    team_not_found: 'Perfil no encontrado',
-    team_not_found_lead: 'Esta ficha no está en el contenido CMS cargado (maqueta).',
-    nav_menu: 'Menú',
-    disclaimer_collapsed_hint:
-      'Aviso legal y de seguridad: pulse para leer el texto completo (el pie de página también lo repite).',
     blog_title: 'Blog — artículos ficticios',
     blog_lead: 'Contenido educativo de ejemplo para Montreal.',
     blog_read: 'Leer',

@@ -170,19 +170,13 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
   const ml = monthLabel(booking.calYear, booking.calMonth);
   const lang = uiLang();
 
-  const sc = (n) => {
-    if (step > n) return 'booking-steps__i booking-steps__i--done';
-    if (step === n) return 'booking-steps__i booking-steps__i--active';
-    return 'booking-steps__i booking-steps__i--todo';
-  };
-  const mark = (n) => (step > n ? '✓' : String(n));
   const stepper = `
     <ol class="booking-steps" aria-label="${tx('Progression', 'Progress', 'Progreso')}">
-      <li class="${sc(1)}"><span class="booking-steps__mark" aria-hidden="true">${mark(1)}</span> ${tx('Motif', 'Reason', 'Motivo')}</li>
-      <li class="${sc(2)}"><span class="booking-steps__mark" aria-hidden="true">${mark(2)}</span> ${tx('Date', 'Date', 'Fecha')}</li>
-      <li class="${sc(3)}"><span class="booking-steps__mark" aria-hidden="true">${mark(3)}</span> ${tx('Heure', 'Time', 'Hora')}</li>
-      <li class="${sc(4)}"><span class="booking-steps__mark" aria-hidden="true">${mark(4)}</span> ${tx('Séance', 'Session', 'Sesión')}</li>
-      <li class="${sc(5)}"><span class="booking-steps__mark" aria-hidden="true">${mark(5)}</span> ${tx('Confirmer', 'Confirm', 'Confirmar')}</li>
+      <li class="booking-steps__i ${step >= 1 ? 'booking-steps__i--on' : ''}"><span>1</span> ${tx('Motif', 'Reason', 'Motivo')}</li>
+      <li class="booking-steps__i ${step >= 2 ? 'booking-steps__i--on' : ''}"><span>2</span> ${tx('Date', 'Date', 'Fecha')}</li>
+      <li class="booking-steps__i ${step >= 3 ? 'booking-steps__i--on' : ''}"><span>3</span> ${tx('Heure', 'Time', 'Hora')}</li>
+      <li class="booking-steps__i ${step >= 4 ? 'booking-steps__i--on' : ''}"><span>4</span> ${tx('Séance', 'Session', 'Sesión')}</li>
+      <li class="booking-steps__i ${step >= 5 ? 'booking-steps__i--on' : ''}"><span>5</span> ${tx('Confirmer', 'Confirm', 'Confirmar')}</li>
     </ol>`;
 
   let leftCol = '';

@@ -31,12 +31,11 @@ export function formDisclaimerBlock() {
 
 /** Shown once at top of public inner content (supplements fixed header banner). */
 export function globalContentDisclaimer() {
-  return `<details class="content-disclaimer card card--disclaimer content-disclaimer--collapsible">
-    <summary class="content-disclaimer__summary">${t('disclaimer_collapsed_hint')}</summary>
+  return `<div class="content-disclaimer card card--disclaimer">
     <p class="content-disclaimer__line"><strong>${t('disclaimer_banner_line')}</strong></p>
     <p class="content-disclaimer__line"><strong>${t('disclaimer_short')}</strong></p>
     <p class="muted content-disclaimer__sub">${t('disclaimer_detail')}</p>
-  </details>`;
+  </div>`;
 }
 
 /** Site footer on public pages (supplements header banner). */
