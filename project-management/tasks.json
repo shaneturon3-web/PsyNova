@@ -1,0 +1,57 @@
+[
+  {
+    "id": "task-booking-summary-finalize",
+    "name": "Finalize booking confirmation summary completeness",
+    "module": "Booking",
+    "status": "In Development",
+    "priority": "High",
+    "cursor_prompt": "Ensure final summary shows session/provider/contact/date/time/therapist/join instructions.",
+    "test_result": "Frontend build passes.",
+    "related_files": ["app/frontend/src/booking-wizard.js", "app/frontend/src/app-legacy.js"],
+    "notes": "Keep API payload unchanged."
+  },
+  {
+    "id": "task-group-session-controls",
+    "name": "Add group session controls and roles",
+    "module": "Group Sessions",
+    "status": "In Development",
+    "priority": "High",
+    "cursor_prompt": "Implement host/co-host/participant controls and anonymous mode demo toggle.",
+    "test_result": "Route renders and actions do not crash.",
+    "related_files": ["app/frontend/src/demo-session-data.js", "app/frontend/src/app-legacy.js"],
+    "notes": "Demo-safe local state only."
+  },
+  {
+    "id": "task-notion-sync-bootstrap",
+    "name": "Bootstrap local PM db and Notion sync script",
+    "module": "Core Platform",
+    "status": "In Development",
+    "priority": "High",
+    "cursor_prompt": "Create project-management JSON database and upsert-only Notion sync script.",
+    "test_result": "Missing credentials path handled without crash.",
+    "related_files": ["scripts/sync-to-notion.js", "project-management/README.md"],
+    "notes": "Never delete remote Notion data."
+  },
+  {
+    "id": "task-license-governance",
+    "name": "Enforce verified resource licensing register",
+    "module": "Resource Licensing",
+    "status": "Planned",
+    "priority": "High",
+    "cursor_prompt": "Block unverified content from production paths; surface status in admin.",
+    "test_result": "",
+    "related_files": ["app/frontend/src/verified-resources.js", "docs/RESOURCE_LICENSE_REGISTER.md"],
+    "notes": "Unknown license => mock-only."
+  },
+  {
+    "id": "task-therapist-dashboard-v1",
+    "name": "Build therapist dashboard v1",
+    "module": "Therapist Dashboard",
+    "status": "Planned",
+    "priority": "High",
+    "cursor_prompt": "Create schedule/upcoming/patient/messages/records/session controls in one view.",
+    "test_result": "",
+    "related_files": ["app/frontend/src/app-legacy.js"],
+    "notes": ""
+  }
+]

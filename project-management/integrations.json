@@ -1,0 +1,66 @@
+[
+  {
+    "id": "int-zoom",
+    "name": "Zoom",
+    "provider_type": "video",
+    "status": "PLACEHOLDER_REQUIRES_SIGNUP",
+    "credentials_required": ["ZOOM_CLIENT_ID", "ZOOM_CLIENT_SECRET", "ZOOM_ACCOUNT_ID", "ZOOM_WEBHOOK_SECRET"],
+    "notes": "Primary session provider. credentials pending."
+  },
+  {
+    "id": "int-daily",
+    "name": "Daily.co",
+    "provider_type": "video",
+    "status": "PLACEHOLDER_REQUIRES_SIGNUP",
+    "credentials_required": ["DAILY_API_KEY"],
+    "notes": "Backup provider. credentials pending."
+  },
+  {
+    "id": "int-whereby",
+    "name": "Whereby",
+    "provider_type": "video",
+    "status": "PLACEHOLDER_REQUIRES_SIGNUP",
+    "credentials_required": ["WHEREBY_API_KEY"],
+    "notes": "Backup provider. credentials pending."
+  },
+  {
+    "id": "int-jitsi",
+    "name": "Jitsi",
+    "provider_type": "video",
+    "status": "VERIFIED_OPEN",
+    "credentials_required": [],
+    "notes": "Open-source/self-hostable option."
+  },
+  {
+    "id": "int-twilio",
+    "name": "Twilio Voice",
+    "provider_type": "voip",
+    "status": "PLACEHOLDER_REQUIRES_SIGNUP",
+    "credentials_required": ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_PHONE_NUMBER"],
+    "notes": "VoIP primary. credentials pending."
+  },
+  {
+    "id": "int-telnyx",
+    "name": "Telnyx",
+    "provider_type": "voip",
+    "status": "PLACEHOLDER_REQUIRES_SIGNUP",
+    "credentials_required": ["TELNYX_API_KEY"],
+    "notes": "Phone backup. credentials pending."
+  },
+  {
+    "id": "int-vonage",
+    "name": "Vonage",
+    "provider_type": "voip",
+    "status": "PLACEHOLDER_REQUIRES_SIGNUP",
+    "credentials_required": ["VONAGE_API_KEY"],
+    "notes": "Phone backup. credentials pending."
+  },
+  {
+    "id": "int-stripe",
+    "name": "Stripe",
+    "provider_type": "payments",
+    "status": "PLACEHOLDER_REQUIRES_SIGNUP",
+    "credentials_required": ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"],
+    "notes": "Billing and merchant processing. credentials pending."
+  }
+]

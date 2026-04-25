@@ -1,0 +1,62 @@
+[
+  {
+    "id": "lic-jitsi",
+    "name": "Jitsi Meet",
+    "category": "video providers",
+    "official_url": "https://raw.githubusercontent.com/jitsi/jitsi-meet/master/LICENSE",
+    "license_type": "Apache-2.0",
+    "commercial_use_allowed": "yes",
+    "signup_required": "no",
+    "api_key_required": "no",
+    "status": "VERIFIED_OPEN",
+    "notes": "Open-source license verified."
+  },
+  {
+    "id": "lic-zoom",
+    "name": "Zoom",
+    "category": "video providers",
+    "official_url": "https://developers.zoom.us/docs/internal-apps/s2s-oauth/",
+    "license_type": "Commercial terms",
+    "commercial_use_allowed": "yes",
+    "signup_required": "yes",
+    "api_key_required": "yes",
+    "status": "VERIFIED_COMMERCIAL",
+    "notes": "credentials pending"
+  },
+  {
+    "id": "lic-twilio",
+    "name": "Twilio",
+    "category": "VoIP providers",
+    "official_url": "https://www.twilio.com/docs/iam/api-keys",
+    "license_type": "Commercial terms",
+    "commercial_use_allowed": "yes",
+    "signup_required": "yes",
+    "api_key_required": "yes",
+    "status": "VERIFIED_COMMERCIAL",
+    "notes": "credentials pending"
+  },
+  {
+    "id": "lic-unsplash",
+    "name": "Unsplash",
+    "category": "stock images",
+    "official_url": "https://unsplash.com/license",
+    "license_type": "Unsplash License",
+    "commercial_use_allowed": "unknown",
+    "signup_required": "no",
+    "api_key_required": "no",
+    "status": "MOCK_ONLY_LICENSE_REQUIRED",
+    "notes": "Manual legal verification required before production use."
+  },
+  {
+    "id": "lic-clinical-worksheets-generic",
+    "name": "Clinical Worksheets (generic)",
+    "category": "clinical worksheets",
+    "official_url": "https://example.invalid/clinical-worksheets-license",
+    "license_type": "Unknown",
+    "commercial_use_allowed": "unknown",
+    "signup_required": "unknown",
+    "api_key_required": "unknown",
+    "status": "MOCK_ONLY_LICENSE_REQUIRED",
+    "notes": "Do not deploy without explicit rights."
+  }
+]

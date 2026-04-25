@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "pm:sync:notion": "node scripts/sync-to-notion.js"
+  },
+  "dependencies": {
+    "@notionhq/client": "latest",
+    "dotenv": "latest"
+  }
+}
