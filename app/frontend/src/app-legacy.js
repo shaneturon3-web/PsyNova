@@ -53,7 +53,145 @@ const state = {
   banner: null,
   booking: defaultBookingState(),
   cms: { bundle: null, loading: false, error: null },
+  demo: {
+    therapists: [],
+    patients: [],
+    appointments: [],
+    messages: [],
+    emails: [],
+    records: [],
+    bookingConfirmation: null,
+  },
 };
+
+function buildDemoData() {
+  const therapists = [
+    {
+      id: 'th-01',
+      name: 'Dr. Mira Rowan',
+      title: 'Psychologist (DEMO / FICTIONAL)',
+      specialties: ['CBT', 'Anxiety', 'Mindfulness'],
+      languages: ['English', 'French'],
+      availability: 'Mon-Thu 09:00-17:00',
+      email: 'mira.rowan@demo.psynova.local',
+      phone: '+1 514-555-0101',
+      avatarUrl: TEAM_FALLBACK_IMAGES[0],
+      bio: 'Demo therapist profile for UI testing only.',
+      licenseStatus: 'Mock license verified (fictional)',
+    },
+    {
+      id: 'th-02',
+      name: 'Noah Vale, LCSW',
+      title: 'Clinical Social Worker (DEMO / FICTIONAL)',
+      specialties: ['Depression', 'Trauma', 'Youth'],
+      languages: ['English', 'Spanish'],
+      availability: 'Tue-Fri 10:00-18:00',
+      email: 'noah.vale@demo.psynova.local',
+      phone: '+1 514-555-0102',
+      avatarUrl: TEAM_FALLBACK_IMAGES[1],
+      bio: 'Trauma-informed and youth-focused demo profile.',
+      licenseStatus: 'Mock active status (fictional)',
+    },
+    {
+      id: 'th-03',
+      name: 'Ari Bennett',
+      title: 'Psychotherapist (DEMO / FICTIONAL)',
+      specialties: ['Couples', 'Communication', 'Mindfulness'],
+      languages: ['English', 'French'],
+      availability: 'Mon-Fri 12:00-20:00',
+      email: 'ari.bennett@demo.psynova.local',
+      phone: '+1 514-555-0103',
+      avatarUrl: TEAM_FALLBACK_IMAGES[2],
+      bio: 'Couples and communication demo specialist.',
+      licenseStatus: 'Mock supervised practice (fictional)',
+    },
+    {
+      id: 'th-04',
+      name: 'Dr. Lina Ortega',
+      title: 'Psychiatric Consultant (DEMO / FICTIONAL)',
+      specialties: ['ADHD', 'Anxiety', 'Medication planning'],
+      languages: ['English', 'Spanish', 'French'],
+      availability: 'Wed-Sat 08:00-16:00',
+      email: 'lina.ortega@demo.psynova.local',
+      phone: '+1 514-555-0104',
+      avatarUrl: TEAM_FALLBACK_IMAGES[3],
+      bio: 'ADHD and anxiety planning, demo only.',
+      licenseStatus: 'Mock specialist listing (fictional)',
+    },
+    {
+      id: 'th-05',
+      name: 'Samira Khan',
+      title: 'Registered Therapist (DEMO / FICTIONAL)',
+      specialties: ['Trauma', 'Depression', 'CBT'],
+      languages: ['English', 'French', 'Urdu'],
+      availability: 'Mon-Thu 11:00-19:00',
+      email: 'samira.khan@demo.psynova.local',
+      phone: '+1 514-555-0105',
+      avatarUrl: TEAM_FALLBACK_IMAGES[0],
+      bio: 'Trauma and depression mock care pathways.',
+      licenseStatus: 'Mock registration active (fictional)',
+    },
+    {
+      id: 'th-06',
+      name: 'Eli Park',
+      title: 'Virtual Care Clinician (DEMO / FICTIONAL)',
+      specialties: ['Youth', 'Family', 'Mindfulness'],
+      languages: ['English', 'Korean'],
+      availability: 'Sun-Thu 09:00-15:00',
+      email: 'eli.park@demo.psynova.local',
+      phone: '+1 514-555-0106',
+      avatarUrl: TEAM_FALLBACK_IMAGES[1],
+      bio: 'Family and youth support in virtual settings (demo).',
+      licenseStatus: 'Mock telehealth provider (fictional)',
+    },
+  ];
+  const patients = [
+    ['pt-01', 'Avery Cole', 28, 'avery.cole@demo.mail', '+1 438-555-1001', 'th-01', '2026-04-29 09:00', '2026-04-15', 'active', ['anxiety', 'sleep'], 'Practicing breathing plan; improved sleep cadence.'],
+    ['pt-02', 'Jordan Price', 34, 'jordan.price@demo.mail', '+1 438-555-1002', 'th-02', '2026-04-30 10:30', '2026-04-16', 'active', ['trauma'], 'Stabilization goals; journaling adherence moderate.'],
+    ['pt-03', 'Mina Patel', 19, 'mina.patel@demo.mail', '+1 438-555-1003', 'th-06', '2026-04-28 14:00', '2026-04-14', 'new', ['youth', 'school'], 'Orientation session complete; consent reviewed.'],
+    ['pt-04', 'Leo Martin', 41, 'leo.martin@demo.mail', '+1 438-555-1004', 'th-03', '2026-05-01 13:00', '2026-04-11', 'active', ['couples'], 'Communication worksheet assigned.'],
+    ['pt-05', 'Nina Flores', 32, 'nina.flores@demo.mail', '+1 438-555-1005', 'th-04', '2026-05-02 11:00', '2026-04-13', 'follow-up', ['adhd'], 'Executive function routine in progress.'],
+    ['pt-06', 'Owen Blake', 47, 'owen.blake@demo.mail', '+1 438-555-1006', 'th-05', '2026-05-03 15:30', '2026-04-18', 'active', ['depression'], 'Behavioral activation plan updated.'],
+    ['pt-07', 'Sara Kim', 26, 'sara.kim@demo.mail', '+1 438-555-1007', 'th-01', '2026-05-04 09:30', '2026-04-19', 'paused', ['anxiety', 'mindfulness'], 'Paused for exams; check-in reminder sent.'],
+    ['pt-08', 'Tom Rivera', 38, 'tom.rivera@demo.mail', '+1 438-555-1008', 'th-02', '2026-05-05 16:00', '2026-04-20', 'active', ['trauma', 'cbt'], 'Exposure hierarchy reviewed; no red flags.'],
+  ].map(([id, name, age, email, phone, therapistId, upcomingAppointment, lastSession, status, tags, notes]) => ({
+    id,
+    name,
+    age,
+    email,
+    phone,
+    therapistId,
+    upcomingAppointment,
+    lastSession,
+    status,
+    tags,
+    notes,
+  }));
+  const appointments = [
+    { id: 'apt-201', therapistId: 'th-01', patientId: 'pt-01', service: 'Anxiety support', startsAt: '2026-04-29 09:00', sessionType: 'video', status: 'pending' },
+    { id: 'apt-202', therapistId: 'th-02', patientId: 'pt-02', service: 'Trauma follow-up', startsAt: '2026-04-30 10:30', sessionType: 'video', status: 'confirmed' },
+    { id: 'apt-203', therapistId: 'th-06', patientId: 'pt-03', service: 'Youth intake', startsAt: '2026-04-28 14:00', sessionType: 'in_person', status: 'pending' },
+    { id: 'apt-204', therapistId: 'th-03', patientId: 'pt-04', service: 'Couples therapy', startsAt: '2026-05-01 13:00', sessionType: 'video', status: 'cancelled' },
+  ];
+  const messages = [
+    { id: 'msg-1', from: 'Avery Cole', to: 'Dr. Mira Rowan', subject: 'Reschedule request', preview: 'Can we move next week to Thursday?', unread: true, time: '2026-04-24 09:12' },
+    { id: 'msg-2', from: 'Noah Vale, LCSW', to: 'Jordan Price', subject: 'Homework reminder', preview: 'Please complete worksheet 2 before Friday.', unread: false, time: '2026-04-23 18:01' },
+    { id: 'msg-3', from: 'Sara Kim', to: 'Dr. Mira Rowan', subject: 'Quick check-in', preview: 'Symptoms better this week, thanks.', unread: true, time: '2026-04-24 14:22' },
+  ];
+  const emails = [
+    { id: 'mail-1', type: 'Appointment confirmation', recipient: 'avery.cole@demo.mail', status: 'sent', time: '2026-04-24 08:40' },
+    { id: 'mail-2', type: 'Session reminder', recipient: 'tom.rivera@demo.mail', status: 'queued', time: '2026-04-24 09:05' },
+    { id: 'mail-3', type: 'Follow-up summary', recipient: 'nina.flores@demo.mail', status: 'sent', time: '2026-04-23 16:30' },
+  ];
+  const records = [
+    { id: 'rec-1', patient: 'Avery Cole', therapist: 'Dr. Mira Rowan', date: '2026-04-15', type: 'Session note', status: 'signed', summary: 'Sleep hygiene and panic triggers reviewed.' },
+    { id: 'rec-2', patient: 'Jordan Price', therapist: 'Noah Vale, LCSW', date: '2026-04-16', type: 'Progress note', status: 'draft', summary: 'Grounding tools practiced, stress scale improved.' },
+    { id: 'rec-3', patient: 'Mina Patel', therapist: 'Eli Park', date: '2026-04-14', type: 'Intake', status: 'signed', summary: 'Initial goals and consent confirmed (DEMO).' },
+    { id: 'rec-4', patient: 'Leo Martin', therapist: 'Ari Bennett', date: '2026-04-11', type: 'Couples session', status: 'signed', summary: 'Communication pattern mapping complete.' },
+  ];
+  return { therapists, patients, appointments, messages, emails, records, bookingConfirmation: null };
+}
+state.demo = buildDemoData();
 
 function routeFromHash() {
   const raw = window.location.hash.replace(/^#/, '') || '/';
@@ -225,9 +363,11 @@ function publicNav(currentPath) {
     ${item('/about', 'nav_about')}
     ${item('/services', 'nav_services')}
     ${item('/team', 'nav_team')}
+    <a class="public-nav__a${currentPath === '/therapist-demo' ? ' public-nav__a--current' : ''}" href="#/therapist-demo">Therapist Demo</a>
     ${item('/blog', 'nav_blog')}
     ${item('/contact', 'nav_contact')}
     ${item('/book', 'nav_book')}
+    <a class="public-nav__a${currentPath === '/records-demo' ? ' public-nav__a--current' : ''}" href="#/records-demo">Records Demo</a>
     </div>
     <span class="public-nav__sp" aria-hidden="true"></span>
     <div class="public-nav__tools">
@@ -389,10 +529,22 @@ function viewTeam() {
   if (state.cms?.loading && !b) {
     return publicPageWrap(`<p class="muted">Loading…</p>`, '/team');
   }
-  if (!b || state.cms?.error) {
-    return publicPageWrap(`<p class="error-msg">${esc(state.cms?.error || 'CMS unavailable')}</p>`, '/team');
-  }
-  const team = [...(b.doctors || [])].sort((a, x) => (a.sortOrder ?? 0) - (x.sortOrder ?? 0));
+  const hasCmsTeam = !!(b && !state.cms?.error && (b.doctors || []).length);
+  const team = hasCmsTeam
+    ? [...(b.doctors || [])].sort((a, x) => (a.sortOrder ?? 0) - (x.sortOrder ?? 0))
+    : state.demo.therapists.map((t, idx) => ({
+        id: t.id,
+        nameEn: t.name,
+        roleEn: t.title,
+        bioEn: t.bio,
+        avatarMediaId: null,
+        illustrationNote: `${t.licenseStatus} · ${t.availability}`,
+        _fallbackAvatarUrl: t.avatarUrl,
+        _specialties: t.specialties,
+        _languages: t.languages,
+        _isDemo: true,
+        sortOrder: idx,
+      }));
   const nameKey = lang === 'fr' ? 'nameFr' : lang === 'es' ? 'nameEs' : 'nameEn';
   const roleKey = lang === 'fr' ? 'roleFr' : lang === 'es' ? 'roleEs' : 'roleEn';
   const cards = team
@@ -400,9 +552,11 @@ function viewTeam() {
       const name = pickLocalizedText(m, 'name', lang);
       const role = pickLocalizedText(m, 'role', lang);
       const bio = pickLocalizedText(m, 'bio', lang);
-      const url = resolveMediaUrl(b, m.avatarMediaId);
+      const url = hasCmsTeam ? resolveMediaUrl(b, m.avatarMediaId) : m._fallbackAvatarUrl;
       const fallbackImg = TEAM_FALLBACK_IMAGES[idx % TEAM_FALLBACK_IMAGES.length];
       const ill = m.illustrationNote || '';
+      const demoChips = m._specialties || ['CBT', 'Mindfulness', 'Virtual care'];
+      const demoLang = m._languages ? ` · ${m._languages.join(' / ')}` : '';
       return `
     <article class="team-card">
       ${
@@ -412,8 +566,11 @@ function viewTeam() {
       }
       <h3 class="team-card__name"${cmsInlinePatchAttr('doctor', m.id, nameKey)}>${esc(name)}</h3>
       <p class="team-card__role"${cmsInlinePatchAttr('doctor', m.id, roleKey)}>${esc(role)}</p>
-      <div class="team-card__chips"><span>CBT</span><span>Mindfulness</span><span>Virtual care</span></div>
+      <div class="team-card__chips">${demoChips
+        .map((x) => `<span>${esc(x)}</span>`)
+        .join('')}</div>
       <div class="team-card__bio">${bio}</div>
+      ${m._isDemo ? `<p class="muted team-card__meta">DEMO / FICTIONAL${esc(demoLang)}</p>` : ''}
       <p class="team-card__illust muted"><em>${esc(ill)}</em></p>
       <p class="team-card__cta"><a class="btn btn--small btn--ghost" href="#/book">Book session</a> <a class="btn btn--small btn--ghost" href="#/team/${encodeURIComponent(m.id)}">${esc(t('team_view_profile'))}</a></p>
     </article>`;
@@ -433,13 +590,18 @@ function viewTeamMember(memberId) {
   if (state.cms?.loading && !b) {
     return publicPageWrap(`<p class="muted">Loading…</p>`, `/team/${memberId}`);
   }
-  if (!b || state.cms?.error) {
-    return publicPageWrap(
-      `<p class="error-msg">${esc(state.cms?.error || 'CMS unavailable')}</p>`,
-      `/team/${memberId}`,
-    );
-  }
-  const team = [...(b.doctors || [])];
+  const hasCmsTeam = !!(b && !state.cms?.error && (b.doctors || []).length);
+  const team = hasCmsTeam
+    ? [...(b.doctors || [])]
+    : state.demo.therapists.map((t) => ({
+        id: t.id,
+        nameEn: t.name,
+        roleEn: t.title,
+        bioEn: t.bio,
+        avatarMediaId: null,
+        _fallbackAvatarUrl: t.avatarUrl,
+        illustrationNote: `${t.licenseStatus} · ${t.availability} · ${t.email}`,
+      }));
   const m = team.find((x) => x.id === memberId);
   if (!m) {
     return publicPageWrap(
@@ -454,7 +616,7 @@ function viewTeamMember(memberId) {
   const name = pickLocalizedText(m, 'name', lang);
   const role = pickLocalizedText(m, 'role', lang);
   const bio = pickLocalizedText(m, 'bio', lang);
-  const url = resolveMediaUrl(b, m.avatarMediaId);
+  const url = hasCmsTeam ? resolveMediaUrl(b, m.avatarMediaId) : m._fallbackAvatarUrl;
   const ill = m.illustrationNote || '';
   const body = `<p class="back-link"><a href="#/team">← ${esc(t('nav_team'))}</a></p>
   <article class="team-profile card">
@@ -637,7 +799,9 @@ function viewBookPublic() {
     : '<p class="muted public-lead" style="margin-top:0">Choose a visit reason, date, and time first. You will be asked to <strong>create an account</strong> (or sign in) only on the <strong>last</strong> step to confirm the appointment (maquette / mock API).</p>';
   return publicPageWrap(
     `<h1 class="public-h1">${esc(t('nav_book'))}</h1>
+    <p class="status-bar"><a href="#/">← Home</a> · <a href="#/team">${esc(t('nav_team'))}</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/records-demo">Records Demo</a></p>
     ${signed}
+    ${state.demo.bookingConfirmation ? `<div class="card booking-confirmation-card"><h3>Appointment confirmation</h3><p><strong>Confirmed:</strong> ${esc(state.demo.bookingConfirmation)}</p><p class="muted">DEMO / FICTIONAL confirmation state unless backend persists the record.</p></div>` : ''}
     <div class="main main--booking" style="margin-top:1rem">
       ${bookingWizardHtml(state.booking, esc, state.user, state.cms?.bundle?.services)}
     </div>
@@ -664,7 +828,7 @@ function viewDashboard() {
         <div class="dash-links card">
           <h2>Site (maquette)</h2>
           <p class="muted"><a href="#/services">${esc(t('nav_services'))}</a> · <a href="#/team">${esc(t('nav_team'))}</a> · <a href="#/blog">${esc(t('nav_blog'))}</a> · <a href="#/contact">${esc(t('nav_contact'))}</a></p>
-          <p><a class="btn" href="#/app/appointments">${esc(t('sidebar_appts'))}</a></p>
+          <p><a class="btn" href="#/app/appointments">${esc(t('sidebar_appts'))}</a> <a class="btn btn--ghost" href="#/therapist-demo">Therapist Demo</a> <a class="btn btn--ghost" href="#/records-demo">Records Demo</a></p>
         </div>
         <div class="card">
           <h2>Backend health</h2>
@@ -676,7 +840,7 @@ function viewDashboard() {
         </div>
         <div class="gray-panel">
           <h3>Modules</h3>
-          <p class="muted">Try <a href="#/app/messages">${esc(t('sidebar_messages'))}</a>. ${esc(t('sidebar_telehealth'))}, ${esc(t('sidebar_billing'))}: not wired.</p>
+          <p class="muted">Try <a href="#/app/messages">${esc(t('sidebar_messages'))}</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/records-demo">Records Demo</a>. ${esc(t('sidebar_telehealth'))}, ${esc(t('sidebar_billing'))}: mock-only.</p>
         </div>
         ${siteFooterDisclaimer()}
       </div>
@@ -695,32 +859,48 @@ function apptCategoryCell(a) {
 }
 
 function viewAppointments() {
-  const rows =
+  const apiRows =
     state.appointments?.items?.length > 0
       ? state.appointments.items
           .map(
             (a) =>
-              `<tr><td>${esc(a.id.slice(0, 8))}…</td><td>${apptCategoryCell(a)}</td><td>${esc(a.status)}</td><td>${esc(a.startsAt)}</td><td>${esc(a.endsAt)}</td><td class="muted">${a.sessionNotesOriginal ? esc(a.sessionNotesOriginal.slice(0, 48)) + (a.sessionNotesOriginal.length > 48 ? '…' : '') : '—'}</td></tr>`,
+              `<tr><td>${esc(a.id.slice(0, 8))}…</td><td>${apptCategoryCell(a)}</td><td><span class="status-pill status-pill--${esc(String(a.status || '').toLowerCase())}">${esc(a.status)}</span></td><td>${esc(a.startsAt)}</td><td>${esc(a.endsAt)}</td><td class="muted">${a.sessionNotesOriginal ? esc(a.sessionNotesOriginal.slice(0, 48)) + (a.sessionNotesOriginal.length > 48 ? '…' : '') : '—'}</td><td class="muted">API</td></tr>`,
           )
           .join('')
-      : `<tr><td colspan="6" class="muted">No rows yet — use the booking wizard above.</td></tr>`;
+      : '';
+  const demoRows = state.demo.appointments
+    .map((a) => {
+      const patient = state.demo.patients.find((p) => p.id === a.patientId);
+      return `<tr>
+        <td>${esc(a.id)}</td>
+        <td>${esc(a.service)}</td>
+        <td><span class="status-pill status-pill--${esc(a.status)}">${esc(a.status)}</span></td>
+        <td>${esc(a.startsAt)}</td>
+        <td>${esc(a.sessionType)}</td>
+        <td class="muted">${esc(patient?.name || 'Demo patient')}</td>
+        <td><button type="button" class="btn btn--small btn--ghost" data-demo-appt-confirm="${esc(a.id)}">Confirm</button> <button type="button" class="btn btn--small btn--ghost" data-demo-appt-cancel="${esc(a.id)}">Cancel</button></td>
+      </tr>`;
+    })
+    .join('');
+  const rows = `${demoRows}${apiRows}` || `<tr><td colspan="7" class="muted">No rows yet — use the booking wizard above.</td></tr>`;
 
   return `
     <div class="layout">
       ${shellSidebar(true)}
       <div class="main main--booking" id="main">
         ${mockupStripHtml()}
-        <p class="status-bar"><a href="#/app">← Dashboard</a></p>
+        <p class="status-bar"><a href="#/app">← Dashboard</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/records-demo">Records Demo</a></p>
         <h1 style="margin-top:0;">Appointments</h1>
         <p class="muted" style="margin-top:0;">DRAFT booking: category → date → time → session details → confirm. Original implementation; not a third-party theme.</p>
+        ${state.demo.bookingConfirmation ? `<p class="pill">Appointment confirmed (demo): ${esc(state.demo.bookingConfirmation)}</p>` : ''}
         ${state.listError ? `<p class="error-msg">${esc(state.listError)}</p>` : ''}
         ${bookingWizardHtml(state.booking, esc, state.user, state.cms?.bundle?.services)}
         ${state.formError ? `<p class="error-msg" role="alert">${esc(state.formError)}</p>` : ''}
         <div class="card">
-          <h2>Your appointments</h2>
+          <h2>Your appointments (DEMO / FICTIONAL + API)</h2>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>ID</th><th>Category</th><th>Status</th><th>Starts</th><th>Ends</th><th>Notes (demo)</th></tr></thead>
+              <thead><tr><th>ID</th><th>Category/Service</th><th>Status</th><th>Starts</th><th>Ends/Type</th><th>Notes/Patient</th><th>Actions</th></tr></thead>
               <tbody>${rows}</tbody>
             </table>
           </div>
@@ -873,6 +1053,119 @@ function viewMessagesMock() {
     </div>`;
 }
 
+function demoTherapistById(id) {
+  return state.demo.therapists.find((t) => t.id === id);
+}
+
+function triggerDownload(filename, mime, text) {
+  const blob = new Blob([text], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function viewTherapistDemo() {
+  const primary = state.demo.therapists[0];
+  const appts = state.demo.appointments
+    .map((a) => {
+      const p = state.demo.patients.find((x) => x.id === a.patientId);
+      return `<tr>
+        <td>${esc(a.id)}</td>
+        <td>${esc(p?.name || 'Demo patient')}</td>
+        <td>${esc(a.service)}</td>
+        <td>${esc(a.startsAt)}</td>
+        <td><span class="status-pill status-pill--${esc(a.status)}">${esc(a.status)}</span></td>
+        <td><button type="button" class="btn btn--small btn--ghost" data-demo-appt-confirm="${esc(a.id)}">Confirm</button> <button type="button" class="btn btn--small btn--ghost" data-demo-appt-cancel="${esc(a.id)}">Cancel</button></td>
+      </tr>`;
+    })
+    .join('');
+  const patients = state.demo.patients
+    .map((p) => {
+      const th = demoTherapistById(p.therapistId);
+      return `<tr>
+        <td>${esc(p.name)}</td>
+        <td>${esc(String(p.age))}</td>
+        <td>${esc(th?.name || p.therapistId)}</td>
+        <td>${esc(p.upcomingAppointment)}</td>
+        <td><span class="status-pill status-pill--${esc(p.status)}">${esc(p.status)}</span></td>
+        <td class="muted">${esc(p.tags.join(', '))}</td>
+      </tr>`;
+    })
+    .join('');
+  const msgs = state.demo.messages
+    .map(
+      (m) =>
+        `<article class="msg-item card"><h4>${esc(m.subject)} <span class="status-pill ${m.unread ? 'status-pill--pending' : 'status-pill--confirmed'}">${m.unread ? 'Unread' : 'Read'}</span></h4><p class="muted">${esc(m.from)} → ${esc(m.to)} · ${esc(m.time)}</p><p>${esc(m.preview)}</p><p><button type="button" class="btn btn--small btn--ghost" data-demo-reply="${esc(m.id)}">Reply</button></p></article>`,
+    )
+    .join('');
+  const emails = state.demo.emails
+    .map(
+      (e) =>
+        `<tr><td>${esc(e.type)}</td><td>${esc(e.recipient)}</td><td><span class="status-pill status-pill--${esc(e.status)}">${esc(e.status)}</span></td><td>${esc(e.time)}</td></tr>`,
+    )
+    .join('');
+  return publicPageWrap(
+    `<h1 class="public-h1">Therapist Demo Workspace</h1>
+    <p class="muted public-lead">DEMO / FICTIONAL data only. Use to test patient, therapist, messages, email activity, records and appointment confirmation workflows.</p>
+    <p class="status-bar"><a href="#/">← Home</a> · <a href="#/book">Book</a> · <a href="#/team">Therapists</a> · <a href="#/records-demo">Records Demo</a></p>
+    <section class="card therapist-demo-profile">
+      <img class="therapist-demo-profile__img" src="${esc(primary.avatarUrl)}" alt="" width="108" height="108" />
+      <div>
+        <h2>${esc(primary.name)}</h2>
+        <p class="muted">${esc(primary.title)}</p>
+        <p><strong>Specialties:</strong> ${esc(primary.specialties.join(', '))}</p>
+        <p><strong>Languages:</strong> ${esc(primary.languages.join(', '))}</p>
+        <p><strong>Availability:</strong> ${esc(primary.availability)}</p>
+        <p class="muted">${esc(primary.licenseStatus)} · ${esc(primary.email)} · ${esc(primary.phone)}</p>
+      </div>
+    </section>
+    <div class="demo-grid">
+      <section class="card">
+        <h2>Appointments</h2>
+        <p class="muted">Confirm/Cancel updates local demo state only.</p>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Patient</th><th>Service</th><th>When</th><th>Status</th><th>Action</th></tr></thead><tbody>${appts}</tbody></table></div>
+      </section>
+      <section class="card">
+        <h2>Patients</h2>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Age</th><th>Therapist</th><th>Upcoming</th><th>Status</th><th>Tags</th></tr></thead><tbody>${patients}</tbody></table></div>
+      </section>
+    </div>
+    <section class="card">
+      <h2>Messages Inbox</h2>
+      <div class="msg-list">${msgs}</div>
+    </section>
+    <section class="card">
+      <h2>Email activity</h2>
+      <div class="table-wrap"><table><thead><tr><th>Type</th><th>Recipient</th><th>Status</th><th>Timestamp</th></tr></thead><tbody>${emails}</tbody></table></div>
+    </section>`,
+    '/therapist-demo',
+  );
+}
+
+function viewRecordsDemo() {
+  const rows = state.demo.records
+    .map(
+      (r) =>
+        `<tr><td>${esc(r.patient)}</td><td>${esc(r.therapist)}</td><td>${esc(r.date)}</td><td>${esc(r.type)}</td><td><span class="status-pill status-pill--${esc(r.status)}">${esc(r.status)}</span></td><td>${esc(r.summary)}</td><td><button type="button" class="btn btn--small btn--ghost" data-demo-view-record="${esc(r.id)}">View</button> <button type="button" class="btn btn--small btn--ghost" data-demo-export-record="${esc(r.id)}" data-format="csv">Export CSV</button> <button type="button" class="btn btn--small btn--ghost" data-demo-export-record="${esc(r.id)}" data-format="json">Export JSON</button></td></tr>`,
+    )
+    .join('');
+  return publicPageWrap(
+    `<h1 class="public-h1">Records Demo</h1>
+    <p class="muted public-lead">DEMO / FICTIONAL records only. Export actions generate frontend downloads using Blob (no backend).</p>
+    <p class="status-bar"><a href="#/therapist-demo">← Therapist Demo</a> · <a href="#/">Home</a> · <a href="#/book">Book</a></p>
+    <section class="card">
+      <h2>Patient records table</h2>
+      <div class="table-wrap"><table><thead><tr><th>Patient</th><th>Therapist</th><th>Date</th><th>Type</th><th>Status</th><th>Summary</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table></div>
+    </section>`,
+    '/records-demo',
+  );
+}
+
 function esc(s) {
   if (s == null) return '';
   return String(s)
@@ -949,6 +1242,10 @@ function onAppClickBooking(e) {
     render();
     return;
   }
+  if (t.id === 'booking-back-home') {
+    navigate('/services');
+    return;
+  }
   if (t.id === 'booking-back-2') {
     state.booking.step = 1;
     render();
@@ -1019,10 +1316,22 @@ async function onAppSubmitBooking(e) {
     });
     clearBookingHandoff();
     await refreshAppointments();
+    state.demo.bookingConfirmation = `${state.booking.dateStr} ${state.booking.timeStr} · ${state.booking.sessionType}`;
     state.booking = defaultBookingState();
     render();
   } catch (err) {
-    state.formError = err.body?.message || err.message;
+    // If backend is unavailable, keep a local demo appointment so end-to-end UI can be tested.
+    state.demo.appointments.unshift({
+      id: `apt-demo-${Date.now().toString().slice(-6)}`,
+      therapistId: state.demo.therapists[0]?.id || 'th-01',
+      patientId: state.demo.patients[0]?.id || 'pt-01',
+      service: state.booking.categoryId || 'General consult',
+      startsAt: `${state.booking.dateStr} ${state.booking.timeStr}`,
+      sessionType: state.booking.sessionType,
+      status: 'pending',
+    });
+    state.demo.bookingConfirmation = `${state.booking.dateStr} ${state.booking.timeStr} · ${state.booking.sessionType} (local demo fallback)`;
+    state.formError = `API unavailable; saved as local demo appointment. ${err.body?.message || err.message}`;
     render();
   }
 }
@@ -1049,6 +1358,10 @@ function render() {
       /* keep raw */
     }
     html = viewTeamMember(tid);
+  } else if (r === '/therapist-demo') {
+    html = viewTherapistDemo();
+  } else if (r === '/records-demo') {
+    html = viewRecordsDemo();
   } else if (r === '/blog') {
     html = viewBlog();
   } else if (r.startsWith('/blog/')) {
@@ -1323,11 +1636,72 @@ async function onCmsInlineClick(e) {
   }
 }
 
+function onAppClickDemo(e) {
+  const confirmBtn = e.target.closest('[data-demo-appt-confirm]');
+  if (confirmBtn) {
+    const id = confirmBtn.getAttribute('data-demo-appt-confirm');
+    const row = state.demo.appointments.find((a) => a.id === id);
+    if (row) {
+      row.status = 'confirmed';
+      state.demo.bookingConfirmation = `${row.id} · ${row.startsAt}`;
+      render();
+    }
+    return;
+  }
+  const cancelBtn = e.target.closest('[data-demo-appt-cancel]');
+  if (cancelBtn) {
+    const id = cancelBtn.getAttribute('data-demo-appt-cancel');
+    const row = state.demo.appointments.find((a) => a.id === id);
+    if (row) {
+      row.status = 'cancelled';
+      render();
+    }
+    return;
+  }
+  const replyBtn = e.target.closest('[data-demo-reply]');
+  if (replyBtn) {
+    const id = replyBtn.getAttribute('data-demo-reply');
+    window.alert(`Demo reply composer for ${id} (mock only).`);
+    return;
+  }
+  const viewRecBtn = e.target.closest('[data-demo-view-record]');
+  if (viewRecBtn) {
+    const id = viewRecBtn.getAttribute('data-demo-view-record');
+    const rec = state.demo.records.find((r) => r.id === id);
+    if (rec) {
+      window.alert(`Record ${rec.id}\nPatient: ${rec.patient}\nSummary: ${rec.summary}\n\nDEMO / FICTIONAL`);
+    }
+    return;
+  }
+  const exportRecBtn = e.target.closest('[data-demo-export-record]');
+  if (exportRecBtn) {
+    const id = exportRecBtn.getAttribute('data-demo-export-record');
+    const format = exportRecBtn.getAttribute('data-format') || 'json';
+    const rec = state.demo.records.find((r) => r.id === id);
+    if (!rec) return;
+    if (format === 'csv') {
+      const csv = `id,patient,therapist,date,type,status,summary\n${[
+        rec.id,
+        rec.patient,
+        rec.therapist,
+        rec.date,
+        rec.type,
+        rec.status,
+        rec.summary.replace(/,/g, ';'),
+      ].join(',')}\n`;
+      triggerDownload(`${rec.id}.csv`, 'text/csv;charset=utf-8', csv);
+    } else {
+      triggerDownload(`${rec.id}.json`, 'application/json;charset=utf-8', JSON.stringify(rec, null, 2));
+    }
+  }
+}
+
 export async function init() {
   const appRoot = document.getElementById('app');
   if (appRoot) {
     appRoot.addEventListener('click', onServiceCardOpenBooking);
     appRoot.addEventListener('click', onAppClickBooking);
+    appRoot.addEventListener('click', onAppClickDemo);
     appRoot.addEventListener('submit', onAppSubmitBooking);
     appRoot.addEventListener('click', onCmsInlineClick);
   }

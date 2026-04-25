@@ -54,6 +54,13 @@ export function buildTimeSlots() {
   return slots;
 }
 
+function displayTimeLabel(hhmm) {
+  const [h, m] = String(hhmm || '00:00').split(':').map((n) => Number(n));
+  const hr12 = ((h + 11) % 12) + 1;
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  return `${hr12}:${String(m || 0).padStart(2, '0')} ${ampm}`;
+}
+
 const WD = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 export function calendarGridHtml(year, month, selectedDateStr, esc) {
@@ -215,6 +222,7 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
           'Selecting a reason opens the calendar in the right column.',
           'Al elegir un motivo se abre el calendario a la derecha.',
         )}</p>
+        <div class="booking-actions"><button type="button" class="btn btn--ghost" id="booking-back-home">← ${tx('Services', 'Services', 'Servicios')}</button></div>
       </div>`;
   } else {
     leftCol = `
@@ -267,7 +275,7 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
     const slotButtons = slots
       .map(
         (slo) =>
-          `<button type="button" class="slot-btn${slo === booking.timeStr ? ' slot-btn--selected' : ''}" data-booking-time="${esc(slo)}">${esc(slo)}</button>`,
+          `<button type="button" class="slot-btn${slo === booking.timeStr ? ' slot-btn--selected' : ''}" data-booking-time="${esc(slo)}"><span class="slot-btn__time">${esc(displayTimeLabel(slo))}</span><span class="slot-btn__meta">50 min · ${tx('Available', 'Available', 'Disponible')}</span></button>`,
       )
       .join('');
     rightCol = `
@@ -326,20 +334,24 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
       const cat = DRAFT_SERVICE_CATEGORIES.find((c) => c.id === booking.categoryId);
       catLine = cat ? categoryLabel(cat, lang) : catLine;
     }
+    const therapist = tx('Assigned demo therapist', 'Assigned demo therapist', 'Terapeuta de demostración asignado');
+    const emailLine = user?.email || tx('Sign in to attach account email', 'Sign in to attach account email', 'Inicie sesión para asociar correo');
     rightCol = `
       <div class="booking-inline-split__right booking-plugin">
         ${formDisclaimerBlock()}
         <h3 class="booking-confirm__title">${tx('Confirmer la réservation', 'Confirm booking', 'Confirmar reserva')}</h3>
         <ul class="booking-summary">
+          <li><strong>${tx('Therapist', 'Therapist', 'Terapeuta')}:</strong> ${esc(therapist)}</li>
           <li><strong>${tx('Motif', 'Reason', 'Motivo')}:</strong> ${esc(catLine)}</li>
-          <li><strong>${tx('Quand', 'When', 'Cuándo')}:</strong> ${esc(booking.dateStr)} ${tx('à', 'at', 'a')} ${esc(booking.timeStr)} (${durMin} min)</li>
+          <li><strong>${tx('Quand', 'When', 'Cuándo')}:</strong> ${esc(booking.dateStr)} ${tx('à', 'at', 'a')} ${esc(displayTimeLabel(booking.timeStr))} (${durMin} min)</li>
           <li><strong>${tx('Format', 'Format', 'Formato')}:</strong> ${esc(fmt)}</li>
+          <li><strong>${tx('Patient email', 'Patient email', 'Correo del paciente')}:</strong> ${esc(emailLine)}</li>
         </ul>
         <p class="muted">${tx('Crée une demande', 'Creates a', 'Crea una solicitud')} <code>pending</code> ${tx('via l’API (maquette) — sans notes cliniques dans cette appli.', 'via API (mock) — this app does not store clinical free text.', 'por API (maqueta) — sin notas clínicas en esta app.')}</p>
         <form id="form-appt-booking" novalidate>
           <div class="booking-actions">
             <button type="button" class="btn btn--ghost" id="booking-back-5">${tx('Retour', 'Back', 'Atrás')}</button>
-            <button type="submit" class="btn" id="booking-submit">${tx('Confirmer', 'Confirm booking', 'Confirmar reserva')}</button>
+            <button type="submit" class="btn" id="booking-submit">${tx('Confirm appointment', 'Confirm appointment', 'Confirmar cita')}</button>
           </div>
         </form>
       </div>`;

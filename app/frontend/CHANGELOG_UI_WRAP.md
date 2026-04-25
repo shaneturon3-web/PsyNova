@@ -99,9 +99,45 @@ All entries confirm: **no backend changes**, **no API contract changes**, **no r
 
 ---
 
+## 2026-04-24 (demo completion pass) — test workflows and mock data coverage
+
+### Files modified
+- `frontend/src/app-legacy.js`
+- `frontend/src/booking-wizard.js`
+- `frontend/src/styles.css`
+- `frontend/CHANGELOG_UI_WRAP.md`
+
+### What was added/changed
+- Booking slot buttons now show clearer labels: formatted time (`9:00 AM` style), duration (`50 min`), and availability copy.
+- Booking wizard final summary expanded to include therapist line, service, date/time, session format, and patient email line; final action label set to **Confirm appointment**.
+- Added visible booking navigation support (`booking-back-home`) and confirmation card in booking pages.
+- Added robust **DEMO / FICTIONAL** frontend datasets (6 therapists, 8 patients, messages, emails, records, demo appointments) in `app-legacy.js`.
+- Team view now falls back to demo therapist cards when CMS doctors are unavailable, including specialties/languages/meta labels.
+- Added route `#/therapist-demo` with profile, appointments list, patients list, inbox, email activity, and local confirm/cancel actions.
+- Added route `#/records-demo` with records table and `View`/`Export CSV`/`Export JSON` actions via frontend Blob downloads.
+- Added public navigation links for **Therapist Demo** and **Records Demo**, plus back/workflow links in relevant views.
+- Appointments view now merges demo rows with API rows and provides local confirm/cancel controls for demo entries.
+- Added local fallback behavior for booking submit when API is unavailable: creates a local demo appointment and shows a demo confirmation note.
+- Added style support for demo modules: status badges, therapist demo layout, slot metadata labels, and records/messages components.
+
+### Mock-only notes
+- `#/therapist-demo` and `#/records-demo` are demo routes.
+- Export actions are frontend-only Blob downloads.
+- Confirm/cancel in demo areas update local frontend state only.
+- Booking fallback on API failure stores a local demo appointment for flow testing.
+
+### Constraints respected
+- No backend file changes.
+- No API contract changes.
+- Existing routes preserved; only additive demo routes introduced.
+- Legal/mockup disclaimers retained.
+- Booking core step progression and data flow preserved.
+
+---
+
 ## Build
 
-_Updated after `npm run build` (2026-04-24, visible pass)._
+_Updated after `npm run build` (2026-04-24, demo completion pass)._
 
 ```
 > psynova-frontend@0.1.0 build
@@ -109,10 +145,10 @@ _Updated after `npm run build` (2026-04-24, visible pass)._
 
 vite v5.4.21 building for production.
 ✓ 20 modules transformed.
-dist-psynova/index.html                  0.58 kB │ gzip:  0.40 kB
-dist-psynova/assets/index-DnhOd-X8.css  29.75 kB │ gzip:  6.67 kB
-dist-psynova/assets/index-BvpCw32Z.js   95.77 kB │ gzip: 26.61 kB
-✓ built in ~1.44s
+dist-psynova/index.html                   0.58 kB │ gzip:  0.40 kB
+dist-psynova/assets/index-Bup1KGBT.css   31.02 kB │ gzip:  6.94 kB
+dist-psynova/assets/index-C0JoVbhc.js   112.56 kB │ gzip: 31.39 kB
+✓ built in ~1.20s
 ```
 
 **Exit code:** 0
