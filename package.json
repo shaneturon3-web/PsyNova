@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "pm:sync:notion": "node scripts/sync-to-notion.js"
+    "pm:sync:notion": "node scripts/sync-to-notion.js",
+    "webbox:local": "node scripts/webbox-local-inventory.js"
   },
   "dependencies": {
     "@notionhq/client": "latest",
