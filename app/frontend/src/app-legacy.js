@@ -1,5 +1,6 @@
 import {
   getToken,
+  setToken,
   health,
   login,
   logout,
@@ -25,6 +26,9 @@ import {
 import { legalPageHtml } from './legal-content.js';
 
 const MOCK_CLINICIAN_ID = '00000000-0000-4000-8000-000000000001';
+
+/** Local-only “UI preview” sign-in: empty password skips API. Not a real JWT. */
+const PSYNOVA_DEMO_UI_TOKEN = 'psynova-demo-ui-bypass';
 
 /** Kept in sync with compliance shell for the same handoff. */
 const SS_BOOKING = 'psynova_booking_draft';
@@ -98,6 +102,16 @@ async function refreshHealth() {
 async function refreshUser() {
   if (!getToken()) {
     state.user = null;
+    return;
+  }
+  if (getToken() === PSYNOVA_DEMO_UI_TOKEN) {
+    const em =
+      (typeof localStorage !== 'undefined' && localStorage.getItem('psynova_demo_email')) || 'therapist@demo.local';
+    state.user = {
+      sub: 'd0000000-0000-4000-8000-0000000000dd',
+      email: em,
+      role: 'therapist',
+    };
     return;
   }
   try {
@@ -544,11 +558,12 @@ function viewLogin() {
           <input id="email" name="email" type="email" autocomplete="username" required />
         </div>
         <div class="form-row">
-          <label for="password">Password</label>
-          <input id="password" name="password" type="password" autocomplete="current-password" required minlength="8" />
+          <label for="password">Password (optional for UI demo)</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" minlength="0" placeholder="Leave empty to open signed-in views (local preview only)" />
         </div>
         ${state.formError ? `<p class="error-msg" role="alert">${esc(state.formError)}</p>` : ''}
         <button type="submit" class="btn">Sign in</button>
+        <p class="muted" style="margin-top:0.5rem;">Empty password: mock therapist session in this browser only — no API check.</p>
         <p class="muted" style="margin-top:1rem;"><a href="#/register">Create account</a> · <a href="#/">Home</a></p>
       </form>
       ${siteFooterDisclaimer()}
@@ -1069,10 +1084,41 @@ function bind() {
     e.preventDefault();
     state.formError = null;
     const fd = new FormData(e.target);
+    const email = (fd.get('email') && String(fd.get('email')).trim()) || '';
+    const password = (fd.get('password') && String(fd.get('password'))) || '';
+    if (!email) {
+      state.formError = 'Email is required.';
+      render();
+      return;
+    }
+    if (!password) {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('psynova_demo_email', email);
+      }
+      setToken(PSYNOVA_DEMO_UI_TOKEN);
+      await refreshUser();
+      state.banner = null;
+      state.formError = null;
+      let next = null;
+      try {
+        next = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(SS_RETURN) : null;
+        if (next && typeof sessionStorage !== 'undefined') {
+          sessionStorage.removeItem(SS_RETURN);
+        }
+      } catch {
+        /* */
+      }
+      navigate(next || '/app');
+      return;
+    }
     try {
+      if (getToken() === PSYNOVA_DEMO_UI_TOKEN) setToken(null);
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('psynova_demo_email');
+      }
       await login({
-        email: fd.get('email'),
-        password: fd.get('password'),
+        email,
+        password,
       });
       await refreshUser();
       state.banner = null;
@@ -1115,11 +1161,17 @@ function bind() {
   });
 
   document.getElementById('btn-logout')?.addEventListener('click', async () => {
-    try {
-      await logout();
-    } catch {
-      /* still clear client */
+    if (getToken() === PSYNOVA_DEMO_UI_TOKEN) {
+      setToken(null);
+      if (typeof localStorage !== 'undefined') localStorage.removeItem('psynova_demo_email');
+    } else {
+      try {
+        await logout();
+      } catch {
+        /* still clear client */
+      }
     }
+    if (typeof localStorage !== 'undefined') localStorage.removeItem('psynova_demo_email');
     state.user = null;
     navigate('/');
   });

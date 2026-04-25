@@ -1530,3 +1530,315 @@ button.service-card:hover {
   }
 }
 
+/* PSYNOVA_UI_WRAP_START
+   Non-destructive visual layer: refines public shell, cards, booking, and motion.
+   Later rules override earlier ones where selectors match. */
+@keyframes psynova-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.4rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes psynova-step-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 124, 172, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 0.25rem rgba(79, 124, 172, 0.15);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    linear-gradient(165deg, #eef4fb 0%, #f7f9fc 38%, #e8f4f0 100%) fixed;
+}
+
+.main.public-page,
+.main.public-page .public-inner {
+  animation: psynova-fade-in-up 0.45s ease-out both;
+}
+
+.main.public-page {
+  position: relative;
+  padding: 1.5rem 1.25rem 2.5rem;
+}
+
+.main.public-page::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 14rem;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(80% 80% at 20% 0%, rgba(167, 199, 231, 0.45) 0%, transparent 55%),
+    radial-gradient(60% 60% at 100% 10%, rgba(111, 211, 192, 0.2) 0%, transparent 50%);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.main.public-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.public-inner {
+  max-width: 100%;
+  padding: 0.5rem 0.15rem 0.25rem;
+}
+
+.public-nav--bar {
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.65rem 0.65rem;
+  box-shadow: var(--shadow-soft);
+  gap: 0.4rem 0.55rem;
+}
+
+.public-nav__a {
+  padding: 0.35rem 0.5rem;
+  border-radius: 999px;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.15s ease;
+}
+
+.public-nav__a:hover {
+  transform: translateY(-1px);
+  background: var(--primary-soft);
+}
+
+.public-nav__a--current {
+  text-decoration: none;
+  background: var(--primary-soft);
+  color: var(--primary-hover);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 30%, transparent);
+}
+
+.hero,
+.hero--wide {
+  position: relative;
+  padding: 1.5rem 1.35rem 1.75rem;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(140deg, color-mix(in srgb, var(--surface) 92%, var(--primary-soft) 8%) 0%, var(--surface) 100%);
+  border: 1px solid color-mix(in srgb, var(--border) 65%, var(--primary) 10%);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.hero::after,
+.hero--wide::after {
+  content: '';
+  position: absolute;
+  right: -20%;
+  top: -30%;
+  width: 50%;
+  height: 100%;
+  background: radial-gradient(circle at 70% 30%, rgba(79, 124, 172, 0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1,
+.hero--wide h1,
+.hero h2 {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.hero .hero__lead,
+.hero--wide .hero__lead,
+.hero--wide .muted {
+  position: relative;
+  z-index: 1;
+  font-size: 1rem;
+  line-height: 1.5;
+  max-width: 38rem;
+}
+
+.hero__actions {
+  position: relative;
+  z-index: 1;
+}
+
+.main .card:not(.contact-form):not(.form-disclaimer),
+article.blog-row.card {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.main .card:not(.contact-form):not(.form-disclaimer):hover,
+article.blog-row.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--primary) 18%, var(--border));
+}
+
+.team-card {
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+.team-card::before {
+  content: '◆';
+  position: absolute;
+  top: 0.6rem;
+  right: 0.65rem;
+  font-size: 0.65rem;
+  opacity: 0.4;
+  color: var(--accent);
+}
+
+.team-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: color-mix(in srgb, var(--primary) 20%, var(--border));
+}
+
+.team-card__avatar,
+.team-card__avatar--img {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+button.category-card {
+  border-radius: var(--radius-md);
+  min-height: 3.5rem;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--border) 50%, white);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+}
+
+button.category-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(79, 124, 172, 0.12);
+}
+
+.category-card--selected {
+  box-shadow: 0 0 0 2px var(--primary), 0 6px 20px rgba(79, 124, 172, 0.15);
+}
+
+.booking-wizard {
+  background: linear-gradient(165deg, #f0f6fa 0%, var(--surface) 28%);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid color-mix(in srgb, var(--border) 75%, var(--primary) 8%);
+}
+
+.booking-inline-split {
+  gap: 1.5rem 1.75rem;
+}
+
+.booking-plugin {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.1rem 1.15rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.booking-steps {
+  justify-content: space-between;
+  gap: 0.4rem 0.35rem;
+}
+
+@media (min-width: 640px) {
+  .booking-steps {
+    flex-wrap: nowrap;
+  }
+}
+
+.booking-steps__i--active .booking-steps__mark {
+  animation: psynova-step-pulse 2.2s ease-in-out infinite;
+}
+
+.cal {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.btn {
+  transition: background 0.18s ease, box-shadow 0.2s ease, color 0.15s ease, transform 0.12s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn--ghost:hover {
+  transform: translateY(-1px);
+  background: var(--primary-soft);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 760px) {
+  .main.public-page {
+    padding: 1rem 0.9rem 2rem;
+  }
+
+  .public-nav--bar {
+    padding: 0.4rem 0.45rem 0.55rem;
+  }
+
+  .public-nav__links {
+    max-height: min(70vh, 22rem);
+    overflow-y: auto;
+  }
+
+  .hero,
+  .hero--wide {
+    padding: 1.1rem 1rem 1.4rem;
+    border-radius: var(--radius-md);
+  }
+
+  .home-cards,
+  .service-grid,
+  .team-grid,
+  .category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-inline-split {
+    flex-direction: column;
+  }
+
+  .booking-inline-split__right.booking-plugin {
+    max-width: 100%;
+  }
+
+  .booking-wizard {
+    padding: 1rem 0.9rem 1.15rem;
+  }
+
+  .booking-steps {
+    font-size: 0.7rem;
+    padding: 0.45rem 0.5rem;
+  }
+
+  .cal-toolbar {
+    flex-wrap: wrap;
+  }
+}
+/* PSYNOVA_UI_WRAP_END */
+
