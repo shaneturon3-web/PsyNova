@@ -32,3 +32,10 @@ Prevent accidental data loss while organizing projects across local disk and clo
 - Bulk delete
 - Overwrite newer remote version with older local version
 - Move without creating mapping entry
+
+## Order/Report Coupling Requirement
+
+Each remote/local split proposal must be tied to:
+- `webbox/orders/YYYY-MM-DD/HHMM-order-####.md`
+- `webbox/order-outputs/YYYY-MM-DD/HHMM-order-####-output.md`
+- `webbox/reports/remote-sync/YYYY-MM-DD/HHMM-sync-report.md`

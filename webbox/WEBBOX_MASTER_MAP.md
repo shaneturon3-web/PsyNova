@@ -28,8 +28,16 @@ This WebBox inventory tracks projects and digital estate inputs from:
 - `webbox/protocols/`
   - `remote-local-split-protocol.md`
   - `archive-policy.md`
+  - `cursor-order-protocol.md`
+  - `cursor-operating-rules.md`
+  - `remote-reporting-protocol.md`
+- `webbox/orders/YYYY-MM-DD/HHMM-order-####.md`
+- `webbox/order-outputs/YYYY-MM-DD/HHMM-order-####-output.md`
+- `webbox/reports/remote-sync/YYYY-MM-DD/HHMM-sync-report.md`
 - `webbox/scripts/`
   - reserved for WebBox-specific helpers
+- `webbox/sandbox/`
+  - temporary processing area only
 
 ## Current State Snapshot
 
@@ -47,3 +55,4 @@ This WebBox inventory tracks projects and digital estate inputs from:
 - No files deleted.
 - No runtime logic modified in application modules.
 - Inventory/classification only.
+- Cursor orders and outputs are now tracked with numbered per-order artifacts.

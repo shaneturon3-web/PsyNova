@@ -34,3 +34,10 @@ When archiving later (not in this task):
 - Financial/compliance-sensitive assets: retain long-term.
 - Experimental/temp outputs: review quarterly.
 - Never archive/delete licensed assets without rights verification record.
+
+## Order Traceability Link
+
+Any archive action approved in the future must reference:
+- originating Cursor order file
+- paired order output file
+- remote sync report file
