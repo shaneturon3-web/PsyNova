@@ -1,14 +1,12 @@
-// BOOKING_FLOW_RESTORE_START
 /**
  * Multi-step booking: category → calendar → time → session → confirm.
- * Inline split layout: context / specialty (left) · calendar + slots (right).
- * This mock does not collect or persist clinical notes, documents, or PHI.
+ * Pattern inspired by public service-booking sites; implementation is original.
+ * Status: DRAFT (not production-final copy or clinical intake).
  */
-// BOOKING_FLOW_RESTORE_END
 
 import { pickLocalizedText, stripHtml } from './cms-util.js';
 import { formDisclaimerBlock } from './disclaimers.js';
-import { uiLang } from './i18n.js';
+import { t, uiLang } from './i18n.js';
 import { DRAFT_SERVICE_CATEGORIES, categoryBlurb, categoryLabel } from './service-categories.js';
 
 function tx(fr, en, es) {
@@ -30,6 +28,7 @@ export function defaultBookingState() {
     dateStr: '',
     timeStr: '',
     sessionType: 'video',
+    notes: '',
     calYear: n.getFullYear(),
     calMonth: n.getMonth(),
   };
@@ -130,37 +129,6 @@ function categoryCardsHtml(booking, esc, lang, cmsServices) {
 /**
  * @param {object} booking
  * @param {function} esc
- * @param {'fr'|'en'|'es'} lang
- * @param {object[] | null | undefined} cmsServices
- */
-function selectedCategoryContextHtml(booking, esc, lang, cmsServices) {
-  if (!booking.categoryId) {
-    return `<p class="muted">${tx('Sélectionnez un motif à gauche (étape 1).', 'Select a visit reason in step 1.', 'Elija un motivo en el paso 1.')}</p>`;
-  }
-  if (cmsServices?.length) {
-    const s = cmsServices.find((x) => x.slug === booking.categoryId);
-    if (s) {
-      const title = esc(pickLocalizedText(s, 'title', lang));
-      const body = esc(stripHtml(pickLocalizedText(s, 'body', lang) || '').slice(0, 500));
-      return `<div class="booking-inline-split__context-inner">
-        <h3 class="booking-inline-split__h">${title}</h3>
-        <div class="booking-inline-split__blurb muted">${body}</div>
-      </div>`;
-    }
-  }
-  const cat = DRAFT_SERVICE_CATEGORIES.find((c) => c.id === booking.categoryId);
-  if (!cat) {
-    return `<p class="muted">${esc(booking.categoryId)}</p>`;
-  }
-  return `<div class="booking-inline-split__context-inner">
-    <h3 class="booking-inline-split__h">${esc(categoryLabel(cat, lang))}</h3>
-    <p class="booking-inline-split__blurb muted">${esc(categoryBlurb(cat, lang))}</p>
-  </div>`;
-}
-
-/**
- * @param {object} booking
- * @param {function} esc
  * @param {object} user - auth /me payload
  * @param {object[] | null | undefined} cmsServices — optional CMS services for category step
  */
@@ -179,57 +147,30 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
       <li class="booking-steps__i ${step >= 5 ? 'booking-steps__i--on' : ''}"><span>5</span> ${tx('Confirmer', 'Confirm', 'Confirmar')}</li>
     </ol>`;
 
-  let leftCol = '';
+  let body = '';
+
   if (step === 1) {
-    leftCol = `
-      <div class="booking-inline-split__left">
+    body = `
+      <div class="booking-panel booking-panel--wide">
         ${formDisclaimerBlock()}
         <p class="booking-lead">${tx(
-          'Choisissez le motif principal (liste DRAFT — pas un bilan clinique).',
-          'Choose the main reason (DRAFT list — not a clinical assessment).',
+          'Choisissez le motif principal de la consultation (liste provisoire DRAFT).',
+          'Choose the main reason for your visit (DRAFT list — not clinical intake).',
           'Elija el motivo principal (lista DRAFT — no es evaluación clínica).',
         )}</p>
         <div class="category-grid" role="group" aria-label="${tx('Motif', 'Service category', 'Motivo')}">${categoryCardsHtml(booking, esc, lang, cmsServices)}</div>
-        <p class="muted" style="margin-top:0.5rem;">${tx(
-          'Un clic sur un motif ouvre le calendrier à droite.',
-          'Selecting a reason opens the calendar in the right column.',
-          'Al elegir un motivo se abre el calendario a la derecha.',
-        )}</p>
-      </div>`;
-  } else {
-    leftCol = `
-      <div class="booking-inline-split__left" aria-label="${tx('Contexte', 'Context', 'Contexto')}">
-        ${formDisclaimerBlock()}
-        <p class="booking-lead">${tx('Votre sélection', 'Your selection', 'Su elección')}</p>
-        ${selectedCategoryContextHtml(booking, esc, lang, cmsServices)}
-        <p class="muted" style="margin-top:1rem;">${tx(
-          'Compte requis seulement après la confirmation (dernière étape).',
-          'Sign-in is only required after the final confirm step.',
-          'Iniciar sesión solo tras el paso final de confirmación.',
-        )}</p>
-      </div>`;
-  }
-
-  let rightCol = '';
-  if (step === 1) {
-    rightCol = `
-      <div class="booking-inline-split__right booking-plugin" aria-label="${tx('Calendrier', 'Calendar', 'Calendario')}">
-        <h3 class="booking-plugin__h">${tx('Prochaine étape', 'Next', 'Siguiente paso')}</h3>
-        <p class="muted">${tx(
-          'Le calendrier apparaîtra ici dès qu’un motif est choisi (colonne de gauche).',
-          'The booking calendar appears here after you select a service reason on the left.',
-          'El calendario aparecerá aquí al elegir un motivo a la izquierda.',
-        )}</p>
+        <div class="booking-actions">
+          <button type="button" class="btn" id="booking-next-cat" ${booking.categoryId ? '' : 'disabled'}>${tx('Suivant', 'Next', 'Siguiente')}</button>
+        </div>
       </div>`;
   } else if (step === 2) {
-    rightCol = `
-      <div class="booking-inline-split__right booking-plugin" aria-label="${tx('Calendrier', 'Calendar', 'Calendario')}">
+    body = `
+      <div class="booking-panel">
         ${formDisclaimerBlock()}
-        <h3 class="booking-plugin__h">${tx('Choisir une date', 'Pick a date', 'Elija una fecha')}</h3>
         <p class="booking-lead">${tx(
-          'D’abord le calendrier; les heures disponibles viennent à l’étape suivante.',
-          'Calendar first; available start times are on the next step.',
-          'Primero el calendario; los horarios en el siguiente paso.',
+          'Choisissez un jour (fuseau Montréal).',
+          'Pick a day (Montreal-time scheduling).',
+          'Elija un día (horario Montreal).',
         )}</p>
         <div class="cal-toolbar">
           <button type="button" class="btn btn--ghost" id="booking-cal-prev" aria-label="${tx('Mois précédent', 'Previous month', 'Mes anterior')}">←</button>
@@ -240,33 +181,31 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
         <p class="muted">${tx('Sélection', 'Selected', 'Selección')}: <strong>${booking.dateStr ? esc(booking.dateStr) : '—'}</strong></p>
         <div class="booking-actions">
           <button type="button" class="btn btn--ghost" id="booking-back-2">${tx('Retour', 'Back', 'Atrás')}</button>
-          <button type="button" class="btn" id="booking-next-1" ${booking.dateStr ? '' : 'disabled'}>${tx('Suivant', 'Continue', 'Continuar')}</button>
+          <button type="button" class="btn" id="booking-next-1" ${booking.dateStr ? '' : 'disabled'}>${tx('Suivant', 'Next', 'Siguiente')}</button>
         </div>
       </div>`;
   } else if (step === 3) {
     const slotButtons = slots
       .map(
-        (slo) =>
-          `<button type="button" class="slot-btn${slo === booking.timeStr ? ' slot-btn--selected' : ''}" data-booking-time="${esc(slo)}">${esc(slo)}</button>`,
+        (slot) =>
+          `<button type="button" class="slot-btn${slot === booking.timeStr ? ' slot-btn--selected' : ''}" data-booking-time="${esc(slot)}">${esc(slot)}</button>`,
       )
       .join('');
-    rightCol = `
-      <div class="booking-inline-split__right booking-plugin" aria-label="${tx('Horaire', 'Schedule', 'Horario')}">
+    body = `
+      <div class="booking-panel">
         ${formDisclaimerBlock()}
-        <h3 class="booking-plugin__h">${tx('Choisir une heure de départ', 'Choose a start time', 'Elija la hora de inicio')}</h3>
         <p class="muted">${tx('Date', 'Date', 'Fecha')}: <strong>${esc(booking.dateStr)}</strong></p>
         <p class="booking-lead">${tx('Heure de début', 'Start time', 'Hora de inicio')} (${SLOT_STEP_MIN} min).</p>
         <div class="slot-grid" role="group" aria-label="${tx('Créneaux', 'Time slots', 'Horarios')}">${slotButtons}</div>
         <div class="booking-actions">
           <button type="button" class="btn btn--ghost" id="booking-back-3">${tx('Retour', 'Back', 'Atrás')}</button>
-          <button type="button" class="btn" id="booking-next-2" ${booking.timeStr ? '' : 'disabled'}>${tx('Suivant', 'Continue', 'Continuar')}</button>
+          <button type="button" class="btn" id="booking-next-2" ${booking.timeStr ? '' : 'disabled'}>${tx('Suivant', 'Next', 'Siguiente')}</button>
         </div>
       </div>`;
   } else if (step === 4) {
-    rightCol = `
-      <div class="booking-inline-split__right booking-plugin">
+    body = `
+      <div class="booking-panel">
         ${formDisclaimerBlock()}
-        <h3 class="booking-plugin__h">${tx('Format de la séance', 'Session format', 'Formato de la sesión')}</h3>
         <p class="muted">${esc(booking.dateStr)} · ${esc(booking.timeStr)}</p>
         <div class="form-row">
           <label>${tx('Format', 'Format', 'Formato')}</label>
@@ -276,18 +215,24 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
             <label><input type="radio" name="sessionType" value="phone" ${booking.sessionType === 'phone' ? 'checked' : ''} /> ${tx('Téléphone', 'Phone', 'Teléfono')}</label>
           </div>
         </div>
+        <p class="booking-lang-prompt" lang="mul">${esc(t('booking_free_text_prompt'))}</p>
+        <div class="form-row">
+          <label for="booking-notes">${tx('Notes (optionnel, démo)', 'Notes (optional, demo)', 'Notas (opcional, demo)')}</label>
+          <textarea id="booking-notes" name="notes" rows="4" class="input-textarea" maxlength="8000" aria-describedby="booking-notes-hint">${esc(booking.notes)}</textarea>
+        </div>
+        <p id="booking-notes-hint" class="muted">${esc(t('booking_notes_hint'))}</p>
         <p class="muted">${
           user?.email
             ? `${esc(user.email)} · ${tx('Langue UI', 'UI language', 'Idioma UI')}: ${esc(lang)}`
             : tx(
-                "Pas de compte requis ici. Vous serez invité à vous connecter seulement à l'étape « Confirmer ».",
-                'No sign-in on this step. You will be asked to sign in only on the final Confirm step.',
-                'Sin inicio de sesión aquí: solo en el paso final « Confirmar ».',
+                'Compte requis seulement à l’étape de confirmation (ci-dessous).',
+                'An account is only required at the confirmation step (below).',
+                'Solo se pedirá cuenta al confirmar (más abajo).',
               )
         }</p>
         <div class="booking-actions">
           <button type="button" class="btn btn--ghost" id="booking-back-4">${tx('Retour', 'Back', 'Atrás')}</button>
-          <button type="button" class="btn" id="booking-next-3">${tx('Suivant', 'Continue', 'Continuar')}</button>
+          <button type="button" class="btn" id="booking-next-3">${tx('Suivant', 'Next', 'Siguiente')}</button>
         </div>
       </div>`;
   } else {
@@ -306,20 +251,21 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
       const cat = DRAFT_SERVICE_CATEGORIES.find((c) => c.id === booking.categoryId);
       catLine = cat ? categoryLabel(cat, lang) : catLine;
     }
-    rightCol = `
-      <div class="booking-inline-split__right booking-plugin">
+    body = `
+      <div class="booking-panel">
         ${formDisclaimerBlock()}
         <h3 class="booking-confirm__title">${tx('Confirmer la réservation', 'Confirm booking', 'Confirmar reserva')}</h3>
         <ul class="booking-summary">
           <li><strong>${tx('Motif', 'Reason', 'Motivo')}:</strong> ${esc(catLine)}</li>
           <li><strong>${tx('Quand', 'When', 'Cuándo')}:</strong> ${esc(booking.dateStr)} ${tx('à', 'at', 'a')} ${esc(booking.timeStr)} (${durMin} min)</li>
           <li><strong>${tx('Format', 'Format', 'Formato')}:</strong> ${esc(fmt)}</li>
+          <li><strong>${tx('Notes', 'Notes', 'Notas')}:</strong> ${booking.notes ? esc(booking.notes) : '—'}</li>
         </ul>
-        <p class="muted">${tx('Crée une demande', 'Creates a', 'Crea una solicitud')} <code>pending</code> ${tx('via l’API (maquette) — sans notes cliniques dans cette appli.', 'via API (mock) — this app does not store clinical free text.', 'por API (maqueta) — sin notas clínicas en esta app.')}</p>
-        <form id="form-appt-booking" novalidate>
+        <p class="muted">${tx('Crée une demande', 'Creates a', 'Crea una solicitud')} <code>pending</code> ${tx('via l’API (maquette).', 'appointment via API (mockup).', 'por API (maqueta).')}</p>
+        <form id="form-appt-booking">
           <div class="booking-actions">
             <button type="button" class="btn btn--ghost" id="booking-back-5">${tx('Retour', 'Back', 'Atrás')}</button>
-            <button type="submit" class="btn" id="booking-submit">${tx('Confirmer', 'Confirm booking', 'Confirmar reserva')}</button>
+            <button type="submit" class="btn" id="booking-submit">${tx('Confirmer', 'Confirm & book', 'Confirmar')}</button>
           </div>
         </form>
       </div>`;
@@ -330,14 +276,11 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
       <div class="booking-draft-badge" role="status">DRAFT</div>
       <h2 id="booking-wizard-title" class="booking-wizard__h">${tx('Prendre rendez-vous', 'Book a session', 'Reservar cita')}</h2>
       <p class="booking-wizard__sub">${tx(
-        'Colonne de gauche : contexte. Colonne de droite : calendrier, puis horaires, puis confirmation. Maquette seulement.',
-        'Left: context. Right: calendar, then time slots, then details and confirm. Mockup only.',
-        'Columna izquierda: contexto. Derecha: calendario, horarios, confirmación. Solo maqueta.',
+        'Motif → date → heure → détails → confirmation. Maquette sans valeur clinique.',
+        'Category → date → time → details → confirm. Mockup — not clinical intake.',
+        'Motivo → fecha → hora → detalles → confirmación. Maqueta sin valor clínico.',
       )}</p>
       ${stepper}
-      <div class="booking-inline-split">
-        ${leftCol}
-        ${rightCol}
-      </div>
+      ${body}
     </section>`;
 }

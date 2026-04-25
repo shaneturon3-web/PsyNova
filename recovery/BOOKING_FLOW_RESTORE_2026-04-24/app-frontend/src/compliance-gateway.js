@@ -1,5 +1,6 @@
 import { createAppointment, getToken, health, login, logout, me, register } from './api.js';
 import { defaultBookingState, bookingWizardHtml } from './booking-wizard.js';
+import { uiLang } from './i18n.js';
 
 const defaultLinks = {
   booking: import.meta.env.VITE_VENDOR_BOOKING_URL || '',
@@ -239,7 +240,6 @@ function onAppClickBooking(e) {
 
   if (t.hasAttribute('data-booking-category')) {
     state.booking.categoryId = t.getAttribute('data-booking-category') || '';
-    if (state.booking.categoryId) state.booking.step = 2;
     render();
     return;
   }
@@ -272,6 +272,8 @@ function onAppClickBooking(e) {
   if (t.id === 'booking-next-3') {
     const r = wz.querySelector('input[name="sessionType"]:checked');
     state.booking.sessionType = r ? r.value : 'video';
+    const ta = document.getElementById('booking-notes');
+    state.booking.notes = ta ? ta.value : '';
     state.booking.step = 5;
     render();
     return;
@@ -301,7 +303,7 @@ async function onAppSubmitBooking(e) {
       /* */
     }
     state.bookingError = null;
-    navigate('/login');
+    navigate('/register');
     return;
   }
   state.bookingError = null;
@@ -316,6 +318,8 @@ async function onAppSubmitBooking(e) {
       endsAt: ends.toISOString(),
       status: 'pending',
       serviceCategory: state.booking.categoryId || undefined,
+      sessionNotes: state.booking.notes?.trim() || undefined,
+      sessionNotesClientLanguage: uiLang(),
     });
     state.booking = defaultBookingState();
     if (typeof sessionStorage !== 'undefined') {

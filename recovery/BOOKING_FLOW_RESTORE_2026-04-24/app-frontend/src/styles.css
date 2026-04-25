@@ -161,42 +161,6 @@ select:focus-visible {
   max-width: 1100px;
 }
 
-/* BOOKING_FLOW_RESTORE: inline two-column layout (context left, calendar/slots right) */
-.booking-inline-split {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem 1.5rem;
-  align-items: flex-start;
-}
-
-.booking-inline-split__left,
-.booking-inline-split__right {
-  flex: 1 1 300px;
-  min-width: 0;
-}
-
-.booking-plugin__h,
-.booking-inline-split__h {
-  margin: 0 0 0.5rem;
-  font-size: 1.05rem;
-  color: #0f2744;
-}
-
-.booking-inline-split__blurb {
-  font-size: 0.85rem;
-  line-height: 1.45;
-  margin: 0;
-  max-height: 12rem;
-  overflow: auto;
-}
-
-@media (min-width: 800px) {
-  .booking-inline-split__right.booking-plugin {
-    flex: 1 1 360px;
-    max-width: 520px;
-  }
-}
-
 .banner-draft {
   background: var(--draft-bg);
   border: 1px solid var(--border);
@@ -739,22 +703,6 @@ td {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 0.75rem;
-}
-
-button.service-card {
-  display: block;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  font: inherit;
-  color: inherit;
-  transition: border-color 0.12s, background 0.12s, box-shadow 0.12s;
-}
-
-button.service-card:hover {
-  border-color: var(--primary);
-  background: var(--primary-soft, #f0f7fa);
-  box-shadow: 0 1px 4px rgba(26, 95, 122, 0.1);
 }
 
 .service-card {

@@ -23,7 +23,7 @@ const STR = {
     about_p2:
       'Aucune adresse réelle, aucune promesse de résultat, aucune urgence traitée par ce site : en cas de crise, composez le 911 ou la ligne 988 (Canada).',
     services_title: 'Services (maquette)',
-    services_lead: 'Choisissez un service pour ouvrir la réservation (date et heure avant connexion).',
+    services_lead: 'Les catégories ci-dessous relient le formulaire de réservation une fois connecté.',
     team_title: 'Équipe — personnages fictifs',
     team_lead:
       'Illustrations décrites comme cartoon professionnel (pastel doux, semi-plat). Aucune photo réelle ; noms inventés.',
@@ -110,7 +110,7 @@ const STR = {
     about_p2:
       'No real address, no guaranteed outcomes. For emergencies call 911 or 988 (Canada).',
     services_title: 'Services (mockup)',
-    services_lead: 'Select a service to open the booking flow (date and time before sign-in).',
+    services_lead: 'Categories below connect to booking after sign-in.',
     team_title: 'Team — fictional characters',
     team_lead:
       'Illustrations described as professional cartoon (soft pastel, semi-flat). No real photos; invented names.',
@@ -195,7 +195,7 @@ const STR = {
     about_p2:
       'Sin dirección real ni promesas de curación. Emergencias: 911 o 988 (Canadá).',
     services_title: 'Servicios (maqueta)',
-    services_lead: 'Elija un servicio para abrir la reserva (fecha y hora antes de iniciar sesión).',
+    services_lead: 'Las categorías enlazan con la reserva tras iniciar sesión.',
     team_title: 'Equipo — personajes ficticios',
     team_lead:
       'Ilustración tipo cartoon profesional (pastel suave, semi-plano). Sin fotos reales.',

@@ -292,7 +292,7 @@ function viewLanding() {
         <p class="hero__actions">
           <a class="btn" href="${esc(hero.ctaPrimary?.href || '#/register')}">${esc(hero.ctaPrimary?.label || '')}</a>
           <a class="btn btn--ghost" href="${esc(hero.ctaSecondary?.href || '#/legal')}">${esc(hero.ctaSecondary?.label || '')}</a>
-          <a class="btn btn--ghost" href="${esc(hero.ctaBook?.href || '#/book')}">${esc(hero.ctaBook?.label || '')}</a>
+          <a class="btn btn--ghost" href="${esc(hero.ctaBook?.href || '#/login')}">${esc(hero.ctaBook?.label || '')}</a>
         </p>
         <div class="home-cards">${cardHtml}</div>
         ${
@@ -328,11 +328,7 @@ function viewServices() {
     .map((s) => {
       const title = pickLocalizedText(s, 'title', lang);
       const body = pickLocalizedText(s, 'body', lang);
-      // BOOKING_FLOW_RESTORE: actionable specialty → opens `#/book` with category prefilled (see `onServiceCardOpenBooking`)
-      return `<button type="button" class="service-card" data-booking-category="${esc(s.slug)}" aria-label="${esc(title)} — ${esc(t('nav_book'))}">
-        <h3 class="service-card__h"${cmsInlinePatchAttr('service', s.id, titleKey)}>${esc(title)}</h3>
-        <div class="muted service-card__p">${body}</div>
-      </button>`;
+      return `<div class="service-card"><h3 class="service-card__h"${cmsInlinePatchAttr('service', s.id, titleKey)}>${esc(title)}</h3><div class="muted service-card__p">${body}</div></div>`;
     })
     .join('');
   return publicPageWrap(
@@ -791,24 +787,6 @@ function esc(s) {
     .replace(/"/g, '&quot;');
 }
 
-// BOOKING_FLOW_RESTORE_START — specialty cards (Services page) open `#/book` with pre-filled category; no PHI stored here.
-function onServiceCardOpenBooking(e) {
-  if (e.target.closest('[data-cms-patch], .cms-editable')) return;
-  const card = e.target.closest('.service-card[data-booking-category]');
-  if (!card || e.target.closest('.booking-wizard')) return;
-  e.preventDefault();
-  const slug = card.getAttribute('data-booking-category') || '';
-  if (!slug) return;
-  try {
-    if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem(SS_BOOKING);
-  } catch {
-    /* */
-  }
-  state.booking = { ...defaultBookingState(), categoryId: slug, step: 2 };
-  navigate('/book');
-}
-// BOOKING_FLOW_RESTORE_END
-
 /** Single delegation on #app — avoids duplicate listeners on each render(). */
 function onAppClickBooking(e) {
   const wz = e.target.closest('.booking-wizard');
@@ -848,7 +826,6 @@ function onAppClickBooking(e) {
 
   if (t.hasAttribute('data-booking-category')) {
     state.booking.categoryId = t.getAttribute('data-booking-category') || '';
-    if (state.booking.categoryId) state.booking.step = 2;
     render();
     return;
   }
@@ -881,6 +858,8 @@ function onAppClickBooking(e) {
   if (t.id === 'booking-next-3') {
     const r = wz.querySelector('input[name="sessionType"]:checked');
     state.booking.sessionType = r ? r.value : 'video';
+    const ta = document.getElementById('booking-notes');
+    state.booking.notes = ta ? ta.value : '';
     state.booking.step = 5;
     render();
     return;
@@ -910,9 +889,8 @@ async function onAppSubmitBooking(e) {
     } catch {
       /* full storage */
     }
-    state.banner =
-      'Sign in (or create an account from the sign-in page) to confirm this slot — your choices are kept for this browser session only.';
-    navigate('/login');
+    state.banner = 'Create a patient account (or sign in) to confirm this time slot — your choices are saved for this session.';
+    navigate('/register');
     return;
   }
   const start = new Date(`${state.booking.dateStr}T${state.booking.timeStr}:00`);
@@ -925,6 +903,8 @@ async function onAppSubmitBooking(e) {
       endsAt: ends.toISOString(),
       status: 'pending',
       serviceCategory: state.booking.categoryId || undefined,
+      sessionNotes: state.booking.notes?.trim() || undefined,
+      sessionNotesClientLanguage: uiLang(),
     });
     clearBookingHandoff();
     await refreshAppointments();
@@ -1171,7 +1151,6 @@ async function onCmsInlineClick(e) {
 export async function init() {
   const appRoot = document.getElementById('app');
   if (appRoot) {
-    appRoot.addEventListener('click', onServiceCardOpenBooking);
     appRoot.addEventListener('click', onAppClickBooking);
     appRoot.addEventListener('submit', onAppSubmitBooking);
     appRoot.addEventListener('click', onCmsInlineClick);

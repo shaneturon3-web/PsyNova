@@ -16,3 +16,8 @@ export async function init() {
   }
   return initLegacy();
 }
+
+// BOOKING_FLOW_RESTORE_START
+// Public booking: implemented in `app-legacy.js` (hash `#/book`, inline split, `booking-wizard.js`).
+// Removed prior `psynova_booking_bridge` IIFE that replaced `#app` and bypassed the real shell.
+// BOOKING_FLOW_RESTORE_END
