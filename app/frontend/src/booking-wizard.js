@@ -29,10 +29,38 @@ export function defaultBookingState() {
     categoryId: '',
     dateStr: '',
     timeStr: '',
-    sessionType: 'video',
+    sessionType: 'zoom_video',
+    sessionProvider: 'zoom',
+    patientPhone: '',
+    contactEmail: '',
+    groupParticipants: 1,
+    groupRole: 'host',
+    anonymousGroup: false,
     calYear: n.getFullYear(),
     calMonth: n.getMonth(),
   };
+}
+
+function defaultProviderForType(type) {
+  if (type === 'backup_video') return 'daily';
+  if (type === 'group_video') return 'jitsi';
+  if (type === 'phone') return 'phone_direct';
+  if (type === 'voip') return 'twilio';
+  return 'zoom';
+}
+
+function providerLabel(provider, esc) {
+  const labels = {
+    zoom: 'Zoom',
+    daily: 'Daily.co (placeholder)',
+    whereby: 'Whereby (placeholder)',
+    jitsi: 'Jitsi',
+    phone_direct: 'Direct phone call',
+    twilio: 'Twilio (placeholder)',
+    telnyx: 'Telnyx (placeholder)',
+    vonage: 'Vonage (placeholder)',
+  };
+  return esc(labels[provider] || provider || '—');
 }
 
 function pad2(n) {
@@ -291,17 +319,81 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
         </div>
       </div>`;
   } else if (step === 4) {
+    const selectedType = booking.sessionType || 'zoom_video';
+    const providerValue = booking.sessionProvider || defaultProviderForType(selectedType);
+    const phoneValue = booking.patientPhone || '';
+    const emailValue = booking.contactEmail || user?.email || '';
     rightCol = `
       <div class="booking-inline-split__right booking-plugin">
         ${formDisclaimerBlock()}
         <h3 class="booking-plugin__h">${tx('Format de la séance', 'Session format', 'Formato de la sesión')}</h3>
         <p class="muted">${esc(booking.dateStr)} · ${esc(booking.timeStr)}</p>
-        <div class="form-row">
-          <label>${tx('Format', 'Format', 'Formato')}</label>
-          <div class="radio-row">
-            <label><input type="radio" name="sessionType" value="video" ${booking.sessionType === 'video' ? 'checked' : ''} /> ${tx('Vidéo', 'Video', 'Video')}</label>
-            <label><input type="radio" name="sessionType" value="in_person" ${booking.sessionType === 'in_person' ? 'checked' : ''} /> ${tx('En personne', 'In person', 'Presencial')}</label>
-            <label><input type="radio" name="sessionType" value="phone" ${booking.sessionType === 'phone' ? 'checked' : ''} /> ${tx('Téléphone', 'Phone', 'Teléfono')}</label>
+        <div class="booking-session-options">
+          <div class="booking-session-option${selectedType === 'zoom_video' ? ' booking-session-option--selected' : ''}">
+            <label><input type="radio" name="sessionType" value="zoom_video" ${selectedType === 'zoom_video' ? 'checked' : ''} /> Zoom video session <span class="booking-provider-badge">Primary</span></label>
+            <p class="muted booking-session-option__helper">Secure video appointment link will be generated after confirmation.</p>
+          </div>
+          <div class="booking-session-option${selectedType === 'backup_video' ? ' booking-session-option--selected' : ''}">
+            <label><input type="radio" name="sessionType" value="backup_video" ${selectedType === 'backup_video' ? 'checked' : ''} /> Backup video session</label>
+            <p class="muted booking-session-option__helper">Used if Zoom is unavailable or not configured.</p>
+            <div class="form-row booking-provider-field">
+              <label for="booking-session-provider">Backup provider</label>
+              <select id="booking-session-provider" name="backupProvider">
+                <option value="daily" ${providerValue === 'daily' ? 'selected' : ''}>Daily.co</option>
+                <option value="whereby" ${providerValue === 'whereby' ? 'selected' : ''}>Whereby</option>
+                <option value="jitsi" ${providerValue === 'jitsi' ? 'selected' : ''}>Jitsi</option>
+              </select>
+            </div>
+          </div>
+          <div class="booking-session-option${selectedType === 'phone' ? ' booking-session-option--selected' : ''}">
+            <label><input type="radio" name="sessionType" value="phone" ${selectedType === 'phone' ? 'checked' : ''} /> Telephone session</label>
+            <p class="muted booking-session-option__helper">Therapist will call the patient at the confirmed phone number.</p>
+          </div>
+          <div class="booking-session-option${selectedType === 'group_video' ? ' booking-session-option--selected' : ''}">
+            <label><input type="radio" name="sessionType" value="group_video" ${selectedType === 'group_video' ? 'checked' : ''} /> Group video session</label>
+            <p class="muted booking-session-option__helper">Multi-participant session with host/co-host/participant roles.</p>
+            <div class="form-row booking-provider-field">
+              <label for="booking-group-size">Participants</label>
+              <select id="booking-group-size" name="groupParticipants">
+                <option value="2" ${String(booking.groupParticipants || 2) === '2' ? 'selected' : ''}>2 participants</option>
+                <option value="3" ${String(booking.groupParticipants || 2) === '3' ? 'selected' : ''}>3 participants</option>
+                <option value="4" ${String(booking.groupParticipants || 2) === '4' ? 'selected' : ''}>4 participants</option>
+                <option value="5" ${String(booking.groupParticipants || 2) === '5' ? 'selected' : ''}>5 participants</option>
+              </select>
+            </div>
+            <div class="form-row booking-provider-field">
+              <label for="booking-group-role">Your role</label>
+              <select id="booking-group-role" name="groupRole">
+                <option value="host" ${booking.groupRole === 'host' ? 'selected' : ''}>Host</option>
+                <option value="co_host" ${booking.groupRole === 'co_host' ? 'selected' : ''}>Co-host</option>
+                <option value="participant" ${booking.groupRole === 'participant' ? 'selected' : ''}>Participant</option>
+              </select>
+            </div>
+            <label class="booking-check-inline">
+              <input type="checkbox" name="anonymousGroup" ${booking.anonymousGroup ? 'checked' : ''} />
+              Anonymous Plan B mode
+            </label>
+          </div>
+          <div class="booking-session-option${selectedType === 'voip' ? ' booking-session-option--selected' : ''}">
+            <label><input type="radio" name="sessionType" value="voip" ${selectedType === 'voip' ? 'checked' : ''} /> VoIP call</label>
+            <div class="form-row booking-provider-field">
+              <label for="booking-voip-provider">VoIP provider</label>
+              <select id="booking-voip-provider" name="voipProvider">
+                <option value="twilio" ${providerValue === 'twilio' ? 'selected' : ''}>Twilio placeholder</option>
+                <option value="telnyx" ${providerValue === 'telnyx' ? 'selected' : ''}>Telnyx placeholder</option>
+                <option value="vonage" ${providerValue === 'vonage' ? 'selected' : ''}>Vonage placeholder</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="booking-session-contact">
+          <div class="form-row">
+            <label for="booking-patient-phone">Patient phone</label>
+            <input id="booking-patient-phone" name="patientPhone" type="tel" value="${esc(phoneValue)}" placeholder="+1 514 555 0100" />
+          </div>
+          <div class="form-row">
+            <label for="booking-contact-email">Patient email</label>
+            <input id="booking-contact-email" name="contactEmail" type="email" value="${esc(emailValue)}" placeholder="patient@example.com" />
           </div>
         </div>
         <p class="muted">${
@@ -320,12 +412,14 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
       </div>`;
   } else {
     const durMin = 50;
-    const fmt =
-      booking.sessionType === 'in_person'
-        ? tx('En personne', 'In person', 'Presencial')
-        : booking.sessionType === 'phone'
-          ? tx('Téléphone', 'Phone', 'Teléfono')
-          : tx('Vidéo', 'Video', 'Video');
+    const typeLabelMap = {
+      zoom_video: 'Zoom video session',
+      backup_video: 'Backup video session',
+      group_video: 'Group video session',
+      phone: 'Telephone session',
+      voip: 'VoIP call',
+    };
+    const fmt = typeLabelMap[booking.sessionType] || 'Zoom video session';
     let catLine = booking.categoryId || '—';
     if (cmsServices?.length) {
       const s = cmsServices.find((x) => x.slug === booking.categoryId);
@@ -335,7 +429,14 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
       catLine = cat ? categoryLabel(cat, lang) : catLine;
     }
     const therapist = tx('Assigned demo therapist', 'Assigned demo therapist', 'Terapeuta de demostración asignado');
-    const emailLine = user?.email || tx('Sign in to attach account email', 'Sign in to attach account email', 'Inicie sesión para asociar correo');
+    const emailLine = booking.contactEmail || user?.email || tx('Sign in to attach account email', 'Sign in to attach account email', 'Inicie sesión para asociar correo');
+    const phoneLine = booking.patientPhone || '—';
+    const providerValue = booking.sessionProvider || defaultProviderForType(booking.sessionType);
+    const providerLine = providerLabel(providerValue, esc);
+    const providerConfigured = providerValue === 'jitsi';
+    const joinInstructions = providerConfigured
+      ? 'Join link will be shown from configured provider details.'
+      : 'Demo mode: provider credentials pending.';
     rightCol = `
       <div class="booking-inline-split__right booking-plugin">
         ${formDisclaimerBlock()}
@@ -343,9 +444,24 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
         <ul class="booking-summary">
           <li><strong>${tx('Therapist', 'Therapist', 'Terapeuta')}:</strong> ${esc(therapist)}</li>
           <li><strong>${tx('Motif', 'Reason', 'Motivo')}:</strong> ${esc(catLine)}</li>
-          <li><strong>${tx('Quand', 'When', 'Cuándo')}:</strong> ${esc(booking.dateStr)} ${tx('à', 'at', 'a')} ${esc(displayTimeLabel(booking.timeStr))} (${durMin} min)</li>
-          <li><strong>${tx('Format', 'Format', 'Formato')}:</strong> ${esc(fmt)}</li>
-          <li><strong>${tx('Patient email', 'Patient email', 'Correo del paciente')}:</strong> ${esc(emailLine)}</li>
+          <li><strong>Session type:</strong> ${esc(fmt)}</li>
+          <li><strong>Provider:</strong> ${providerLine}</li>
+          <li><strong>Group participants:</strong> ${esc(booking.sessionType === 'group_video' ? String(booking.groupParticipants || 2) : 'N/A')}</li>
+          <li><strong>Role:</strong> ${esc(
+            booking.sessionType === 'group_video'
+              ? booking.groupRole === 'co_host'
+                ? 'Co-host'
+                : booking.groupRole === 'participant'
+                  ? 'Participant'
+                  : 'Host'
+              : 'N/A',
+          )}</li>
+          <li><strong>Anonymous Plan B:</strong> ${esc(booking.sessionType === 'group_video' && booking.anonymousGroup ? 'Enabled' : 'Disabled')}</li>
+          <li><strong>Patient phone:</strong> ${esc(phoneLine)}</li>
+          <li><strong>Patient email:</strong> ${esc(emailLine)}</li>
+          <li><strong>Appointment date:</strong> ${esc(booking.dateStr)}</li>
+          <li><strong>Appointment time:</strong> ${esc(displayTimeLabel(booking.timeStr))} (${durMin} min)</li>
+          <li><strong>Join instructions:</strong> ${esc(joinInstructions)}</li>
         </ul>
         <p class="muted">${tx('Crée une demande', 'Creates a', 'Crea una solicitud')} <code>pending</code> ${tx('via l’API (maquette) — sans notes cliniques dans cette appli.', 'via API (mock) — this app does not store clinical free text.', 'por API (maqueta) — sin notas clínicas en esta app.')}</p>
         <form id="form-appt-booking" novalidate>

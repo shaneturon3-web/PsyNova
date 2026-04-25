@@ -271,7 +271,36 @@ function onAppClickBooking(e) {
   }
   if (t.id === 'booking-next-3') {
     const r = wz.querySelector('input[name="sessionType"]:checked');
-    state.booking.sessionType = r ? r.value : 'video';
+    const selectedType = r ? r.value : 'zoom_video';
+    const backupProvider = wz.querySelector('select[name="backupProvider"]')?.value;
+    const voipProvider = wz.querySelector('select[name="voipProvider"]')?.value;
+    const patientPhone = wz.querySelector('input[name="patientPhone"]')?.value || '';
+    const contactEmail = wz.querySelector('input[name="contactEmail"]')?.value || '';
+    const groupParticipants = Number(wz.querySelector('select[name="groupParticipants"]')?.value || 2);
+    const groupRole = wz.querySelector('select[name="groupRole"]')?.value || 'host';
+    const anonymousGroup = !!wz.querySelector('input[name="anonymousGroup"]')?.checked;
+    const defaultProvider =
+      selectedType === 'backup_video'
+        ? 'daily'
+        : selectedType === 'group_video'
+          ? 'jitsi'
+        : selectedType === 'voip'
+          ? 'twilio'
+          : selectedType === 'phone'
+            ? 'phone_direct'
+            : 'zoom';
+    state.booking.sessionType = selectedType;
+    state.booking.sessionProvider =
+      selectedType === 'backup_video'
+        ? backupProvider || defaultProvider
+        : selectedType === 'voip'
+          ? voipProvider || defaultProvider
+          : defaultProvider;
+    state.booking.patientPhone = String(patientPhone).trim();
+    state.booking.contactEmail = String(contactEmail).trim() || state.user?.email || '';
+    state.booking.groupParticipants = Number.isFinite(groupParticipants) ? groupParticipants : 2;
+    state.booking.groupRole = String(groupRole);
+    state.booking.anonymousGroup = anonymousGroup;
     state.booking.step = 5;
     render();
     return;

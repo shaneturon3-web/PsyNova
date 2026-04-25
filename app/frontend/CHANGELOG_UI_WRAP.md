@@ -152,3 +152,171 @@ dist-psynova/assets/index-C0JoVbhc.js   112.56 kB │ gzip: 31.39 kB
 ```
 
 **Exit code:** 0
+
+---
+
+## 2026-04-25 (virtual sessions audit + integration plan only)
+
+### Scope
+- Repository audit completed for:
+  - `frontend/src/`
+  - `backend/src/`
+  - booking flow
+  - therapist/admin areas
+  - appointment/session model touchpoints
+  - env/config and package manifests
+- Created planning document:
+  - `docs/VIRTUAL_SESSIONS_INTEGRATION_PLAN.md`
+
+### Findings captured
+- Existing booking flow already captures `sessionType` in frontend state, but backend appointment DTO/storage does not yet persist a session transport/provider model.
+- Existing `#/app/telehealth` route is currently a placeholder and is the recommended UI insertion point for provider-agnostic session controls.
+- Existing backend `vendor-links` module supports public telehealth URL readiness but not realtime session provisioning APIs yet.
+- Provider plan documented with explicit placeholders:
+  - Zoom primary
+  - Daily/Whereby backups
+  - Jitsi open/self-hostable option
+  - Twilio Voice + Telnyx/Vonage phone fallback options
+  - signup-gated credentials marked `PLACEHOLDER_API_KEY_REQUIRED`
+
+### Build verification
+- Frontend build (`app/frontend`): `npm run build` -> success.
+- Backend build (`app/backend`): `npm run build` -> success.
+- No documentation-only import/path corrections were required.
+
+### Behavior/API impact
+- No frontend runtime behavior changed.
+- No backend runtime behavior changed.
+- No API contracts changed.
+
+---
+
+## 2026-04-25 (booking session options UX pass)
+
+### Files modified
+- `frontend/src/booking-wizard.js`
+- `frontend/src/app-legacy.js`
+- `frontend/src/compliance-gateway.js`
+- `frontend/src/styles.css`
+- `frontend/CHANGELOG_UI_WRAP.md`
+
+### Booking step updates (non-destructive)
+- Kept existing 5-step flow and back/next IDs unchanged.
+- Session step now includes explicit options:
+  - Zoom video session (Primary badge)
+  - Backup video session (Daily.co / Whereby / Jitsi placeholders)
+  - Telephone session
+  - VoIP call (Twilio / Telnyx / Vonage placeholders)
+- Added visible contact fields in session step:
+  - patient phone
+  - patient email
+
+### Confirmation summary updates
+- Final confirmation now visibly includes:
+  - session type
+  - provider
+  - patient phone
+  - patient email
+  - appointment date
+  - appointment time
+  - therapist
+  - join instructions
+- When provider credentials are not configured, summary shows:
+  - `Demo mode: provider credentials pending.`
+
+### Integration and safety notes
+- Booking state extended on frontend only (`sessionProvider`, `patientPhone`, `contactEmail`).
+- `createAppointment()` request payload remains unchanged (no API contract changes).
+- Existing booking slot selection, date/time controls, and submit flow preserved.
+
+---
+
+## 2026-04-25 (virtual sessions demo module)
+
+### Files modified
+- `frontend/src/app-legacy.js`
+- `frontend/src/demo-session-data.js` (new)
+- `frontend/src/styles.css`
+- `frontend/.env.example`
+- `backend/.env.example`
+- `frontend/CHANGELOG_UI_WRAP.md`
+
+### What was added
+- New visible public route: `#/sessions-demo`.
+- New nav links to Sessions Demo (public nav + dashboard/demo cross-links).
+- New module sections in Sessions Demo:
+  - Upcoming virtual sessions
+  - Therapist session controls
+  - Patient join instructions
+  - Admin/provider status panel
+- Session cards now show:
+  - patient, therapist, date, time, session type, provider, status
+  - actions: Join Zoom, Open Backup Video, Phone Instructions, Copy Link, Mark Complete
+
+### Safety and placeholders
+- Added provider config placeholders only (no secrets):
+  - `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET`, `ZOOM_ACCOUNT_ID`, `ZOOM_WEBHOOK_SECRET`
+  - `DAILY_API_KEY`, `WHEREBY_API_KEY`
+  - `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`
+  - `TELNYX_API_KEY`, `VONAGE_API_KEY`
+- Frontend uses `VITE_` prefixed variants for demo detection.
+- If Zoom credentials are missing, actions use demo placeholder links and show:
+  - `Demo mode: provider credentials pending.`
+- Jitsi demo room URL generation is gated by:
+  - `VITE_ALLOW_JITSI_DEMO_ROOM=true`
+
+### API/runtime impact
+- No new backend API calls introduced for Sessions Demo actions.
+- No appointment API contract changes in this pass.
+- Demo buttons are frontend-only behavior (window open/copy/prompt/alert + local status updates).
+
+---
+
+## 2026-04-25 (resource license register structure)
+
+### Files added
+- `docs/RESOURCE_LICENSE_REGISTER.md`
+- `frontend/src/verified-resources.js`
+
+### Files updated
+- `frontend/src/app-legacy.js`
+
+### What changed
+- Added a conservative resource/license registry dataset with required fields:
+  - name, category, official URL, license type, commercial use, signup/API requirements, status, notes.
+- Added a matching human-readable register doc with source links used for verification.
+- Added a small Sessions Demo section: **Resource & License Register** (preview table only).
+
+### Safety rules applied
+- No resource was marked open/commercial without an official source or package license reference.
+- Unverified assets default to `MOCK_ONLY_LICENSE_REQUIRED` or `DO_NOT_USE_UNVERIFIED`.
+- Signup-gated integrations are marked as placeholders with `credentials pending`.
+
+---
+
+## 2026-04-25 (group sessions pass - demo-safe)
+
+### Files modified
+- `frontend/src/booking-wizard.js`
+- `frontend/src/app-legacy.js`
+- `frontend/src/compliance-gateway.js`
+- `frontend/src/demo-session-data.js`
+- `frontend/src/styles.css`
+
+### What changed
+- Added **Group video session** option in booking step 4 (non-destructive extension).
+- Added group-specific fields:
+  - participants count
+  - role selector (`host`, `co_host`, `participant`)
+  - anonymous Plan B toggle
+- Captured group fields in booking state on both legacy shell and compliance gateway shell.
+- Extended confirmation summary to show group participants/role/anonymous mode.
+- Expanded sessions demo data with group session examples and participant rosters.
+- Added therapist session control actions for group scenarios:
+  - `Mute Participant` (demo action)
+  - `Remove Participant` (demo action updates local roster/count)
+
+### Safety / contract impact
+- Existing booking steps and back/next flow preserved.
+- Existing appointment API payload unchanged.
+- Group actions remain frontend demo behavior only (no backend API changes).

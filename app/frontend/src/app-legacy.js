@@ -24,6 +24,8 @@ import {
   siteFooterDisclaimer,
 } from './disclaimers.js';
 import { legalPageHtml } from './legal-content.js';
+import { buildDemoVirtualSessions, providerConfigSummary } from './demo-session-data.js';
+import { VERIFIED_RESOURCES } from './verified-resources.js';
 
 const MOCK_CLINICIAN_ID = '00000000-0000-4000-8000-000000000001';
 
@@ -60,6 +62,8 @@ const state = {
     messages: [],
     emails: [],
     records: [],
+    virtualSessions: [],
+    sessionBanner: null,
     bookingConfirmation: null,
   },
 };
@@ -192,6 +196,7 @@ function buildDemoData() {
   return { therapists, patients, appointments, messages, emails, records, bookingConfirmation: null };
 }
 state.demo = buildDemoData();
+state.demo.virtualSessions = buildDemoVirtualSessions();
 
 function routeFromHash() {
   const raw = window.location.hash.replace(/^#/, '') || '/';
@@ -367,6 +372,7 @@ function publicNav(currentPath) {
     ${item('/blog', 'nav_blog')}
     ${item('/contact', 'nav_contact')}
     ${item('/book', 'nav_book')}
+    <a class="public-nav__a${currentPath === '/sessions-demo' ? ' public-nav__a--current' : ''}" href="#/sessions-demo">Sessions Demo</a>
     <a class="public-nav__a${currentPath === '/records-demo' ? ' public-nav__a--current' : ''}" href="#/records-demo">Records Demo</a>
     </div>
     <span class="public-nav__sp" aria-hidden="true"></span>
@@ -799,7 +805,7 @@ function viewBookPublic() {
     : '<p class="muted public-lead" style="margin-top:0">Choose a visit reason, date, and time first. You will be asked to <strong>create an account</strong> (or sign in) only on the <strong>last</strong> step to confirm the appointment (maquette / mock API).</p>';
   return publicPageWrap(
     `<h1 class="public-h1">${esc(t('nav_book'))}</h1>
-    <p class="status-bar"><a href="#/">← Home</a> · <a href="#/team">${esc(t('nav_team'))}</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/records-demo">Records Demo</a></p>
+    <p class="status-bar"><a href="#/">← Home</a> · <a href="#/team">${esc(t('nav_team'))}</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/sessions-demo">Sessions Demo</a> · <a href="#/records-demo">Records Demo</a></p>
     ${signed}
     ${state.demo.bookingConfirmation ? `<div class="card booking-confirmation-card"><h3>Appointment confirmation</h3><p><strong>Confirmed:</strong> ${esc(state.demo.bookingConfirmation)}</p><p class="muted">DEMO / FICTIONAL confirmation state unless backend persists the record.</p></div>` : ''}
     <div class="main main--booking" style="margin-top:1rem">
@@ -828,7 +834,7 @@ function viewDashboard() {
         <div class="dash-links card">
           <h2>Site (maquette)</h2>
           <p class="muted"><a href="#/services">${esc(t('nav_services'))}</a> · <a href="#/team">${esc(t('nav_team'))}</a> · <a href="#/blog">${esc(t('nav_blog'))}</a> · <a href="#/contact">${esc(t('nav_contact'))}</a></p>
-          <p><a class="btn" href="#/app/appointments">${esc(t('sidebar_appts'))}</a> <a class="btn btn--ghost" href="#/therapist-demo">Therapist Demo</a> <a class="btn btn--ghost" href="#/records-demo">Records Demo</a></p>
+          <p><a class="btn" href="#/app/appointments">${esc(t('sidebar_appts'))}</a> <a class="btn btn--ghost" href="#/therapist-demo">Therapist Demo</a> <a class="btn btn--ghost" href="#/sessions-demo">Sessions Demo</a> <a class="btn btn--ghost" href="#/records-demo">Records Demo</a></p>
         </div>
         <div class="card">
           <h2>Backend health</h2>
@@ -840,7 +846,7 @@ function viewDashboard() {
         </div>
         <div class="gray-panel">
           <h3>Modules</h3>
-          <p class="muted">Try <a href="#/app/messages">${esc(t('sidebar_messages'))}</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/records-demo">Records Demo</a>. ${esc(t('sidebar_telehealth'))}, ${esc(t('sidebar_billing'))}: mock-only.</p>
+          <p class="muted">Try <a href="#/app/messages">${esc(t('sidebar_messages'))}</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/sessions-demo">Sessions Demo</a> · <a href="#/records-demo">Records Demo</a>. ${esc(t('sidebar_telehealth'))}, ${esc(t('sidebar_billing'))}: mock-only.</p>
         </div>
         ${siteFooterDisclaimer()}
       </div>
@@ -889,7 +895,7 @@ function viewAppointments() {
       ${shellSidebar(true)}
       <div class="main main--booking" id="main">
         ${mockupStripHtml()}
-        <p class="status-bar"><a href="#/app">← Dashboard</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/records-demo">Records Demo</a></p>
+        <p class="status-bar"><a href="#/app">← Dashboard</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/sessions-demo">Sessions Demo</a> · <a href="#/records-demo">Records Demo</a></p>
         <h1 style="margin-top:0;">Appointments</h1>
         <p class="muted" style="margin-top:0;">DRAFT booking: category → date → time → session details → confirm. Original implementation; not a third-party theme.</p>
         ${state.demo.bookingConfirmation ? `<p class="pill">Appointment confirmed (demo): ${esc(state.demo.bookingConfirmation)}</p>` : ''}
@@ -1112,7 +1118,7 @@ function viewTherapistDemo() {
   return publicPageWrap(
     `<h1 class="public-h1">Therapist Demo Workspace</h1>
     <p class="muted public-lead">DEMO / FICTIONAL data only. Use to test patient, therapist, messages, email activity, records and appointment confirmation workflows.</p>
-    <p class="status-bar"><a href="#/">← Home</a> · <a href="#/book">Book</a> · <a href="#/team">Therapists</a> · <a href="#/records-demo">Records Demo</a></p>
+    <p class="status-bar"><a href="#/">← Home</a> · <a href="#/book">Book</a> · <a href="#/team">Therapists</a> · <a href="#/sessions-demo">Sessions Demo</a> · <a href="#/records-demo">Records Demo</a></p>
     <section class="card therapist-demo-profile">
       <img class="therapist-demo-profile__img" src="${esc(primary.avatarUrl)}" alt="" width="108" height="108" />
       <div>
@@ -1144,6 +1150,105 @@ function viewTherapistDemo() {
       <div class="table-wrap"><table><thead><tr><th>Type</th><th>Recipient</th><th>Status</th><th>Timestamp</th></tr></thead><tbody>${emails}</tbody></table></div>
     </section>`,
     '/therapist-demo',
+  );
+}
+
+function providerStatusClass(status) {
+  const s = String(status || '')
+    .toLowerCase()
+    .replace(/\s+/g, '-');
+  return `status-pill--${s}`;
+}
+
+function viewSessionsDemo() {
+  const providerCfg = providerConfigSummary();
+  const sessions = state.demo.virtualSessions || [];
+  const rows = sessions
+    .map((s) => {
+      const joinInstruction = providerCfg.zoomConfigured
+        ? 'Join link can be generated in configured mode.'
+        : 'Demo mode: provider credentials pending.';
+      const roleLabel =
+        s.participantRole === 'co_host' ? 'Co-host' : s.participantRole === 'host' ? 'Host' : 'Participant';
+      const participantsLine = Array.isArray(s.participants) && s.participants.length
+        ? s.participants.join(', ')
+        : s.patient;
+      return `<article class="card virtual-session-card">
+        <h3>${esc(s.patient)} · ${esc(s.date)} ${esc(s.time)}</h3>
+        <p class="muted">Patient: <strong>${esc(s.patient)}</strong> · Therapist: <strong>${esc(s.therapist)}</strong></p>
+        <p class="muted">Session type: <strong>${esc(s.sessionType)}</strong> · Provider: <strong>${esc(s.provider)}</strong></p>
+        <p class="muted">Participants: <strong>${esc(String(s.participantCount || 1))}</strong> · Role: <strong>${esc(roleLabel)}</strong> · Anonymous Plan B: <strong>${esc(s.anonymousMode ? 'Enabled' : 'Disabled')}</strong></p>
+        <p class="muted">Roster: ${esc(participantsLine)}</p>
+        <p class="muted">Status: <span class="status-pill ${providerStatusClass(s.status)}">${esc(s.status)}</span></p>
+        <p class="muted">Join instructions: ${esc(joinInstruction)}</p>
+        <div class="virtual-session-actions">
+          <button type="button" class="btn btn--small btn--ghost" data-session-action="join-zoom" data-session-id="${esc(s.id)}">Join Zoom</button>
+          <button type="button" class="btn btn--small btn--ghost" data-session-action="open-backup" data-session-id="${esc(s.id)}">Open Backup Video</button>
+          <button type="button" class="btn btn--small btn--ghost" data-session-action="phone" data-session-id="${esc(s.id)}">Phone Instructions</button>
+          <button type="button" class="btn btn--small btn--ghost" data-session-action="copy-link" data-session-id="${esc(s.id)}">Copy Link</button>
+          <button type="button" class="btn btn--small btn--ghost" data-session-action="mute" data-session-id="${esc(s.id)}">Mute Participant</button>
+          <button type="button" class="btn btn--small btn--ghost" data-session-action="remove" data-session-id="${esc(s.id)}">Remove Participant</button>
+          <button type="button" class="btn btn--small btn--ghost" data-session-action="complete" data-session-id="${esc(s.id)}">Mark Complete</button>
+        </div>
+      </article>`;
+    })
+    .join('');
+
+  const providerPanel = [
+    ['Zoom', providerCfg.zoomConfigured ? 'Ready' : 'Not configured'],
+    ['Daily.co', providerCfg.dailyConfigured ? 'Ready' : 'Not configured'],
+    ['Whereby', providerCfg.wherebyConfigured ? 'Ready' : 'Not configured'],
+    ['Twilio', providerCfg.twilioConfigured ? 'Ready' : 'Not configured'],
+    ['Telnyx', providerCfg.telnyxConfigured ? 'Ready' : 'Not configured'],
+    ['Vonage', providerCfg.vonageConfigured ? 'Ready' : 'Not configured'],
+    ['Jitsi demo room', providerCfg.jitsiDemoAllowed ? 'Ready' : 'Not configured'],
+  ]
+    .map(
+      ([name, st]) =>
+        `<tr><td>${esc(name)}</td><td><span class="status-pill ${providerStatusClass(st)}">${esc(st)}</span></td></tr>`,
+    )
+    .join('');
+  const resourcePreview = VERIFIED_RESOURCES.slice(0, 8)
+    .map(
+      (r) =>
+        `<tr><td>${esc(r.name)}</td><td>${esc(r.category)}</td><td><span class="status-pill ${providerStatusClass(r.status.replace(/_/g, ' '))}">${esc(r.status)}</span></td></tr>`,
+    )
+    .join('');
+
+  return publicPageWrap(
+    `<h1 class="public-h1">Virtual Sessions Demo</h1>
+    <p class="muted public-lead">DEMO / FICTIONAL module. Placeholder links only unless provider credentials are configured.</p>
+    <p class="status-bar"><a href="#/">← Home</a> · <a href="#/book">Book</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/records-demo">Records Demo</a></p>
+    ${state.demo.sessionBanner ? `<p class="pill">${esc(state.demo.sessionBanner)}</p>` : ''}
+    <section class="card">
+      <h2>Upcoming virtual sessions</h2>
+      <p class="muted">Each session card includes patient, therapist, date, time, type, provider, status, and controls.</p>
+      <div class="virtual-session-grid">${rows || '<p class="muted">No demo sessions.</p>'}</div>
+    </section>
+    <section class="card">
+      <h2>Therapist session controls</h2>
+      <p class="muted">Use action buttons on each card: Join Zoom, Open Backup Video, Phone Instructions, Copy Link, Mute Participant, Remove Participant, Mark Complete.</p>
+    </section>
+    <section class="card">
+      <h2>Patient join instructions</h2>
+      <ul class="booking-summary">
+        <li><strong>Zoom:</strong> Primary channel when configured.</li>
+        <li><strong>Backup video:</strong> Daily.co / Whereby / Jitsi placeholder fallback.</li>
+        <li><strong>Phone/VoIP fallback:</strong> Share call instructions if video is unavailable.</li>
+      </ul>
+      <p class="muted">When credentials are missing: <strong>Demo mode: provider credentials pending.</strong></p>
+    </section>
+    <section class="card">
+      <h2>Admin/provider status panel</h2>
+      <div class="table-wrap"><table><thead><tr><th>Provider</th><th>Status</th></tr></thead><tbody>${providerPanel}</tbody></table></div>
+    </section>
+    <section class="card">
+      <h2>Resource & License Register</h2>
+      <p class="muted">Preview of verified resource statuses used for safe demo planning.</p>
+      <div class="table-wrap"><table><thead><tr><th>Name</th><th>Category</th><th>Status</th></tr></thead><tbody>${resourcePreview}</tbody></table></div>
+      <p class="muted"><a href="#/sessions-demo">Refresh</a> · See full register in <code>docs/RESOURCE_LICENSE_REGISTER.md</code>.</p>
+    </section>`,
+    '/sessions-demo',
   );
 }
 
@@ -1268,7 +1373,36 @@ function onAppClickBooking(e) {
   }
   if (t.id === 'booking-next-3') {
     const r = wz.querySelector('input[name="sessionType"]:checked');
-    state.booking.sessionType = r ? r.value : 'video';
+    const selectedType = r ? r.value : 'zoom_video';
+    const backupProvider = wz.querySelector('select[name="backupProvider"]')?.value;
+    const voipProvider = wz.querySelector('select[name="voipProvider"]')?.value;
+    const patientPhone = wz.querySelector('input[name="patientPhone"]')?.value || '';
+    const contactEmail = wz.querySelector('input[name="contactEmail"]')?.value || '';
+    const groupParticipants = Number(wz.querySelector('select[name="groupParticipants"]')?.value || 2);
+    const groupRole = wz.querySelector('select[name="groupRole"]')?.value || 'host';
+    const anonymousGroup = !!wz.querySelector('input[name="anonymousGroup"]')?.checked;
+    const defaultProvider =
+      selectedType === 'backup_video'
+        ? 'daily'
+        : selectedType === 'group_video'
+          ? 'jitsi'
+        : selectedType === 'voip'
+          ? 'twilio'
+          : selectedType === 'phone'
+            ? 'phone_direct'
+            : 'zoom';
+    state.booking.sessionType = selectedType;
+    state.booking.sessionProvider =
+      selectedType === 'backup_video'
+        ? backupProvider || defaultProvider
+        : selectedType === 'voip'
+          ? voipProvider || defaultProvider
+          : defaultProvider;
+    state.booking.patientPhone = String(patientPhone).trim();
+    state.booking.contactEmail = String(contactEmail).trim() || state.user?.email || '';
+    state.booking.groupParticipants = Number.isFinite(groupParticipants) ? groupParticipants : 2;
+    state.booking.groupRole = String(groupRole);
+    state.booking.anonymousGroup = anonymousGroup;
     state.booking.step = 5;
     render();
     return;
@@ -1360,6 +1494,8 @@ function render() {
     html = viewTeamMember(tid);
   } else if (r === '/therapist-demo') {
     html = viewTherapistDemo();
+  } else if (r === '/sessions-demo') {
+    html = viewSessionsDemo();
   } else if (r === '/records-demo') {
     html = viewRecordsDemo();
   } else if (r === '/blog') {
@@ -1637,6 +1773,84 @@ async function onCmsInlineClick(e) {
 }
 
 function onAppClickDemo(e) {
+  const sessionActionBtn = e.target.closest('[data-session-action]');
+  if (sessionActionBtn) {
+    const action = sessionActionBtn.getAttribute('data-session-action');
+    const id = sessionActionBtn.getAttribute('data-session-id');
+    const row = state.demo.virtualSessions.find((s) => s.id === id);
+    if (!row) return;
+    const cfg = providerConfigSummary();
+    const jitsiAllowed = cfg.jitsiDemoAllowed;
+    const zoomMissing = !cfg.zoomConfigured;
+    const joinUrl =
+      action === 'open-backup'
+        ? row.providerKey === 'jitsi' && jitsiAllowed
+          ? `https://meet.jit.si/psynova-${encodeURIComponent(row.id)}`
+          : row.demoBackupUrl
+        : row.demoJoinUrl;
+    if (action === 'join-zoom') {
+      if (zoomMissing) {
+        state.demo.sessionBanner = 'Demo mode: provider credentials pending.';
+      } else {
+        state.demo.sessionBanner = `Opening Zoom join page for ${row.id}.`;
+      }
+      window.open(joinUrl, '_blank', 'noopener,noreferrer');
+      render();
+      return;
+    }
+    if (action === 'open-backup') {
+      state.demo.sessionBanner =
+        row.providerKey === 'jitsi' && jitsiAllowed
+          ? `Opening Jitsi demo room for ${row.id}.`
+          : 'Demo mode: provider credentials pending.';
+      window.open(joinUrl, '_blank', 'noopener,noreferrer');
+      render();
+      return;
+    }
+    if (action === 'phone') {
+      window.alert(
+        `Phone instructions (DEMO)\nPatient: ${row.patient}\nTherapist: ${row.therapist}\nNumber: ${row.patientPhone}\nFallback: Twilio/Telnyx/Vonage placeholders only.`,
+      );
+      return;
+    }
+    if (action === 'copy-link') {
+      const copyText = joinUrl;
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard
+          .writeText(copyText)
+          .then(() => {
+            state.demo.sessionBanner = `Copied link for ${row.id}.`;
+            render();
+          })
+          .catch(() => {
+            window.prompt('Copy session link', copyText);
+          });
+      } else {
+        window.prompt('Copy session link', copyText);
+      }
+      return;
+    }
+    if (action === 'mute') {
+      state.demo.sessionBanner = `Participant muted in ${row.id} (demo action).`;
+      render();
+      return;
+    }
+    if (action === 'remove') {
+      if (Array.isArray(row.participants) && row.participants.length > 1) {
+        row.participants = row.participants.slice(0, -1);
+        row.participantCount = row.participants.length;
+      }
+      state.demo.sessionBanner = `Participant removed from ${row.id} (demo action).`;
+      render();
+      return;
+    }
+    if (action === 'complete') {
+      row.status = 'Completed';
+      state.demo.sessionBanner = `Marked ${row.id} as Completed.`;
+      render();
+      return;
+    }
+  }
   const confirmBtn = e.target.closest('[data-demo-appt-confirm]');
   if (confirmBtn) {
     const id = confirmBtn.getAttribute('data-demo-appt-confirm');
