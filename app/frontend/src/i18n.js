@@ -33,8 +33,11 @@ const STR = {
     nav_menu: 'Menu',
     disclaimer_collapsed_hint:
       'Avis légaux et sécurité — cliquez pour afficher le texte complet (le pied de page reprend aussi ces mentions).',
-    blog_title: 'Blogue — articles fictifs',
-    blog_lead: 'Contenus pédagogiques d’exemple, adaptés au contexte montréalais.',
+    blog_title: 'Blogue — repères santé mentale cités',
+    blog_lead:
+      'Courts articles avec citations d’organismes reconnus (NIMH, CDC, WHO, NHLBI, …) — informations générales, pas un avis médical.',
+    home_card_service_cats_label: 'Aller vite à une catégorie de réservation',
+    home_card_team_cats_label: 'Voir un membre de l’équipe',
     blog_read: 'Lire',
     contact_title: 'Contact (simulation)',
     contact_lead: 'Ce formulaire n’envoie pas de courriel réel. Utilisation réservée à la démo.',
@@ -126,8 +129,11 @@ const STR = {
     nav_menu: 'Menu',
     disclaimer_collapsed_hint:
       'Legal & safety notice — click to read the full text (the footer also repeats this information).',
-    blog_title: 'Blog — sample posts',
-    blog_lead: 'Educational placeholders for Greater Montreal context.',
+    blog_title: 'Blog — cited mental-health resources',
+    blog_lead:
+      'Short posts with quoted excerpts from recognized agencies (NIMH, CDC, WHO, NHLBI, …). General information only—not medical advice.',
+    home_card_service_cats_label: 'Jump to a booking category',
+    home_card_team_cats_label: 'Open a team member profile',
     blog_read: 'Read',
     contact_title: 'Contact (simulated)',
     contact_lead: 'This form does not send real email. Demo only.',
@@ -217,8 +223,11 @@ const STR = {
     nav_menu: 'Menú',
     disclaimer_collapsed_hint:
       'Aviso legal y de seguridad: pulse para leer el texto completo (el pie de página también lo repite).',
-    blog_title: 'Blog — artículos ficticios',
-    blog_lead: 'Contenido educativo de ejemplo para Montreal.',
+    blog_title: 'Blog — recursos con fuentes',
+    blog_lead:
+      'Entradas breves con citas de organismos reconocidos (NIMH, CDC, OMS, NHLBI, …). Solo información general; no es consejo médico.',
+    home_card_service_cats_label: 'Ir a una categoría de reserva',
+    home_card_team_cats_label: 'Abrir ficha de un miembro del equipo',
     blog_read: 'Leer',
     contact_title: 'Contacto (simulado)',
     contact_lead: 'El formulario no envía correo real.',

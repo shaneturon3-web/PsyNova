@@ -862,6 +862,49 @@ td {
   color: var(--primary);
 }
 
+/* Home feature cards: Services / Team include compact category links (no nested <a>). */
+.home-card--with-cats {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.home-card--with-cats:hover {
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(26, 95, 122, 0.12);
+}
+
+.home-card__main {
+  display: block;
+  padding: 1rem 1.1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.home-card__cats {
+  padding: 0 0.85rem 0.65rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.home-card__cat-link {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.home-card__cat-link:hover {
+  text-decoration: underline;
+}
+
+.home-card__cat-sep {
+  color: var(--muted);
+  user-select: none;
+}
+
 .service-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));

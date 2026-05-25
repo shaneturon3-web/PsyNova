@@ -10,6 +10,12 @@ import {
   createAppointment,
   submitContact,
   translateText,
+  createBackupVideoSession,
+  createPhoneFallback,
+  getTelehealthLaunch,
+  updateAppointmentStatus,
+  getTestAccounts,
+  getSessionProviders,
 } from './api.js';
 import { bindCmsAdmin, viewCmsAdmin } from './cms-admin-panel.js';
 import { cmsPatchField, fetchCmsBundle } from './cms-api.js';
@@ -26,6 +32,9 @@ import {
 import { legalPageHtml } from './legal-content.js';
 import { buildDemoVirtualSessions, providerConfigSummary } from './demo-session-data.js';
 import { VERIFIED_RESOURCES } from './verified-resources.js';
+import { viewBilling, bindBilling, refreshBilling } from './views/billing.js';
+import { viewEhr, bindEhr, refreshEhr } from './views/ehr.js';
+import { viewClinicianWorkspace, bindWorkspace, refreshWorkspace } from './views/clinician-workspace.js';
 
 const MOCK_CLINICIAN_ID = '00000000-0000-4000-8000-000000000001';
 
@@ -66,6 +75,9 @@ const state = {
     sessionBanner: null,
     bookingConfirmation: null,
   },
+  telehealth: { sessionId: null, payload: null, error: null, loading: false },
+  testAccounts: { items: null, loaded: false, available: false, error: null, signingIn: null },
+  providers: { summary: null, loaded: false, error: null },
 };
 
 function buildDemoData() {
@@ -293,11 +305,66 @@ async function refreshAppointments() {
   state.listError = null;
   state.appointments = null;
   if (!state.user?.sub) return;
+  // Branch the fetch by role: clinicians see their caseload, patients see their own bookings,
+  // admins see everything. Closes deferred action item #2 from the previous session.
+  const role = state.user?.role;
+  const query =
+    role === 'clinician'
+      ? { clinicianId: state.user.sub }
+      : role === 'admin'
+      ? {}
+      : { patientId: state.user.sub };
   try {
-    const r = await listAppointments({ patientId: state.user.sub });
+    const r = await listAppointments(query);
     state.appointments = r;
   } catch (e) {
     state.listError = e.body?.message || e.message || 'Failed to load';
+  }
+}
+
+async function refreshProviders() {
+  if (state.providers.loaded) return;
+  try {
+    state.providers.summary = await getSessionProviders();
+    state.providers.loaded = true;
+    state.providers.error = null;
+  } catch (e) {
+    state.providers.summary = null;
+    state.providers.error = e.message || String(e);
+    state.providers.loaded = true;
+  }
+}
+
+async function refreshTestAccounts() {
+  if (state.testAccounts.loaded) return;
+  try {
+    const data = await getTestAccounts();
+    state.testAccounts.items = Array.isArray(data?.accounts) ? data.accounts : [];
+    state.testAccounts.available = state.testAccounts.items.length > 0;
+    state.testAccounts.error = null;
+  } catch (e) {
+    // 404 in production is the intended off-state, not an error worth surfacing.
+    if (e?.status !== 404) {
+      state.testAccounts.error = e.message || String(e);
+    }
+    state.testAccounts.items = [];
+    state.testAccounts.available = false;
+  } finally {
+    state.testAccounts.loaded = true;
+  }
+}
+
+async function refreshTelehealthLaunch(sessionId) {
+  state.telehealth.sessionId = sessionId;
+  state.telehealth.loading = true;
+  state.telehealth.error = null;
+  try {
+    state.telehealth.payload = await getTelehealthLaunch(sessionId);
+  } catch (e) {
+    state.telehealth.payload = null;
+    state.telehealth.error = e.body?.message || e.message || 'Failed to load telehealth payload';
+  } finally {
+    state.telehealth.loading = false;
   }
 }
 
@@ -324,11 +391,16 @@ function shellSidebar(isAuthed) {
       ${link('/app', 'sidebar_dashboard', false)}
       ${link('/app/appointments', 'sidebar_appts', false)}
       ${link('/app/messages', 'sidebar_messages', false)}
-      ${link('/app/telehealth', 'sidebar_telehealth', true, 'Not implemented')}
-      ${link('/app/billing', 'sidebar_billing', true, 'Not implemented')}
-      ${link('/app/ehr', 'sidebar_ehr', true, 'Not implemented')}
-      ${link('/app/clinician', 'sidebar_clinician', true, 'Not implemented')}
+      ${link('/app/telehealth', 'sidebar_telehealth', false)}
+      ${link('/app/billing', 'sidebar_billing', false)}
+      ${link('/app/ehr', 'sidebar_ehr', false)}
+      ${link('/app/clinician', 'sidebar_clinician', false)}
       ${adminLink}
+      ${
+        state.testAccounts.available
+          ? `<a class="nav-link" href="#/app/test-accounts"${r === '/app/test-accounts' ? ' aria-current="page"' : ''}>Test accounts (dev)</a>`
+          : ''
+      }
       ${link('/app/settings', 'sidebar_settings', false)}
       <div style="margin-top:auto;padding-top:1rem;">
         <a class="nav-link" href="#/legal">${esc(t('sidebar_privacy'))}</a>
@@ -354,7 +426,8 @@ function publicNav(currentPath) {
     const cur =
       currentPath === path ||
       (path === '/blog' && currentPath.startsWith('/blog/')) ||
-      (path === '/team' && (currentPath === '/team' || currentPath.startsWith('/team/')))
+      (path === '/team' && (currentPath === '/team' || currentPath.startsWith('/team/'))) ||
+      (path === '/book' && (currentPath === '/book' || currentPath.startsWith('/book/')))
         ? ' public-nav__a--current'
         : '';
     return `<a class="public-nav__a${cur}" href="#${path}">${esc(t(key))}</a>`;
@@ -410,6 +483,68 @@ function publicPageWrap(bodyHtml, currentPath) {
     </div>`;
 }
 
+function homeBookingCategoryHref(slug) {
+  return `#/book/${encodeURIComponent(slug)}`;
+}
+
+/** Plain-text style links → `#/book/:slug` (published CMS categories only). */
+function homeServiceCategoryLinksHtml(bundle, lang) {
+  if (!bundle?.services?.length) return '';
+  const svcs = [...bundle.services]
+    .filter((s) => s.published)
+    .sort((a, x) => (a.sortOrder ?? 0) - (x.sortOrder ?? 0));
+  if (!svcs.length) return '';
+  const parts = [];
+  svcs.forEach((s, i) => {
+    if (i) parts.push('<span class="home-card__cat-sep" aria-hidden="true"> · </span>');
+    const label = pickLocalizedText(s, 'title', lang);
+    parts.push(`<a class="home-card__cat-link" href="${esc(homeBookingCategoryHref(s.slug))}">${esc(label)}</a>`);
+  });
+  return `<nav class="home-card__cats" aria-label="${esc(t('home_card_service_cats_label'))}">${parts.join('')}</nav>`;
+}
+
+/** Links → `#/team/:id` (CMS doctors when loaded, otherwise demo therapists). */
+function homeTeamMemberLinksHtml(bundle, cmsErr, lang) {
+  const hasCmsTeam = !!(bundle && !cmsErr && (bundle.doctors || []).length);
+  const members = hasCmsTeam
+    ? [...bundle.doctors].filter((m) => m.published).sort((a, x) => (a.sortOrder ?? 0) - (x.sortOrder ?? 0))
+    : [...state.demo.therapists];
+  if (!members.length) return '';
+  const parts = [];
+  members.forEach((m, i) => {
+    if (i) parts.push('<span class="home-card__cat-sep" aria-hidden="true"> · </span>');
+    const label = hasCmsTeam ? pickLocalizedText(m, 'name', lang) : m.name || m.id;
+    parts.push(`<a class="home-card__cat-link" href="#/team/${encodeURIComponent(m.id)}">${esc(label)}</a>`);
+  });
+  return `<nav class="home-card__cats" aria-label="${esc(t('home_card_team_cats_label'))}">${parts.join('')}</nav>`;
+}
+
+/** When `#/book/:slug` matches a published service, pre-select booking category (deep link). */
+function applyBookingCategoryFromUrl(route) {
+  if (route !== '/book' && !route.startsWith('/book/')) return;
+  if (route === '/book' || route === '/book/') return;
+  const rawSeg = route.slice('/book/'.length);
+  let slug = rawSeg;
+  try {
+    slug = decodeURIComponent(rawSeg);
+  } catch {
+    /* keep raw */
+  }
+  if (!slug) return;
+  const bundle = state.cms?.bundle;
+  const ok = !!(bundle?.services || []).some((s) => s.published && s.slug === slug);
+  if (ok) {
+    try {
+      if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem(SS_BOOKING);
+    } catch {
+      /* */
+    }
+    state.booking = { ...defaultBookingState(), categoryId: slug, step: 2 };
+  } else {
+    state.booking = defaultBookingState();
+  }
+}
+
 function viewLanding() {
   const lang = uiLang();
   const b = state.cms?.bundle;
@@ -445,7 +580,17 @@ function viewLanding() {
       const blurb = c.blurb?.[lang] || c.blurb?.en || '';
       const href = c.href || '#';
       const icon = HOME_CARD_ICONS[idx % HOME_CARD_ICONS.length];
-      return `<a class="home-card" href="${esc(href)}"><div class="home-card__icon" aria-hidden="true">${icon}</div><h3>${esc(title)}</h3><p class="muted">${esc(blurb)}</p></a>`;
+      const mainInner = `<div class="home-card__icon" aria-hidden="true">${icon}</div><h3>${esc(title)}</h3><p class="muted">${esc(blurb)}</p>`;
+      const isServicesCard = href === '#/services';
+      const isTeamCard = href === '#/team';
+      if (isServicesCard) {
+        return `<div class="home-card home-card--with-cats"><a class="home-card__main" href="${esc(href)}">${mainInner}</a>${homeServiceCategoryLinksHtml(b, lang)}</div>`;
+      }
+      if (isTeamCard) {
+        const cats = homeTeamMemberLinksHtml(b, state.cms?.error, lang);
+        return `<div class="home-card home-card--with-cats"><a class="home-card__main" href="${esc(href)}">${mainInner}</a>${cats}</div>`;
+      }
+      return `<a class="home-card" href="${esc(href)}">${mainInner}</a>`;
     })
     .join('');
   const tests = [...(b.testimonials || [])].sort((a, x) => (a.sortOrder ?? 0) - (x.sortOrder ?? 0));
@@ -813,7 +958,7 @@ function viewBookPublic() {
     </div>
     ${state.formError ? `<p class="error-msg" role="alert" style="margin-top:1rem">${esc(state.formError)}</p>` : ''}
     <p class="muted" style="margin-top:1rem">Already use the app? <a href="#/app/appointments">Appointments (signed-in)</a> · <a href="#/login">Sign in</a></p>`,
-    '/book',
+    state.route.startsWith('/book') ? state.route : '/book',
   );
 }
 
@@ -868,10 +1013,13 @@ function viewAppointments() {
   const apiRows =
     state.appointments?.items?.length > 0
       ? state.appointments.items
-          .map(
-            (a) =>
-              `<tr><td>${esc(a.id.slice(0, 8))}…</td><td>${apptCategoryCell(a)}</td><td><span class="status-pill status-pill--${esc(String(a.status || '').toLowerCase())}">${esc(a.status)}</span></td><td>${esc(a.startsAt)}</td><td>${esc(a.endsAt)}</td><td class="muted">${a.sessionNotesOriginal ? esc(a.sessionNotesOriginal.slice(0, 48)) + (a.sessionNotesOriginal.length > 48 ? '…' : '') : '—'}</td><td class="muted">API</td></tr>`,
-          )
+          .map((a) => {
+            const cancelable = a.status !== 'cancelled' && a.status !== 'completed';
+            const actions = cancelable
+              ? `<button type="button" class="btn btn--small btn--ghost" data-api-appt-cancel="${esc(a.id)}">Cancel</button> <button type="button" class="btn btn--small btn--ghost" data-api-appt-launch="${esc(a.id)}">Open Telehealth</button>`
+              : `<span class="muted">${esc(a.status)}</span>`;
+            return `<tr><td>${esc(a.id.slice(0, 8))}…</td><td>${apptCategoryCell(a)}</td><td><span class="status-pill status-pill--${esc(String(a.status || '').toLowerCase())}">${esc(a.status)}</span></td><td>${esc(a.startsAt)}</td><td>${esc(a.endsAt)}</td><td class="muted">${a.sessionNotesOriginal ? esc(a.sessionNotesOriginal.slice(0, 48)) + (a.sessionNotesOriginal.length > 48 ? '…' : '') : '—'}</td><td>${actions}</td></tr>`;
+          })
           .join('')
       : '';
   const demoRows = state.demo.appointments
@@ -1059,6 +1207,141 @@ function viewMessagesMock() {
     </div>`;
 }
 
+function viewTelehealth() {
+  const tele = state.telehealth;
+  const apiRows = state.appointments?.items || [];
+  const sourceList =
+    apiRows.length > 0
+      ? apiRows.map((a) => ({ id: a.id, label: `${a.id.slice(0, 8)}… · ${a.startsAt}` }))
+      : state.demo.virtualSessions.map((s) => ({ id: s.id, label: `${s.id} · ${s.patient}` }));
+  const options = sourceList
+    .map((s) => `<option value="${esc(s.id)}" ${tele.sessionId === s.id ? 'selected' : ''}>${esc(s.label)}</option>`)
+    .join('');
+  const consent =
+    tele.payload?.consentChecklist
+      ?.map(
+        (c) =>
+          `<li><label><input type="checkbox" data-tele-consent="${esc(c.id)}" /> ${esc(c.label)}${c.required ? ' <span class="muted">(required)</span>' : ''}</label></li>`,
+      )
+      .join('') || '';
+  const summary = state.providers.summary;
+  const tags = summary
+    ? Object.entries(summary.backup)
+        .map(
+          ([k, v]) =>
+            `<li><strong>${esc(k)}</strong>: <span class="status-pill ${v.configured ? 'status-pill--ready' : 'status-pill--not-configured'}">${v.configured ? 'configured' : 'mock'}</span> (${esc(v.mode)})</li>`,
+        )
+        .join('')
+    : '<li class="muted">Provider summary unavailable.</li>';
+  return `
+    <div class="layout">
+      ${shellSidebar(true)}
+      <div class="main" id="main">
+        ${mockupStripHtml()}
+        <p class="status-bar"><a href="#/app">← Dashboard</a></p>
+        <h1 style="margin-top:0;">Telehealth launch</h1>
+        <p class="muted">Composes video provider URL + chat token + consent checklist + notes pointer in a single backend call (<code>GET /api/telehealth/sessions/:id/launch</code>).</p>
+
+        <section class="card">
+          <h2>Session</h2>
+          <div class="form-row">
+            <label for="tele-session-id">Pick an appointment / session id</label>
+            <select id="tele-session-id">${options || '<option value="">No sessions available</option>'}</select>
+            <button type="button" class="btn" id="btn-tele-launch">Launch</button>
+          </div>
+          ${tele.loading ? `<p class="muted">Loading…</p>` : ''}
+          ${tele.error ? `<p class="error-msg">${esc(tele.error)}</p>` : ''}
+        </section>
+
+        ${
+          tele.payload
+            ? `<section class="card">
+                <h2>Launch payload (session ${esc(tele.payload.sessionId)})</h2>
+                <p>Video provider: <strong>${esc(tele.payload.video.provider)}</strong> · mode: <span class="status-pill ${tele.payload.video.mode === 'live' ? 'status-pill--ready' : 'status-pill--not-configured'}">${esc(tele.payload.video.mode)}</span></p>
+                <p><a class="btn" href="${esc(tele.payload.video.joinUrl)}" target="_blank" rel="noopener noreferrer">Open video room</a> ${tele.payload.video.notice ? `<span class="muted">${esc(tele.payload.video.notice)}</span>` : ''}</p>
+                <p class="muted">Chat channel: <code>${esc(tele.payload.chat.channel)}</code> · token <code>${esc(tele.payload.chat.token.slice(0, 12))}…</code> (${esc(tele.payload.chat.notice)})</p>
+                <p class="muted">Notes endpoint: <code>${esc(tele.payload.notes.url)}</code></p>
+                <h3>Consent checklist</h3>
+                <ul class="booking-summary">${consent}</ul>
+              </section>`
+            : ''
+        }
+
+        <section class="card">
+          <h2>Backend provider readiness (live from <code>/api/sessions/providers</code>)</h2>
+          <ul class="booking-summary">${tags}</ul>
+          ${state.providers.error ? `<p class="error-msg">${esc(state.providers.error)}</p>` : ''}
+        </section>
+        ${siteFooterDisclaimer()}
+      </div>
+    </div>`;
+}
+
+function viewTestAccounts() {
+  const t = state.testAccounts;
+  if (!t.loaded) {
+    return `
+    <div class="layout">
+      ${shellSidebar(true)}
+      <div class="main" id="main">
+        ${mockupStripHtml()}
+        <h1 style="margin-top:0;">Test accounts</h1>
+        <p class="muted">Loading…</p>
+      </div>
+    </div>`;
+  }
+  if (!t.available) {
+    return `
+    <div class="layout">
+      ${shellSidebar(true)}
+      <div class="main" id="main">
+        ${mockupStripHtml()}
+        <p class="status-bar"><a href="#/app">← Dashboard</a></p>
+        <h1 style="margin-top:0;">Test accounts</h1>
+        <div class="gray-panel">
+          <h3>Disabled</h3>
+          <p>The dev test-accounts endpoint returned no accounts (<code>NODE_ENV=production</code> or feature disabled). Run <code>npm run db:seed:test</code> on a non-production environment to enable.</p>
+          ${t.error ? `<p class="error-msg">${esc(t.error)}</p>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }
+  const rows = t.items
+    .map(
+      (a) => `<tr>
+        <td><strong>${esc(a.label)}</strong></td>
+        <td><code>${esc(a.email)}</code></td>
+        <td><code>${esc(a.password)}</code></td>
+        <td><span class="status-pill">${esc(a.role)}</span></td>
+        <td>
+          <button type="button" class="btn btn--small" data-test-account-signin="${esc(a.email)}" ${t.signingIn === a.email ? 'disabled' : ''}>
+            ${t.signingIn === a.email ? 'Signing in…' : `Sign in as ${esc(a.role)}`}
+          </button>
+        </td>
+      </tr>`,
+    )
+    .join('');
+  return `
+    <div class="layout">
+      ${shellSidebar(true)}
+      <div class="main" id="main">
+        ${mockupStripHtml()}
+        <p class="status-bar"><a href="#/app">← Dashboard</a></p>
+        <h1 style="margin-top:0;">Test accounts (dev only)</h1>
+        <p class="muted">One-click sign-in for the seeded patient/clinician/admin fixtures. These credentials are intentionally not secret. Disabled when <code>NODE_ENV=production</code>.</p>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Account</th><th>Email</th><th>Password</th><th>Role</th><th>Action</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>
+        ${siteFooterDisclaimer()}
+      </div>
+    </div>`;
+}
+
 function demoTherapistById(id) {
   return state.demo.therapists.find((t) => t.id === id);
 }
@@ -1161,7 +1444,25 @@ function providerStatusClass(status) {
 }
 
 function viewSessionsDemo() {
-  const providerCfg = providerConfigSummary();
+  // Prefer backend `/api/sessions/providers` (single source of truth, reads BACKEND env).
+  // Fall back to the legacy VITE_*-derived summary only when the backend isn't reachable
+  // yet (first paint, or backend down) so the demo never renders a blank table.
+  const backend = state.providers.summary;
+  const legacy = providerConfigSummary();
+  const providerCfg = backend
+    ? {
+        zoomConfigured: backend.primary?.zoom?.configured ?? false,
+        dailyConfigured: backend.backup?.daily?.configured ?? false,
+        wherebyConfigured: backend.backup?.whereby?.configured ?? false,
+        twilioConfigured: backend.phone?.twilio?.configured ?? false,
+        telnyxConfigured: backend.phone?.telnyx?.configured ?? false,
+        vonageConfigured: backend.phone?.vonage?.configured ?? false,
+        jitsiDemoAllowed: backend.backup?.jitsi?.configured ?? false,
+      }
+    : legacy;
+  const providerSourceLabel = backend
+    ? '(source: backend /api/sessions/providers)'
+    : '(source: VITE_* fallback — backend unreachable)';
   const sessions = state.demo.virtualSessions || [];
   const rows = sessions
     .map((s) => {
@@ -1240,6 +1541,7 @@ function viewSessionsDemo() {
     </section>
     <section class="card">
       <h2>Admin/provider status panel</h2>
+      <p class="muted">${esc(providerSourceLabel)}</p>
       <div class="table-wrap"><table><thead><tr><th>Provider</th><th>Status</th></tr></thead><tbody>${providerPanel}</tbody></table></div>
     </section>
     <section class="card">
@@ -1473,6 +1775,7 @@ async function onAppSubmitBooking(e) {
 function render() {
   state.route = routeFromHash();
   const r = state.route;
+  applyBookingCategoryFromUrl(r);
   const authed = !!(getToken() && state.user);
   let html = '';
 
@@ -1508,7 +1811,7 @@ function render() {
     html = viewLogin();
   } else if (r === '/register') {
     html = viewRegister();
-  } else if (r === '/book') {
+  } else if (r === '/book' || r.startsWith('/book/')) {
     html = viewBookPublic();
   } else if (r === '/legal') {
     html = viewLegal();
@@ -1526,13 +1829,15 @@ function render() {
     } else if (r === '/app/cms') {
       html = viewCms();
     } else if (r === '/app/telehealth') {
-      html = viewGray('Telehealth', 'Video session scheduling and Zoom Healthcare integration are not wired.');
+      html = viewTelehealth();
+    } else if (r === '/app/test-accounts') {
+      html = viewTestAccounts();
     } else if (r === '/app/billing') {
-      html = viewGray('Billing', 'Stripe and insurance-ready invoicing are not wired.');
+      html = viewBilling();
     } else if (r === '/app/ehr') {
-      html = viewGray('Clinical records', 'EHR storage and charting are not wired.');
+      html = viewEhr();
     } else if (r === '/app/clinician') {
-      html = viewGray('Clinician workspace', 'Separate clinician tools require additional endpoints and roles.');
+      html = viewClinicianWorkspace();
     } else if (r === '/app/settings') {
       html = viewSettings();
     } else {
@@ -1548,6 +1853,11 @@ function render() {
 }
 
 function bind() {
+  // New module views — each binder is a no-op when its DOM isn't present.
+  if (state.route === '/app/billing') bindBilling(render);
+  if (state.route === '/app/ehr') bindEhr(render);
+  if (state.route === '/app/clinician') bindWorkspace(render);
+
   document.getElementById('form-login')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     state.formError = null;
@@ -1739,6 +2049,43 @@ function bind() {
   if (state.route === '/app/cms' && state.user?.role === 'admin') {
     void bindCmsAdmin({ state, render, esc });
   }
+
+  document.getElementById('btn-tele-launch')?.addEventListener('click', async () => {
+    const sel = document.getElementById('tele-session-id');
+    const id = sel?.value?.trim();
+    if (!id) {
+      state.telehealth.error = 'Pick a session id first.';
+      render();
+      return;
+    }
+    await refreshTelehealthLaunch(id);
+    render();
+  });
+
+  document.querySelectorAll('[data-test-account-signin]').forEach((btn) => {
+    btn.addEventListener('click', async (ev) => {
+      const email = ev.currentTarget.getAttribute('data-test-account-signin') || '';
+      const acc = state.testAccounts.items?.find((a) => a.email === email);
+      if (!acc) return;
+      state.testAccounts.signingIn = email;
+      render();
+      try {
+        // Clear any prior demo-only token so the real JWT takes over.
+        if (getToken() === PSYNOVA_DEMO_UI_TOKEN) setToken(null);
+        if (typeof localStorage !== 'undefined') {
+          localStorage.removeItem('psynova_demo_email');
+        }
+        await login({ email: acc.email, password: acc.password });
+        await refreshUser();
+        state.testAccounts.signingIn = null;
+        navigate('/app');
+      } catch (err) {
+        state.testAccounts.signingIn = null;
+        state.testAccounts.error = err.body?.message || err.message || 'Sign-in failed';
+        render();
+      }
+    });
+  });
 }
 
 async function onCmsInlineClick(e) {
@@ -1779,7 +2126,14 @@ function onAppClickDemo(e) {
     const id = sessionActionBtn.getAttribute('data-session-id');
     const row = state.demo.virtualSessions.find((s) => s.id === id);
     if (!row) return;
-    const cfg = providerConfigSummary();
+    // Prefer backend providers when known; fall back to VITE_* otherwise.
+    const backend = state.providers.summary;
+    const cfg = backend
+      ? {
+          zoomConfigured: backend.primary?.zoom?.configured ?? false,
+          jitsiDemoAllowed: backend.backup?.jitsi?.configured ?? false,
+        }
+      : providerConfigSummary();
     const jitsiAllowed = cfg.jitsiDemoAllowed;
     const zoomMissing = !cfg.zoomConfigured;
     const joinUrl =
@@ -1799,18 +2153,51 @@ function onAppClickDemo(e) {
       return;
     }
     if (action === 'open-backup') {
-      state.demo.sessionBanner =
-        row.providerKey === 'jitsi' && jitsiAllowed
-          ? `Opening Jitsi demo room for ${row.id}.`
-          : 'Demo mode: provider credentials pending.';
-      window.open(joinUrl, '_blank', 'noopener,noreferrer');
+      // Prefer backend stub seam so provider readiness comes from backend env (not VITE_*).
+      // On any failure (backend down, validation error), fall back to the legacy local URL
+      // so the demo never hard-breaks.
+      const backupProvider =
+        row.providerKey === 'daily' || row.providerKey === 'whereby' || row.providerKey === 'jitsi'
+          ? row.providerKey
+          : undefined;
+      state.demo.sessionBanner = `Requesting backup video session for ${row.id}…`;
       render();
+      createBackupVideoSession({ sessionId: row.id, provider: backupProvider })
+        .then((res) => {
+          state.demo.sessionBanner =
+            res.notice ||
+            (res.mode === 'live'
+              ? `Backup session ready (${res.provider}, live) for ${row.id}.`
+              : `Backup session ready (${res.provider}, mock) for ${row.id}.`);
+          window.open(res.joinUrl, '_blank', 'noopener,noreferrer');
+          render();
+        })
+        .catch((err) => {
+          state.demo.sessionBanner = `Backup video API unavailable (${err?.message || 'error'}); using local demo URL.`;
+          window.open(joinUrl, '_blank', 'noopener,noreferrer');
+          render();
+        });
       return;
     }
     if (action === 'phone') {
-      window.alert(
-        `Phone instructions (DEMO)\nPatient: ${row.patient}\nTherapist: ${row.therapist}\nNumber: ${row.patientPhone}\nFallback: Twilio/Telnyx/Vonage placeholders only.`,
-      );
+      // Hits backend `/api/sessions/phone-fallback`. Mock returns BACKUP_PHONE_NUMBER + a
+      // deterministic conference code; live mode (Twilio trial keys present) actually places
+      // the outbound call.
+      const provider =
+        row.providerKey === 'twilio' || row.providerKey === 'telnyx' || row.providerKey === 'vonage'
+          ? row.providerKey
+          : undefined;
+      state.demo.sessionBanner = `Requesting phone fallback for ${row.id}…`;
+      render();
+      createPhoneFallback({ sessionId: row.id, provider, toNumber: row.patientPhone })
+        .then((res) => {
+          state.demo.sessionBanner = `Phone fallback (${res.provider}, ${res.mode}): dial ${res.phoneNumber} · code ${res.conferenceCode}. ${res.notice ?? ''}`.trim();
+          render();
+        })
+        .catch((err) => {
+          state.demo.sessionBanner = `Phone fallback API unavailable (${err?.message || 'error'}); falling back to direct dial ${row.patientPhone}.`;
+          render();
+        });
       return;
     }
     if (action === 'copy-link') {
@@ -1872,6 +2259,33 @@ function onAppClickDemo(e) {
     }
     return;
   }
+  const apiCancelBtn = e.target.closest('[data-api-appt-cancel]');
+  if (apiCancelBtn) {
+    const id = apiCancelBtn.getAttribute('data-api-appt-cancel');
+    const reason = window.prompt('Optional cancellation reason', '') || undefined;
+    state.listError = null;
+    updateAppointmentStatus(id, { status: 'cancelled', reason })
+      .then(async () => {
+        await refreshAppointments();
+        render();
+      })
+      .catch((err) => {
+        state.listError = err?.body?.message || err?.message || 'Cancel failed';
+        render();
+      });
+    return;
+  }
+  const apiLaunchBtn = e.target.closest('[data-api-appt-launch]');
+  if (apiLaunchBtn) {
+    const id = apiLaunchBtn.getAttribute('data-api-appt-launch');
+    state.telehealth.sessionId = id;
+    state.telehealth.payload = null;
+    state.telehealth.error = null;
+    navigate('/app/telehealth');
+    // Eagerly kick off the launch fetch so the user sees data as soon as the route renders.
+    void refreshTelehealthLaunch(id).then(() => render());
+    return;
+  }
   const replyBtn = e.target.closest('[data-demo-reply]');
   if (replyBtn) {
     const id = replyBtn.getAttribute('data-demo-reply');
@@ -1918,6 +2332,25 @@ export async function init() {
     appRoot.addEventListener('click', onAppClickDemo);
     appRoot.addEventListener('submit', onAppSubmitBooking);
     appRoot.addEventListener('click', onCmsInlineClick);
+    // Same-hash rerender fix (deferred action item #3): when a user clicks an in-app
+    // anchor whose href matches the current hash, the browser skips the `hashchange`
+    // event entirely so the renderer never runs and the view appears stuck. Detect that
+    // case and call routeChange() ourselves on the next tick (after the link's default
+    // hash assignment has happened, so window.location.hash already reflects the click).
+    document.addEventListener('click', (e) => {
+      const a = e.target?.closest?.('a[href^="#/"]');
+      if (!a) return;
+      if (a.target === '_blank') return;
+      if (e.defaultPrevented) return;
+      const intended = a.getAttribute('href').slice(1) || '/';
+      // Only fire when the current route already matches the link target — the normal
+      // hashchange path handles all other cases.
+      if (intended === state.route) {
+        setTimeout(() => {
+          void routeChange();
+        }, 0);
+      }
+    });
   }
   window.addEventListener('hashchange', () => {
     void routeChange();
@@ -1927,16 +2360,30 @@ export async function init() {
 
 async function routeChange() {
   state.route = routeFromHash();
-  if (state.route === '/book') {
+  if (state.route === '/book' || state.route.startsWith('/book/')) {
     mergeBookingFromSession();
   }
   state.formError = null;
   await refreshUser();
   await refreshHealth();
   await loadCms();
+  // Test-accounts gate runs once per page load; cheap (404 in prod, 200 otherwise).
+  await refreshTestAccounts();
   const r = state.route;
-  if (state.user && (r === '/app/appointments' || r === '/app')) {
+  if (state.user && (r === '/app/appointments' || r === '/app' || r === '/app/telehealth')) {
     await refreshAppointments();
+  }
+  if (r === '/app/telehealth' || r === '/sessions-demo') {
+    await refreshProviders();
+  }
+  if (state.user && r === '/app/billing') {
+    await refreshBilling();
+  }
+  if (state.user && r === '/app/ehr') {
+    await refreshEhr();
+  }
+  if (state.user && r === '/app/clinician') {
+    await refreshWorkspace();
   }
   render();
 }

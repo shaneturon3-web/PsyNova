@@ -1,0 +1,33 @@
+# PsyNova reverse-proxy Worker on *.workers.dev
+# This Worker is a tiny stable front-door that forwards every request to the
+# current cloudflared quick-tunnel URL (stored in `vars.ORIGIN_URL`). The
+# launcher refreshes ORIGIN_URL on every tunnel restart by re-running
+# `wrangler deploy --var ORIGIN_URL:<new-url>`.
+#
+# The worker name becomes the leftmost label of the deployed URL:
+#   https://<name>.<account>.workers.dev
+# Override with `npx wrangler deploy --name some-other-name` if the default
+# is already taken in your account.
+
+name = "psynova-staging"
+main = "src/index.ts"
+compatibility_date = "2026-01-15"
+
+# Enables https://<name>.<account>.workers.dev (the free dev URL).
+workers_dev = true
+
+# Production custom domains on shaneturon.ca zone (requires zone in same CF account).
+[[routes]]
+pattern = "psynova.shaneturon.ca"
+custom_domain = true
+
+[[routes]]
+pattern = "psynova-api.shaneturon.ca"
+custom_domain = true
+
+# vars.ORIGIN_URL is overridden at deploy time by:
+#   npx wrangler deploy --var ORIGIN_URL:https://<random>.trycloudflare.com
+# The placeholder makes the worker return a friendly 503 until the launcher
+# wires in a real tunnel URL.
+[vars]
+ORIGIN_URL = "http://placeholder.invalid"
