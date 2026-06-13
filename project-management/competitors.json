@@ -1,0 +1,56 @@
+[
+  {
+    "id": "comp-jane",
+    "name": "Jane App",
+    "target_users": "Health and wellness clinics",
+    "pricing_model": "Tiered + add-ons",
+    "strengths": ["Booking UX", "Integrated workflows"],
+    "weaknesses": ["Add-on complexity", "Reporting depth limits"],
+    "source_doc": "docs/COMPETITOR_ANALYSIS.md"
+  },
+  {
+    "id": "comp-simplepractice",
+    "name": "SimplePractice",
+    "target_users": "Solo and small therapy practices",
+    "pricing_model": "Tiered + gated features",
+    "strengths": ["Ease of use", "Good baseline feature set"],
+    "weaknesses": ["Feature gating", "Scaling friction"],
+    "source_doc": "docs/COMPETITOR_ANALYSIS.md"
+  },
+  {
+    "id": "comp-theranest",
+    "name": "TheraNest",
+    "target_users": "Mental health providers",
+    "pricing_model": "Per-therapist tiers + add-ons",
+    "strengths": ["Mental health feature depth"],
+    "weaknesses": ["Reliability/support complaints"],
+    "source_doc": "docs/COMPETITOR_ANALYSIS.md"
+  },
+  {
+    "id": "comp-cliniko",
+    "name": "Cliniko",
+    "target_users": "Allied health clinics",
+    "pricing_model": "Practitioner-based subscription",
+    "strengths": ["Simple UX", "Transparent plans"],
+    "weaknesses": ["Less advanced enterprise tooling"],
+    "source_doc": "docs/COMPETITOR_ANALYSIS.md"
+  },
+  {
+    "id": "comp-betterhelp",
+    "name": "BetterHelp",
+    "target_users": "Direct-to-consumer therapy seekers",
+    "pricing_model": "Subscription",
+    "strengths": ["Convenience", "Large provider network"],
+    "weaknesses": ["Billing/support trust concerns"],
+    "source_doc": "docs/COMPETITOR_ANALYSIS.md"
+  },
+  {
+    "id": "comp-alma",
+    "name": "Alma",
+    "target_users": "Therapists + in-network clients",
+    "pricing_model": "Provider membership model",
+    "strengths": ["Credentialing and network value"],
+    "weaknesses": ["Billing/support complaints"],
+    "source_doc": "docs/COMPETITOR_ANALYSIS.md"
+  }
+]

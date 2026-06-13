@@ -1,0 +1,21 @@
+{
+  "name": "PsyNova Project Command Center",
+  "version": "1.0.0",
+  "created_at": "2026-04-25",
+  "owner": "PsyNova",
+  "status": "active",
+  "data_files": {
+    "modules": "project-management/modules.json",
+    "tasks": "project-management/tasks.json",
+    "integrations": "project-management/integrations.json",
+    "licenses": "project-management/licenses.json",
+    "competitors": "project-management/competitors.json",
+    "research": "project-management/research.json",
+    "roadmap": "project-management/roadmap.json"
+  },
+  "sync": {
+    "script": "scripts/sync-to-notion.js",
+    "mode": "upsert-only",
+    "delete_behavior": "never-delete-remote"
+  }
+}

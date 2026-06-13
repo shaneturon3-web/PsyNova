@@ -1,0 +1,14 @@
+{
+  "name": "benchmark-armyknife-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Escritorio (HTTP local): selector de archivos, drag&drop de URLs, extracción opcional PDF/DOCX, lanzador del motor",
+  "main": "server.cjs",
+  "scripts": {
+    "start": "node server.cjs"
+  },
+  "dependencies": {
+    "mammoth": "^1.9.0",
+    "pdf-parse": "^1.1.1"
+  }
+}

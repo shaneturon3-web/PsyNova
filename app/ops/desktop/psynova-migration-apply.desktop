@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=PsyNova Migration Apply
+Comment=Restore PsyNova, SugarCubes, and Cursor config from migration-bundle
+Exec=bash -lc 'BUNDLE="${BUNDLE:-$HOME/shared/PsyNova/migration-bundle}"; for c in "$BUNDLE" "/run/user/$(id -u)/gvfs/smb-share:server=optiplex.local,share=shared/PsyNova/migration-bundle"; do [ -d "$c/psynova/repo" ] && BUNDLE="$c" && break; done; bash "$BUNDLE/apply_on_optiplex.sh" "$BUNDLE" && bash "$BUNDLE/bootstrap_optiplex.sh"; read -p "Press Enter to close..."'
+Icon=system-software-update
+Terminal=true
+Categories=Development;

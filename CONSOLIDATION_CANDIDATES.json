@@ -1,0 +1,136 @@
+[
+  {
+    "absolute_path": "/home/shane/Desktop/Projects/PSYNOVA_DB_ALIGN_20260411_185005",
+    "type": "backup",
+    "unique_file_count_vs_canonical_app": 4,
+    "sample_unique_files": [
+      "03_docker.txt",
+      "01_env.txt",
+      "04_backend.log",
+      "02_db_code.txt"
+    ]
+  },
+  {
+    "absolute_path": "/home/shane/Desktop/Projects/PSYNOVA_FIX_DB_20260411_184053",
+    "type": "backup",
+    "unique_file_count_vs_canonical_app": 9,
+    "sample_unique_files": [
+      "05_mysql_test_corrected.txt",
+      "01_docker.txt",
+      "00_EXECUTION_NOTES.txt",
+      "03_db_refs.txt",
+      "02_backend_env.txt",
+      "06_backend_restart.log",
+      "04_db_test_corrected.txt",
+      "05_mysql_test.txt",
+      "04_db_test.txt"
+    ]
+  },
+  {
+    "absolute_path": "/home/shane/Desktop/Projects/PSYNOVA_VERIFIED_STATE_20260411_183213",
+    "type": "report",
+    "unique_file_count_vs_canonical_app": 3,
+    "sample_unique_files": [
+      "CURSOR_EXECUTION_PROTOCOL.md",
+      "02_verified_summary.txt",
+      "01_system_check.txt"
+    ]
+  },
+  {
+    "absolute_path": "/home/shane/Desktop/Projects/PsyNova_ATC_Packet_20260411_182317",
+    "type": "packet",
+    "unique_file_count_vs_canonical_app": 9,
+    "sample_unique_files": [
+      "PsyNova_ATC_Packet_CURRENT.zip",
+      "package/00_START_HERE.md",
+      "package/01_MASTER_PROFILE.md",
+      "package/03_PENDING_WORK.md",
+      "package/04_DO_NOT_RETRY.md",
+      "package/07_FILE_MAP.md",
+      "package/02_SYSTEM_STATE.md",
+      "package/06_SYSTEM_CHECK_PROTOCOL.md",
+      "package/05_CURSOR_BOOT.md"
+    ]
+  },
+  {
+    "absolute_path": "/home/shane/Desktop/Projects/PsyNova_EXPORT_20260411_175352",
+    "type": "export",
+    "unique_file_count_vs_canonical_app": 49,
+    "sample_unique_files": [
+      "notion/psynova_dashboard.csv",
+      "state/tree.txt",
+      "state/status.json",
+      "logs/2026-04-09__12-26-46__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-09__10-30-53__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-11T02_50_32_655Z-debug-0.log",
+      "logs/2026-04-09__10-25-04__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-09__12-30-59__AUTOPILOT__BATCH__v01.log",
+      "logs/2026-04-11__16-13-32__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-09__13-53-59__AUTOPILOT__BATCH__v01.log",
+      "logs/2026-04-09__10-29-01__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-11T02_35_37_007Z-debug-0.log",
+      "logs/2026-04-09__13-39-43__AUTOPILOT__BATCH__v01.log",
+      "logs/2026-04-09__10-33-42__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-09__10-30-29__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-09__10-40-00__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-09__12-23-29__AUTOPILOT__BATCH__v01.log",
+      "logs/2026-04-11T02_38_14_007Z-debug-0.log",
+      "logs/2026-04-09__10-34-23__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-09__13-39-19__AUTOPILOT__BATCH__v01.log",
+      "logs/2026-04-09__12-25-45__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-11__16-03-02__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-09__12-17-45__AUTOPILOT__BATCH__v01.log",
+      "logs/2026-04-09__10-38-48__BACKEND__TEST_E2E__RUN__v01.log",
+      "logs/2026-04-09__10-38-06__BACKEND__TEST_E2E__RUN__v01.log"
+    ]
+  },
+  {
+    "absolute_path": "/home/shane/Desktop/Projects/PsyNova_EXPORT_20260411_175532",
+    "type": "export",
+    "unique_file_count_vs_canonical_app": 451,
+    "sample_unique_files": [
+      "EXPORT_REPORT.txt",
+      "notion/psynova_dashboard.csv",
+      "state/tree.txt",
+      "state/export_status.json",
+      "raw/2026-04-09__12-26-46__BACKEND__TEST_E2E__RUN__v01.log",
+      "raw/formatters-meta.json",
+      "raw/REFERENCES.md",
+      "raw/2026-04-09__10-30-53__BACKEND__TEST_E2E__RUN__v01.log",
+      "raw/BENCHY.snippet.sh",
+      "raw/browser-upper.json",
+      "raw/install-linux-once.sh",
+      "raw/2026-04-11T02_50_32_655Z-debug-0.log",
+      "raw/ProxyAgent.md",
+      "raw/TROUBLESHOOTING.md",
+      "raw/run_backend_checks.sh",
+      "raw/2026-04-09__09-50-19__SYSTEM__CHECKS__DEPENDENCIES__v01.md",
+      "raw/full-versions.json",
+      "raw/2026-04-09__10-33-41__SYSTEM__INVENTORY__SESSION__v01.md",
+      "raw/tsconfig.schemastore-schema.json",
+      "raw/2026-04-09__10-24-30__SYSTEM__INVENTORY__SESSION__v01.md",
+      "raw/ManifestPlugin.json",
+      "raw/BannerPlugin.json",
+      "raw/RetryAgent.md",
+      "raw/cp950.json",
+      "raw/swagger-ui-bundle.js.LICENSE.txt"
+    ]
+  },
+  {
+    "absolute_path": "/home/shane/Desktop/Projects/PsyNova_Rescue_Packet_20260411_171436",
+    "type": "rescue",
+    "unique_file_count_vs_canonical_app": 10,
+    "sample_unique_files": [
+      "manifest.json",
+      "RESCUE_REPORT.txt",
+      "found/main.ts",
+      "found/session_bootstrap.sh",
+      "found/SHANE Profiles.README",
+      "found/README.md",
+      "found/PORT_3000_POLICY.md",
+      "found/.cursorrules",
+      "found/docker-compose.yml",
+      "found/lunch_autopilot.sh"
+    ]
+  }
+]

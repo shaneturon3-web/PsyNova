@@ -1,0 +1,15 @@
+PsyNova — Shane's Armyknives — indice del par TXT para auditoria
+================================================================
+[MOCKUP PURPOSE ONLY - NOT REAL DATA]
+
+Par principal (leer en orden):
+  1) PAIR_01_ORDER_INTERPRETATION_ACTIONS_v01.txt
+  2) PAIR_02_RESOURCES_RESULTS_AUDIT_PROMPT_v01.txt
+
+Proposito: empaquetar la orden operativa, la interpretacion, las acciones, la evidencia
+y un bloque listo para pegar en ChatGPT como auditor externo.
+
+Ruta base del proyecto:
+  virtual-psychology-clinic/
+
+Generado: 2026-04-09 (contexto de sesion Cursor + PsyNova Virtual Clinic)

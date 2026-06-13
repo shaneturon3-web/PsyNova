@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>Benchmark Armyknife — escritorio</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Benchmark Armyknife</h1>
+    <p class="sub">Arrastra enlaces aquí, pega URLs o elige archivos (texto, PDF, DOCX) para extraer enlaces.</p>
+  </header>
+
+  <section id="dropzone" class="dropzone" tabindex="0">
+    <div class="drop-inner">
+      <span class="drop-icon" aria-hidden="true">📥</span>
+      <p>Suelta enlaces desde el navegador o archivos</p>
+    </div>
+  </section>
+
+  <div class="row">
+    <button type="button" id="btn-files">Elegir archivos…</button>
+    <input type="file" id="file-input" multiple accept=".txt,.md,.json,.csv,.html,.htm,.xml,.pdf,.docx,*/*" hidden />
+    <button type="button" id="btn-clear">Limpiar lista</button>
+    <button type="button" id="btn-run" class="primary">Ejecutar benchmark</button>
+  </div>
+
+  <label for="urls">URLs (una por línea)</label>
+  <textarea id="urls" rows="8" placeholder="https://example.com"></textarea>
+
+  <label for="log">Salida</label>
+  <pre id="log"></pre>
+
+  <footer>
+    <span id="paths-hint"></span>
+  </footer>
+
+  <script src="/renderer.js"></script>
+</body>
+</html>

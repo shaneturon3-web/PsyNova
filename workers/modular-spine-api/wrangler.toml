@@ -1,0 +1,23 @@
+name = "psynova-modular-spine-api"
+main = "src/index.ts"
+compatibility_date = "2026-05-01"
+workers_dev = true
+
+[vars]
+PERIMETER_LOCK = "true"
+ENVIRONMENT = "preview"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "psynova-edge-db"
+database_id = "52b810e6-0dc8-4c72-98d9-8fc8ce3a3e25"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "psynova-storage-prod"
+preview_bucket_name = "psynova-storage-preview"
+
+# Cron — Phase 2.2 (notifications)
+# [triggers]
+# crons = ["0 9 * * *"]

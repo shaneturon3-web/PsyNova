@@ -1,0 +1,12 @@
+{
+  "source": "Notion",
+  "status": "placeholder",
+  "last_checked": "2026-04-25",
+  "workspaces": [],
+  "databases": [],
+  "notes": [
+    "Notion inventory export not provided in this run.",
+    "Use project-management Notion sync outputs and workspace export to populate this file.",
+    "Do not assume missing data means missing assets."
+  ]
+}

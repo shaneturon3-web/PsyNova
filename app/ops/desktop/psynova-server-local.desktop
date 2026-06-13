@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=PsyNova Server (Local)
+GenericName=PsyNova local development stack
+Comment=Start the PsyNova stack and open Chrome to the local URL
+TryExec=bash
+Exec=bash __REPO_ROOT__/app/ops/psynova_launcher.sh local
+Icon=psynova-server
+Terminal=false
+Categories=Development;
+Keywords=psynova;therapy;clinic;dev;
+StartupNotify=true

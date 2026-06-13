@@ -1,0 +1,97 @@
+================================================================================
+PAIR 01 — ORDEN (OPTIMIZADA) · INTERPRETACION · ACCIONES EJECUTADAS
+================================================================================
+Proyecto: PsyNova Virtual Clinic
+Herramienta: Shane's Armyknives (paquete de auditoria / continuidad)
+Tag: [MOCKUP PURPOSE ONLY - NOT REAL DATA]
+
+--------------------------------------------------------------------------------
+A) ORDEN DEL OPERADOR (SHANE) — VERSION OPTIMIZADA (SINTESIS)
+--------------------------------------------------------------------------------
+
+1) Protocolo de reportes y perfil maestro (SHANE Profiles.README): formato readiness,
+   Delta, tasks, bloque UPDATE, handshake "OK for Next Step o pega la FALLA".
+
+2) Purga Notion: eliminar scripts, hooks, docs y variables de ejemplo asociadas.
+
+3) Estado del proyecto / mockup funcional: brief interno; enlace ChatGPT compartido
+   no extraible por fetch publico; PDF de especificacion; mockup UI con modulos gris.
+
+4) Puerto 3000 EADDRINUSE: solucion persistente (perfil Docker with-api, port guard,
+   politica documentada, lote stack_batch).
+
+5) Frontend: proxy Vite /api para evitar CORS "Failed to fetch"; migracion DB
+   password_hash; scripts con Docker/sudo seguro (sin source .env roto).
+
+6) Toolbox Cursor: mini-apps, INDEX, registro en perfil maestro, [DECISION].
+
+7) Citas / booking: inspiracion en flujo tipo sitios de servicios (referencia publica
+   MonImpotPro — calendario, slots, pasos); implementacion propia en vanilla JS.
+
+8) Lotes bash con salvaguardas, reintentos y control de respuesta (stack_batch,
+   migrate_db_password_hash).
+
+9) Empaquetar para auditoria externa (ChatGPT): par TXT + subcarpeta Shane's Armyknives.
+
+
+--------------------------------------------------------------------------------
+B) INTERPRETACION (COMO LA TRADUJE A INGENIERIA)
+--------------------------------------------------------------------------------
+
+- Prioridad: una sola fuente de verdad en ops/; envoltorios en toolbox-cursor;
+  evitar duplicar logica.
+- Conflicto :3000 = un solo dueno (Docker API con perfil OR Nest local); no ambos.
+- CORS en dev: mismo origen via proxy Vite hacia Nest :3000.
+- DB existente sin columna: migracion idempotente ALTER ADD COLUMN + script shell.
+- Booking: no copiar tema ni assets de terceros; patron UX (wizard + API existente).
+- Listeners SPA: delegacion en #app para no acumular handlers en cada render.
+- Auditoria: documento dual (orden/interpretacion/acciones vs evidencia/prompt).
+
+
+--------------------------------------------------------------------------------
+C) ACCIONES REALIZADAS (CHECKLIST TECNICO)
+--------------------------------------------------------------------------------
+
+[Perfil / ops]
+- SHANE Profiles.README: tag TOOLBOX-CURSOR, seccion Toolbox, [DECISION] Toolbox,
+  directiva PsyNova.
+- ops/stack_batch_db_migrate_v01.sh, ops/migrate_db_password_hash.sh (sin source .env),
+  ops/port_guard_3000.sh, ops/free_port_3000.sh, ops/PORT_3000_POLICY.md
+- database/03-alter-users-password-hash.sql + montaje en docker-compose
+- docker-compose.yml: profiles [with-api] en backend; lunch_autopilot con --profile
+- backend package.json: start:dev con port_guard
+- README.md: flujos A/B, migracion, frontend proxy, batch script
+
+[Toolbox Cursor]
+- tools/toolbox-cursor/INDEX.md, README.md, apps/*.sh (wrappers)
+- .cursor/toolbox-cursor-POINTER.md
+
+[Frontend mock + booking]
+- frontend/vite.config.js: proxy /api dev+preview
+- frontend/src/api.js: API_BASE relativo /api + manejo error red
+- frontend/src/booking-wizard.js: wizard 4 pasos (calendario, slots, sesion, confirm)
+- frontend/src/app.js: integracion createAppointment, delegacion eventos
+- frontend/src/styles.css: estilos booking wizard
+- frontend/.env.example
+
+[PDF / briefs ops]
+- ops/reports/PSYNOVA_MOCKUP_SPEC_CHATGPT_LINK_v01.md + PDF raiz (generado con pandoc)
+- ops/CHATGPT_BRIEF_PORT_3000_PERSISTENT_v01.txt
+- CHATGPT_UI_DESIGN_BRIEF_v01.txt (anterior)
+
+[Build]
+- frontend: npm run build OK (dist-psynova)
+
+
+--------------------------------------------------------------------------------
+D) LIMITES Y SUPUESTOS (PARA AUDITOR)
+--------------------------------------------------------------------------------
+
+- No se audita aqui el caso legal Delta-Michigan salvo referencia cruzada en perfil.
+- Datos clinicos: ninguno; todo mock.
+- ChatGPT share URL no aporto cuerpo de conversacion (muro/login); el diseno UI
+  uso brief interno + APIs reales conocidas.
+
+================================================================================
+FIN PAIR 01
+================================================================================

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=PsyNova Server (Cloudflare)
+GenericName=PsyNova local stack + public Cloudflare tunnel
+Comment=Start the PsyNova stack, expose via Cloudflare quick tunnel, open Chrome to the public URL
+TryExec=bash
+Exec=bash __REPO_ROOT__/app/ops/psynova_launcher.sh cloudflare
+Icon=psynova-server
+Terminal=false
+Categories=Development;
+Keywords=psynova;tunnel;cloudflare;
+StartupNotify=true

@@ -1,0 +1,29 @@
+PSYNOVA_FIX_DB report — execution notes (2026-04-11)
+
+OUTPUT DIRECTORY (this run):
+  /home/shane/Desktop/PSYNOVA_FIX_DB_20260411_184053
+
+[1] 01_docker.txt — OK (containers running).
+
+[2] 02_backend_env.txt — OK (backend/.env present; USE_PERSISTENCE=false; DB_HOST=psynova-db).
+
+[3] 03_db_refs.txt — empty (no literal "DATABASE" string under backend/src; config uses DB_* via Nest/Config).
+
+[4] 04_db_test.txt — FAILED as written: psql -U postgres — role "postgres" does not exist in this stack.
+    Use app user instead, e.g.:
+      docker exec -i psynova-db psql -U psynova -d psynova -c '\l'
+    See: 04_db_test_corrected.txt (successful run).
+
+[5] 05_mysql_test.txt — FAILED: MariaDB 11 image has `mariadb` client, not `mysql` in PATH.
+    Example:
+      docker exec -i psynova-wpdb mariadb -u root -p'<MARIADB_ROOT_PASSWORD>' -e "SHOW DATABASES;"
+    See: 05_mysql_test_corrected.txt (successful run with default password from docker-compose.yml).
+
+[6–7] 06_backend_restart.log / 07_health_after.txt — NOT produced in this Cursor agent environment:
+    `npm` was not available in PATH (`Command 'npm' not found`).
+    Run steps [6] and [7] on your machine where Node/npm is installed; expect files under the same OUT pattern.
+
+Suggested script fixes for local use:
+  - Replace `docker exec -it` with `docker exec -i` when capturing to files (no TTY).
+  - Postgres: use `-U psynova` (or match POSTGRES_USER), not `postgres`.
+  - WordPress DB: use `mariadb` instead of `mysql`.

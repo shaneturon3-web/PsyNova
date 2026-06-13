@@ -1,0 +1,4 @@
+NAMES               PORTS                                         STATUS
+psynova-db          0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp   Up 6 hours (healthy)
+psynova-wordpress   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp       Up 6 hours
+psynova-wpdb        0.0.0.0:3306->3306/tcp, [::]:3306->3306/tcp   Up 6 hours (healthy)

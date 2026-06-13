@@ -1,0 +1,21 @@
+# Samba shares — included from smb.conf via setup_samba_server.sh
+# Placeholders: __SHARE_USER__ __SHARE_ROOT__
+
+[shared]
+   comment = LAN shared workspace (PsyNova, SugarCubes, AgentStack, etc.)
+   path = __SHARE_ROOT__
+   browseable = yes
+   read only = no
+   valid users = __SHARE_USER__
+   create mask = 0664
+   directory mask = 0775
+   force user = __SHARE_USER__
+   force group = __SHARE_USER__
+
+[homes]
+   comment = Home directories
+   browseable = no
+   read only = no
+   valid users = %S
+   create mask = 0664
+   directory mask = 0775

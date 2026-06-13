@@ -1,0 +1,24 @@
+[Unit]
+Description=PsyNova Cloudflare quick tunnel (https://*.trycloudflare.com)
+Requires=psynova-stack.service
+After=psynova-stack.service
+
+[Service]
+Type=simple
+WorkingDirectory=%h/PsyNova/app
+Environment=PSYNOVA_REPO_ROOT=%h/PsyNova
+Environment=NVM_DIR=%h/.nvm
+Environment=PATH=%h/.nvm/versions/node/v24.16.0/bin:%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/env bash %h/PsyNova/app/ops/psynova_tunnel.sh start
+ExecStop=/usr/bin/env bash %h/PsyNova/app/ops/psynova_tunnel.sh stop
+TimeoutStartSec=120
+TimeoutStopSec=30
+Restart=on-failure
+RestartSec=5
+KillMode=mixed
+KillSignal=SIGTERM
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,25 @@
+METRIC [DRAFT_OP_V5],VALUE [DRAFT_OP_V5]
+,
+Director — clinic share revenue (solvency anchor) [DRAFT_OP_V5],=INPUTS!$B$9*INPUTS!$B$10*INPUTS!$B$2
+Roster — clinic share [DRAFT_OP_V5],=ROSTER!$E$22
+Total clinic margin [DRAFT_OP_V5],=B3+B4
+Operating_Costs (incl. director hybrid pay) [DRAFT_OP_V5],"=(OPERATING_COSTS!$B$14+IF(COUNTA(ROSTER!$A$2:$A$21)>=INPUTS!$B$12,INPUTS!$B$15,0)+INPUTS!$B$13*INPUTS!$B$14+IF(COUNTA(ROSTER!$A$2:$A$21)<INPUTS!$B$12,0,IF(INPUTS!$B$16>0,ROSTER!$F$22*INPUTS!$B$16,IF(INPUTS!$B$17>0,SUM(ROSTER!$C$2:$C$21)*4*INPUTS!$B$17,0)))+INPUTS!$B$7*INPUTS!$B$8+INPUTS!$B$9*INPUTS!$B$11)"
+Partner_L_Draw (fixed) [DRAFT_OP_V5],=INPUTS!$B$6
+Pre-tax (before adjustment reserve) [DRAFT_OP_V5],=B5-B6-B7
+Tax [DRAFT_OP_V5],"=IF(B8>0,B8*INPUTS!$B$19,0)"
+Net after tax (before ADJUSTMENT_RESERVE) [DRAFT_OP_V5],=B8-B9
+ADJUSTMENT_RESERVE (INPUTS — last lever) [DRAFT_OP_V5],=INPUTS!$B$41
+Net profit (final) [DRAFT_OP_V5],=B10+B11
+Alert — equity redemption [DRAFT_OP_V5],"=IF(B12<INPUTS!$B$6,""EQUITY REDEMPTION REQUIRED"","""")"
+Validation — solvency (ops + draw > margin) [DRAFT_OP_V5],"=IF(B6+B7>B5,""WARNING: CLINIC INSOLVENT"","""")"
+,
+Reference — therapist-side (1 − Clinic %) × gross [DRAFT_OP_V5],=ROSTER!$F$22*(1-INPUTS!$B$2)
+Break-even — roster gross (approx.) [DRAFT_OP_V5],"=IF(ROSTER!$F$22<=0,0,IF(INPUTS!$B$2<=0,0,(OPERATING_COSTS!$B$14+IF(COUNTA(ROSTER!$A$2:$A$21)>=INPUTS!$B$12,INPUTS!$B$15,0)+INPUTS!$B$13*INPUTS!$B$14+IF(COUNTA(ROSTER!$A$2:$A$21)<INPUTS!$B$12,0,IF(INPUTS!$B$16>0,ROSTER!$F$22*INPUTS!$B$16,IF(INPUTS!$B$17>0,SUM(ROSTER!$C$2:$C$21)*4*INPUTS!$B$17,0))))/INPUTS!$B$2))"
+Dividend pool [DRAFT_OP_V5],"=IF(B12>0,B12*INPUTS!$B$23,0)"
+Dividend — Principal A [DRAFT_OP_V5],=$B$18*PARTNERSHIP_STRUCTURE!$F$5
+Dividend — Partner L [DRAFT_OP_V5],=$B$18*PARTNERSHIP_STRUCTURE!$F$6
+Dividend — Principal C [DRAFT_OP_V5],=$B$18*PARTNERSHIP_STRUCTURE!$F$7
+Dividend — Director (reserved) [DRAFT_OP_V5],=$B$18*PARTNERSHIP_STRUCTURE!$F$8
+Check (pool) [DRAFT_OP_V5],=B18-SUM(B19:B22)
+Payback (months) [DRAFT_OP_V5],"=IF(AND(B12>0,INPUTS!$B$42>0),INPUTS!$B$42/B12,""—"")"
+Roster hours — investor scale (ref.) [DRAFT_OP_V5],"=IF(OR(B19<=0,INPUTS!$B$21<=0),""—"",ROUNDUP(SUM(ROSTER!$C$2:$C$21)*(INPUTS!$B$21/B19),1))"

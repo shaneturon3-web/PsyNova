@@ -1,0 +1,39 @@
+{
+  "phases": [
+    {
+      "id": "phase-1",
+      "name": "Core Flow Completeness",
+      "priority": "Critical",
+      "modules": ["mod-booking", "mod-virtual-sessions", "mod-group-sessions", "mod-records"],
+      "success_criteria": "Booking -> session -> follow-up works end-to-end in demo-safe mode."
+    },
+    {
+      "id": "phase-2",
+      "name": "Therapist + Patient Systems",
+      "priority": "High",
+      "modules": ["mod-therapist-dashboard", "mod-therapist-tablet", "mod-patient-dashboard", "mod-messaging"],
+      "success_criteria": "Therapist and patient daily workflows are usable and testable."
+    },
+    {
+      "id": "phase-3",
+      "name": "Communication + Engagement",
+      "priority": "High",
+      "modules": ["mod-email-automation", "mod-journaling", "mod-homework", "mod-mood-tracking"],
+      "success_criteria": "Patients receive reminders and engagement actions between sessions."
+    },
+    {
+      "id": "phase-4",
+      "name": "Admin + Billing + Growth",
+      "priority": "Medium",
+      "modules": ["mod-admin-backend", "mod-clinic-backend", "mod-billing", "mod-crm", "mod-seo"],
+      "success_criteria": "Operational controls and growth metrics available for clinic admin."
+    },
+    {
+      "id": "phase-5",
+      "name": "Marketplace + Extensibility",
+      "priority": "Medium",
+      "modules": ["mod-marketplace", "mod-wellness-plugins", "mod-resource-licensing", "mod-plan-b-wellness"],
+      "success_criteria": "Module/plugin lifecycle and licensing controls are enforceable."
+    }
+  ]
+}

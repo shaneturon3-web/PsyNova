@@ -1,0 +1,70 @@
+# Node / Dependency Packages (Primary Weight Vector)
+node_modules/
+**/node_modules/
+.npm/
+.eslintcache
+
+# Local Runtime Compilations and Distribution Builds
+dist/
+**/dist/
+.astro/
+build/
+.next/
+out/
+coverage/
+.cache/
+
+# Binary Archives and Heavy Backup Footprints
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+archive/
+recovery/
+migration-bundle/
+AI_STUDIO_RECOVERY_BUNDLE/
+psynova-booking-flow-restore/
+psynova-booking-flow-restore-v2/
+psynova-ui-design-handoff-2026-04-24/
+
+# Local System Environment Variables and Credential Stores
+.env
+.env.local
+.env.production
+.env.development
+.env.*
+!.env.example
+allamakey.txt
+MISSING_SECRETS_CHECK.md
+
+# Operating System Noise and IDE Metadata Caches
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.cursor/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Local Python virtualenvs (never commit)
+.venv*/
+**/.venv*/
+
+# Logs and temp
+*.log
+logs/
+__pycache__/
+*.pyc
+*.sql.gz
+*.dump
+tmp/
+temp/
+
+# Reversible compliance-gateway apply/revert backups (local only)
+.pre-compliance-gateway/
+
+# Packaged AI Studio bundle (folder excluded above; zip local-only)
+/AI_STUDIO_RECOVERY_BUNDLE.zip

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=PsyNova Server (Stop)
+GenericName=Stop the PsyNova stack and tunnel
+Comment=Stop the PsyNova local stack and any running Cloudflare tunnel
+TryExec=bash
+Exec=bash __REPO_ROOT__/app/ops/psynova_launcher.sh stop
+Icon=psynova-server
+Terminal=false
+Categories=Development;
+Keywords=psynova;stop;
+StartupNotify=true

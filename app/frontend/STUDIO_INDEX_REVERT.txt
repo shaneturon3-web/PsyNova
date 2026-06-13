@@ -1,0 +1,15 @@
+Google AI Studio / tooling note (PsyNova frontend)
+--------------------------------------------------
+Change (2026-04-24): app/frontend/index.html was simplified to a minimal Vite shell
+(lang en, no meta description, no static maquette banner) for alignment with
+Studio/ChatGPT-style recommendations. The previous page is kept verbatim as:
+
+  index.maquette.html
+
+Revert to the maquette entry (local dev / prod preference):
+
+  cp index.maquette.html index.html
+
+Or restore only the lost bits by diffing the two files.
+
+Vite still mounts #app and loads /src/main.js in both versions.

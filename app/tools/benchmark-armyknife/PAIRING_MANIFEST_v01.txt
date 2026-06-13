@@ -1,0 +1,14 @@
+Benchmark Armyknife — emparejado motor + escritorio (v01)
+Fecha referencia: empaquetado con scripts/package-bundle.sh
+
+PARES PRINCIPALES
+- Motor CLI: dist/index.js ← generado desde fuentes TypeScript (npm run build en raíz de benchmark-armyknife).
+- UI local: desktop-shell/server.cjs + desktop-shell/public/* ← sirve interfaz y llama al motor vía node dist/index.js.
+- Lanzador: desktop-shell/launch-desktop.sh — inicia el servidor HTTP en 127.0.0.1:18742 (variable ARMYK_DESKTOP_PORT).
+- Instalación escritorio Linux: install-linux-once.sh — icono en ~/Desktop, .desktop en ~/.local/share/applications, icono en hicolor/512, opcional pin GNOME.
+
+ICONOS
+- desktop-shell/assets/icon.png, icon.svg — fuente; public/assets/icon.png — copia servida (regenerar con desktop-shell/scripts/write_icon_png.py si se cambia el script).
+
+EXCLUSIÓN EN ZIP
+- node_modules/ del motor y de desktop-shell se excluyen del ZIP para tamaño; tras descomprimir: npm install en raíz y en desktop-shell, npm run build en raíz.

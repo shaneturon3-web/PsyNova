@@ -1,0 +1,42 @@
+[
+  {
+    "id": "res-001",
+    "name": "Top cross-platform complaint clusters",
+    "competitor": "All",
+    "source_url": "docs/COMPETITOR_ANALYSIS.md",
+    "finding": "Recurring pain points: pricing clarity, telehealth reliability, billing complexity, support speed.",
+    "complaint": "Users struggle with hidden add-on costs and manual operational workflows.",
+    "opportunity": "Build transparent pricing calculator + guided claims/status workspace.",
+    "priority": "Critical"
+  },
+  {
+    "id": "res-002",
+    "name": "Fast opportunities map",
+    "competitor": "All",
+    "source_url": "docs/OPPORTUNITY_MAP.md",
+    "finding": "High-leverage wins map cleanly to booking/session/follow-up vertical.",
+    "complaint": "Workflow fragmentation and poor continuity between booking and care delivery.",
+    "opportunity": "Complete booking -> session -> follow-up with fallback-safe virtual sessions.",
+    "priority": "Critical"
+  },
+  {
+    "id": "res-003",
+    "name": "Virtual sessions integration planning",
+    "competitor": "All",
+    "source_url": "docs/VIRTUAL_SESSIONS_INTEGRATION_PLAN.md",
+    "finding": "Provider-agnostic abstraction reduces lock-in and improves resilience.",
+    "complaint": "Session failures and poor backup logic disrupt care.",
+    "opportunity": "Zoom primary + Jitsi/backup + phone fallback path.",
+    "priority": "High"
+  },
+  {
+    "id": "res-004",
+    "name": "Resource license gating",
+    "competitor": "All",
+    "source_url": "docs/RESOURCE_LICENSE_REGISTER.md",
+    "finding": "Many wellness assets are unverified for commercial clinical use.",
+    "complaint": "Teams risk using unlicensed content in production.",
+    "opportunity": "License verification registry and release gating by status.",
+    "priority": "High"
+  }
+]

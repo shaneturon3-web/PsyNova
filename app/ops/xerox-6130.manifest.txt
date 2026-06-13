@@ -1,0 +1,6 @@
+Xerox Phaser 6130N installer bundle
+source_host=shane-HP-EliteBook-820-G3
+queue_name=Phaser-6130N
+device_uri=usb://Xerox/Phaser%206130N?serial=HAT032887
+ppd=Xerox Phaser 6130N Foomatic/Postscript
+packages=cups cups-filters foomatic-db-compressed-ppds openprinting-ppds printer-driver-all

@@ -1,0 +1,16 @@
+# Node artifacts
+node_modules/
+dist/
+dist-psynova/
+coverage/
+
+# CMS uploads (runtime)
+backend/uploads/
+
+# Env files
+.env
+.env.local
+
+# OS / editor
+.DS_Store
+*.log

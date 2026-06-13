@@ -1,0 +1,25 @@
+[Unit]
+Description=PsyNova local stack (Vite + Nest + Postgres-via-docker)
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/PsyNova/app
+Environment=PSYNOVA_REPO_ROOT=%h/PsyNova
+Environment=NODE_ENV=development
+Environment=NVM_DIR=%h/.nvm
+Environment=PATH=%h/.nvm/versions/node/v24.16.0/bin:%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/env bash %h/PsyNova/app/ops/psynova_stack.sh start
+ExecStop=/usr/bin/env bash %h/PsyNova/app/ops/psynova_stack.sh stop
+TimeoutStartSec=180
+TimeoutStopSec=30
+Restart=on-failure
+RestartSec=5
+KillMode=mixed
+KillSignal=SIGTERM
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
