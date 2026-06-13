@@ -45,3 +45,15 @@ Do not:
 
 NEXT_ACTION=Run .dev build audit.
 DEPLOY_BLOCKED=UNTIL_DEV_PASS
+
+
+## Trace forward — .dev recovery attempt 01
+TRACE_TIMESTAMP=20260612_224158
+TRACE_REPORT=/home/shane/Downloads/Reports/PsyNova_DevRecoveryAttempt01_MissingSurface_20260612_224158_v01.md
+TRACE_PHASE_DOC=/home/shane/Projects/PsyNova_FRESH_20260612_214251/PHASES/PsyNova_DevRecoveryAttempt01_MissingSurface_20260612_224158_v01.md
+TRACE_STATUS=DEV_DEPLOYED_BUT_SURFACE_INCOMPLETE
+TRACE_ISSUE=Home/services/blog reverted to mockup state on .dev.
+TRACE_NEXT=Sibling chat must run focused diff and selectively recover missing content into canonical fresh candidate.
+DEV_PASS=NO
+QUARANTINE_READY=NO
+
