@@ -1,3 +1,4 @@
+import cmsBundle from './cms-bundle.json';
 // PsyNova reverse-proxy Worker.
 //
 // Forwards every incoming request to env.ORIGIN_URL while preserving method,
@@ -48,6 +49,19 @@ function placeholderResponse(reason: string): Response {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    const url = new URL(request.url);
+
+    if (url.pathname === '/api/cms/bundle' || url.pathname === '/api/cms/bundle.json') {
+      return new Response(JSON.stringify(cmsBundle), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json; charset=utf-8',
+          'cache-control': 'public, max-age=300',
+          'x-psynova-cms-source': 'worker-snapshot',
+        },
+      });
+    }
+
     const origin = (env.ORIGIN_URL ?? '').trim();
     if (!origin || PLACEHOLDER_HOSTS.has(new URL(origin).hostname)) {
       return placeholderResponse(
