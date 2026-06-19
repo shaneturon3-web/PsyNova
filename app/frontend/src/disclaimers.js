@@ -9,8 +9,7 @@ export function mockupStripHtml() {
     <span lang="fr">Aperçu public PsyNova</span>
     <span class="mockup-strip__sep" aria-hidden="true"> / </span>
     <span lang="es">Vista pública PsyNova</span>
-    <span class="mockup-strip__sep" aria-hidden="true"> – </span>
-    <span lang="mul">no real services or data</span>
+
   </div>`;
 }
 
