@@ -12,9 +12,9 @@ const STR = {
     nav_register: 'Créer un compte',
     nav_api: 'API',
     nav_book: 'Prendre rendez-vous',
-    home_title: 'Clinique virtuelle de psychologie — Montréal',
+    home_title: 'PsyNova — Clinique virtuelle + plateforme d’accès et d’administration',
     home_lead:
-      'Plateforme d’accès aux services psychologiques virtuels à Montréal. Aperçu public — ne traite pas les urgences.',
+      'Couche modulaire d’accueil, de réservation, de facturation, de rappels et de coordination pour cliniciens, cliniques et parcours d’accès client.',
     home_cta_register: 'Créer un compte',
     home_cta_legal: 'Avis légaux',
     about_title: 'À propos de PsyNova',
@@ -32,7 +32,7 @@ const STR = {
     team_not_found_lead: 'Cette fiche n’existe pas dans le contenu public actuel.',
     nav_menu: 'Menu',
     disclaimer_collapsed_hint:
-      'Avis légaux et sécurité — cliquez pour afficher le texte complet (le pied de page reprend aussi ces mentions).',
+      'Avis légaux et sécurité',
     blog_title: 'Blogue — repères santé mentale cités',
     blog_lead:
       'Courts articles avec citations d’organismes reconnus (NIMH, CDC, WHO, NHLBI, …) — informations générales, pas un avis médical.',
@@ -66,7 +66,7 @@ const STR = {
     sidebar_privacy: 'Confidentialité',
     skip_content: 'Aller au contenu',
     disclaimer_banner_line:
-      'PsyNova public preview / Aperçu public PsyNova / Vista pública PsyNova — platform information only, not emergency care.',
+      'PsyNova public preview / Aperçu public PsyNova / Vista pública PsyNova',
     disclaimer_short:
       'Rien sur ce site ne constitue un avis médical ou psychologique. Aucune relation thérapeutique n’est établie. Aucun service psychologique ou médical réel n’est offert.',
     disclaimer_detail:
@@ -74,11 +74,11 @@ const STR = {
     disclaimer_aria: 'Avis sur la nature fictive du site',
     disclaimer_form_title: 'Avis important',
     disclaimer_form_p1:
-      'Ce site est une démonstration : il ne fournit pas de soins, ne crée aucune obligation contractuelle, et ne remplace pas une consultation professionnelle. Rien ici ne constitue un avis médical ou psychologique.',
+      'Utilisez ce parcours uniquement pour les demandes non urgentes de rendez-vous ou de contact.',
     disclaimer_form_p2:
-      'Le texte saisi peut être conservé dans sa langue d’origine et traduit automatiquement en français (usage interne de démonstration uniquement).',
+      '',
     footer_disclaimer:
-      'Aperçu public de plateforme — ne traite pas les urgences ni les soins actifs. Urgence : 911 ou 988 (Canada).',
+      'En cas d’urgence ou de danger immédiat : 911 ou 988 (Canada).',
     disclaimer_crisis:
       'En cas de crise ou de danger immédiat : composez le 911 ou la ligne 988 (Canada). Ce site ne gère pas les urgences.',
     booking_free_text_prompt:
@@ -108,9 +108,9 @@ const STR = {
     nav_register: 'Create account',
     nav_api: 'API',
     nav_book: 'Book a session',
-    home_title: 'Virtual psychology clinic — Montreal',
+    home_title: 'PsyNova — Virtual Clinic + Care-Access & Administration Platform',
     home_lead:
-      'Virtual-care access platform for psychology services in Montreal. Public preview — not an emergency service.',
+      'A modular intake, booking, billing, reminder, and coordination layer for clinicians, clinics, and client-access workflows.',
     home_cta_register: 'Create account',
     home_cta_legal: 'Legal notices',
     about_title: 'About PsyNova',
@@ -128,7 +128,7 @@ const STR = {
     team_not_found_lead: 'This team member is not in the current public content.',
     nav_menu: 'Menu',
     disclaimer_collapsed_hint:
-      'Legal & safety notice — click to read the full text (the footer also repeats this information).',
+      'Legal & safety notice',
     blog_title: 'Blog — cited mental-health resources',
     blog_lead:
       'Short posts with quoted excerpts from recognized agencies (NIMH, CDC, WHO, NHLBI, …). General information only—not medical advice.',
@@ -162,7 +162,7 @@ const STR = {
     sidebar_privacy: 'Privacy / Legal',
     skip_content: 'Skip to content',
     disclaimer_banner_line:
-      'PsyNova public preview / Aperçu public PsyNova / Vista pública PsyNova — platform information only, not emergency care.',
+      'PsyNova public preview / Aperçu public PsyNova / Vista pública PsyNova',
     disclaimer_short:
       'Nothing on this site constitutes medical or psychological advice. No therapeutic relationship is established. No real psychological or medical services are provided.',
     disclaimer_detail:
@@ -170,11 +170,11 @@ const STR = {
     disclaimer_aria: 'Notice on fictional nature of this site',
     disclaimer_form_title: 'Important notice',
     disclaimer_form_p1:
-      'This site is a demonstration: it does not provide care, create a contractual duty, or replace a professional consultation. Nothing here constitutes medical or psychological advice.',
+      'Use this pathway for non-urgent booking and contact only.',
     disclaimer_form_p2:
-      'Your text may be kept in its original language and machine-translated into French for internal demonstration use only.',
+      '',
     footer_disclaimer:
-      'Public platform preview — not for emergencies or active clinical care. Emergency: 911 or 988 (Canada).',
+      'For emergencies or immediate danger, call 911 or 988 (Canada).',
     disclaimer_crisis:
       'In crisis or immediate danger: call 911 or 988 (Canada). This site does not handle emergencies.',
     booking_free_text_prompt: 'Write in your language — Écrivez dans votre langue — Escribe en tu idioma.',
@@ -202,9 +202,9 @@ const STR = {
     nav_register: 'Crear cuenta',
     nav_api: 'API',
     nav_book: 'Reservar',
-    home_title: 'Clínica virtual de psicología — Montreal',
+    home_title: 'PsyNova — Clínica virtual + plataforma de acceso y administración',
     home_lead:
-      'Plataforma de acceso a servicios psicológicos virtuales en Montreal. Vista pública — no atiende emergencias.',
+      'Capa modular de admisión, reservas, facturación, recordatorios y coordinación para profesionales, clínicas y recorridos de acceso del cliente.',
     home_cta_register: 'Crear cuenta',
     home_cta_legal: 'Avisos legales',
     about_title: 'Sobre PsyNova',
@@ -222,7 +222,7 @@ const STR = {
     team_not_found_lead: 'Esta ficha no está en el contenido público actual.',
     nav_menu: 'Menú',
     disclaimer_collapsed_hint:
-      'Aviso legal y de seguridad: pulse para leer el texto completo (el pie de página también lo repite).',
+      'Aviso legal y de seguridad',
     blog_title: 'Blog — recursos con fuentes',
     blog_lead:
       'Entradas breves con citas de organismos reconocidos (NIMH, CDC, OMS, NHLBI, …). Solo información general; no es consejo médico.',
@@ -256,7 +256,7 @@ const STR = {
     sidebar_privacy: 'Privacidad',
     skip_content: 'Ir al contenido',
     disclaimer_banner_line:
-      'PsyNova public preview / Aperçu public PsyNova / Vista pública PsyNova — platform information only, not emergency care.',
+      'PsyNova public preview / Aperçu public PsyNova / Vista pública PsyNova',
     disclaimer_short:
       'Nada en este sitio constituye consejo médico o psicológico. No se establece relación terapéutica. No se ofrecen servicios psicológicos ni médicos reales.',
     disclaimer_detail:
@@ -264,9 +264,9 @@ const STR = {
     disclaimer_aria: 'Aviso sobre el carácter ficticio del sitio',
     disclaimer_form_title: 'Aviso importante (maqueta)',
     disclaimer_form_p1:
-      'Este sitio es una demostración: no brinda atención, no crea obligación contractual ni sustituye una consulta profesional. Nada aquí constituye consejo médico o psicológico.',
+      'Use este recorrido solo para reservas o contacto no urgente.',
     disclaimer_form_p2:
-      'Su texto puede conservarse en el idioma original y traducirse automáticamente al francés solo para uso interno de demostración.',
+      '',
     footer_disclaimer:
       'Maqueta de demostración — sin servicios clínicos reales. Emergencia: 911 o 988 (Canadá).',
     disclaimer_crisis:
