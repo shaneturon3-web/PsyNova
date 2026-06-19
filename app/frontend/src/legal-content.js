@@ -1,15 +1,15 @@
-/** Blocs légaux brouillon — maquette, non avis juridique. */
+/** Blocs légaux brouillon — aperçu public, non avis juridique. */
 
 export function legalPageHtml(lang) {
   const blocks = {
     fr: `
       <section class="legal-section"><h2>Consentement éclairé (information)</h2>
-      <p>Version maquette : en production, un consentement révisé par les instances compétentes et adapté à chaque modalité de service serait requis avant toute intervention.</p></section>
+      <p>Version d’aperçu public : avant toute intervention réelle, un consentement révisé par les instances compétentes et adapté à chaque modalité de service serait requis.</p></section>
       <section class="legal-section"><h2>Confidentialité et Loi 25</h2>
-      <p>Ce site ne collecte des données réelles que dans la mesure où vous utilisez l’API de démonstration avec des comptes fictifs. Aucune finalité clinique réelle.</p></section>
+      <p>Ce site présente un aperçu de plateforme. Ne transmettez pas d’information urgente ou clinique dans les formulaires publics.</p></section>
       <section class="legal-section"><h2>Télépsychologie</h2>
       <p>Les services à distance ont des limites (confidentialité du lieu, urgence, technologie). Ce prototype illustre des parcours sans les remplacer.</p></section>
-      <section class="legal-section"><h2>Nature du site (maquette)</h2>
+      <section class="legal-section"><h2>Nature du site</h2>
       <p>Cette interface ne constitue pas un service de santé mentale, ne fournit pas de conseils thérapeutiques ni de diagnostic, et ne crée aucune relation professionnelle. Aucune certification réglementaire n’est revendiquée par ce prototype.</p></section>
       <section class="legal-section"><h2>Urgences</h2>
       <p>En cas de danger immédiat : <strong>911</strong>. Ligne de prévention du suicide : <strong>988</strong> (Canada).</p></section>
@@ -17,12 +17,12 @@ export function legalPageHtml(lang) {
       <p>La psychothérapie dépend de nombreux facteurs ; aucune amélioration n’est garantie. Texte à valider par des pairs et conseillers.</p></section>`,
     en: `
       <section class="legal-section"><h2>Informed consent (informational)</h2>
-      <p>Mockup version: production would require counsel-reviewed consent for each service modality.</p></section>
+      <p>Public-preview version: before any real intervention, production use would require counsel-reviewed consent for each service modality.</p></section>
       <section class="legal-section"><h2>Privacy & Law 25</h2>
-      <p>This demo only processes data you send to the mock API with fictional accounts. No real clinical purpose.</p></section>
+      <p>This site presents a platform preview. Do not submit urgent or clinical information through public forms.</p></section>
       <section class="legal-section"><h2>Telepsychology</h2>
       <p>Remote care has limits (privacy of setting, emergencies, technology). This prototype illustrates flows only.</p></section>
-      <section class="legal-section"><h2>Site nature (mockup)</h2>
+      <section class="legal-section"><h2>Site nature</h2>
       <p>This interface is not mental health care, not therapeutic advice or diagnosis, and does not create a professional relationship. This prototype does not claim regulatory certification.</p></section>
       <section class="legal-section"><h2>Emergencies</h2>
       <p>Immediate danger: <strong>911</strong>. Suicide prevention: <strong>988</strong> (Canada).</p></section>
