@@ -1,5 +1,5 @@
 /**
- * Contenu fictif — noms cartoon, aucune personne réelle.
+ * Contenu d’aperçu public — noms et profils à valider avant usage clinique.
  * Descriptions d’illustration pour génération d’assets ultérieure.
  */
 
@@ -52,13 +52,13 @@ export const BLOG_POSTS = [
     },
     date: '2026-01-15',
     excerpt: {
-      fr: 'Lumière, mouvement et lien social : rappels non médicalisés pour une maquette pédagogique.',
-      en: 'Light, movement, connection — educational mockup, not medical advice.',
+      fr: 'Lumière, mouvement et lien social : repères publics non médicalisés.',
+      en: 'Light, movement, connection — public information, not medical advice.',
       es: 'Luz, movimiento y vínculos — contenido educativo de maqueta.',
     },
     body: {
-      fr: `<p>Ceci est un <strong>article fictif</strong>. En pratique, un professionnel peut recommander luminothérapie validée, activité physique adaptée et suivis personnalisés.</p><p>Aucune donnée réelle ; viser une revue clinique avant publication.</p>`,
-      en: `<p>This is a <strong>fictional article</strong>. In real care, clinicians may suggest evidence-based light therapy, tailored exercise, and follow-up.</p><p>No real data; clinical review required before live use.</p>`,
+      fr: `<p>Ceci est un <strong>article d’information publique</strong>. En pratique, un professionnel peut recommander luminothérapie validée, activité physique adaptée et suivis personnalisés.</p><p>Une revue clinique est requise avant usage clinique.</p>`,
+      en: `<p>This is a <strong>public information article</strong>. In real care, clinicians may suggest evidence-based light therapy, tailored exercise, and follow-up.</p><p>Clinical review is required before clinical use.</p>`,
       es: `<p>Artículo <strong>ficticio</strong>. En la práctica clínica real se personalizan intervenciones con evidencia.</p>`,
     },
   },
@@ -71,8 +71,8 @@ export const BLOG_POSTS = [
     },
     date: '2026-02-01',
     excerpt: {
-      fr: 'Confidentialité, consentement et limites technologiques — rappel pour la maquette.',
-      en: 'Privacy, consent, tech limits — mockup reminder.',
+      fr: 'Confidentialité, consentement et limites technologiques.',
+      en: 'Privacy, consent, and technology limits.',
       es: 'Privacidad, consentimiento y límites técnicos.',
     },
     body: {
