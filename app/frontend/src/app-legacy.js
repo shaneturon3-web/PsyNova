@@ -85,7 +85,7 @@ function buildDemoData() {
     {
       id: 'th-01',
       name: 'Dr. Mira Rowan',
-      title: 'Psychologist (DEMO / FICTIONAL)',
+      title: 'Psychologist [DRAFT]',
       specialties: ['CBT', 'Anxiety', 'Mindfulness'],
       languages: ['English', 'French'],
       availability: 'Mon-Thu 09:00-17:00',
@@ -93,12 +93,12 @@ function buildDemoData() {
       phone: '+1 514-555-0101',
       avatarUrl: TEAM_FALLBACK_IMAGES[0],
       bio: 'Demo therapist profile for UI testing only.',
-      licenseStatus: 'Mock license verified (fictional)',
+      licenseStatus: 'Credential placeholder — verification required',
     },
     {
       id: 'th-02',
       name: 'Noah Vale, LCSW',
-      title: 'Clinical Social Worker (DEMO / FICTIONAL)',
+      title: 'Clinical Social Worker [DRAFT]',
       specialties: ['Depression', 'Trauma', 'Youth'],
       languages: ['English', 'Spanish'],
       availability: 'Tue-Fri 10:00-18:00',
@@ -106,12 +106,12 @@ function buildDemoData() {
       phone: '+1 514-555-0102',
       avatarUrl: TEAM_FALLBACK_IMAGES[1],
       bio: 'Trauma-informed and youth-focused demo profile.',
-      licenseStatus: 'Mock active status (fictional)',
+      licenseStatus: 'Credential placeholder — verification required',
     },
     {
       id: 'th-03',
       name: 'Ari Bennett',
-      title: 'Psychotherapist (DEMO / FICTIONAL)',
+      title: 'Psychotherapist [DRAFT]',
       specialties: ['Couples', 'Communication', 'Mindfulness'],
       languages: ['English', 'French'],
       availability: 'Mon-Fri 12:00-20:00',
@@ -119,25 +119,25 @@ function buildDemoData() {
       phone: '+1 514-555-0103',
       avatarUrl: TEAM_FALLBACK_IMAGES[2],
       bio: 'Couples and communication demo specialist.',
-      licenseStatus: 'Mock supervised practice (fictional)',
+      licenseStatus: 'Credential placeholder — verification required',
     },
     {
       id: 'th-04',
       name: 'Dr. Lina Ortega',
-      title: 'Psychiatric Consultant (DEMO / FICTIONAL)',
+      title: 'Psychiatric Consultant [DRAFT]',
       specialties: ['ADHD', 'Anxiety', 'Medication planning'],
       languages: ['English', 'Spanish', 'French'],
       availability: 'Wed-Sat 08:00-16:00',
       email: 'lina.ortega@demo.psynova.local',
       phone: '+1 514-555-0104',
       avatarUrl: TEAM_FALLBACK_IMAGES[3],
-      bio: 'ADHD and anxiety planning, demo only.',
-      licenseStatus: 'Mock specialist listing (fictional)',
+      bio: 'ADHD and anxiety planning module [DRAFT].',
+      licenseStatus: 'Credential placeholder — verification required',
     },
     {
       id: 'th-05',
       name: 'Samira Khan',
-      title: 'Registered Therapist (DEMO / FICTIONAL)',
+      title: 'Registered Therapist [DRAFT]',
       specialties: ['Trauma', 'Depression', 'CBT'],
       languages: ['English', 'French', 'Urdu'],
       availability: 'Mon-Thu 11:00-19:00',
@@ -145,12 +145,12 @@ function buildDemoData() {
       phone: '+1 514-555-0105',
       avatarUrl: TEAM_FALLBACK_IMAGES[0],
       bio: 'Trauma and depression mock care pathways.',
-      licenseStatus: 'Mock registration active (fictional)',
+      licenseStatus: 'Credential placeholder — verification required',
     },
     {
       id: 'th-06',
       name: 'Eli Park',
-      title: 'Virtual Care Clinician (DEMO / FICTIONAL)',
+      title: 'Virtual Care Clinician [DRAFT]',
       specialties: ['Youth', 'Family', 'Mindfulness'],
       languages: ['English', 'Korean'],
       availability: 'Sun-Thu 09:00-15:00',
@@ -158,7 +158,7 @@ function buildDemoData() {
       phone: '+1 514-555-0106',
       avatarUrl: TEAM_FALLBACK_IMAGES[1],
       bio: 'Family and youth support in virtual settings (demo).',
-      licenseStatus: 'Mock telehealth provider (fictional)',
+      licenseStatus: 'Credential placeholder — verification required',
     },
   ];
   const patients = [
@@ -721,7 +721,7 @@ function viewTeam() {
         .map((x) => `<span>${esc(x)}</span>`)
         .join('')}</div>
       <div class="team-card__bio">${bio}</div>
-      ${m._isDemo ? `<p class="muted team-card__meta">DEMO / FICTIONAL${esc(demoLang)}</p>` : ''}
+      ${m._isDemo ? `<p class="muted team-card__meta">[DRAFT]${esc(demoLang)}</p>` : ''}
       <p class="team-card__illust muted"><em>${esc(ill)}</em></p>
       <p class="team-card__cta"><a class="btn btn--small btn--ghost" href="#/book">Book session</a> <a class="btn btn--small btn--ghost" href="#/team/${encodeURIComponent(m.id)}">${esc(t('team_view_profile'))}</a></p>
     </article>`;
@@ -947,12 +947,12 @@ function viewRegister() {
 function viewBookPublic() {
   const signed = state.user?.sub
     ? `<p class="pill" role="status">Signed in as ${esc(state.user?.email || '')} — you can confirm your booking below.</p>`
-    : '<p class="muted public-lead" style="margin-top:0">Choose a visit reason, date, and time first. You will be asked to <strong>create an account</strong> (or sign in) only on the <strong>last</strong> step to confirm the appointment (maquette / mock API).</p>';
+    : '<p class="muted public-lead" style="margin-top:0">Choose a visit reason, date, and time first. You will be asked to <strong>create an account</strong> or sign in only on the <strong>last</strong> step to confirm the appointment.</p>';
   return publicPageWrap(
     `<h1 class="public-h1">${esc(t('nav_book'))}</h1>
     <p class="status-bar"><a href="#/">← Home</a> · <a href="#/team">${esc(t('nav_team'))}</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/sessions-demo">Sessions Demo</a> · <a href="#/records-demo">Records Demo</a></p>
     ${signed}
-    ${state.demo.bookingConfirmation ? `<div class="card booking-confirmation-card"><h3>Appointment confirmation</h3><p><strong>Confirmed:</strong> ${esc(state.demo.bookingConfirmation)}</p><p class="muted">DEMO / FICTIONAL confirmation state unless backend persists the record.</p></div>` : ''}
+    ${state.demo.bookingConfirmation ? `<div class="card booking-confirmation-card"><h3>Appointment confirmation</h3><p><strong>Confirmed:</strong> ${esc(state.demo.bookingConfirmation)}</p><p class="muted">[DRAFT] confirmation state unless backend persists the record.</p></div>` : ''}
     <div class="main main--booking" style="margin-top:1rem">
       ${bookingWizardHtml(state.booking, esc, state.user, state.cms?.bundle?.services)}
     </div>
@@ -977,7 +977,7 @@ function viewDashboard() {
         </div>
         <h1 style="margin-top:0;">${esc(t('sidebar_dashboard'))}</h1>
         <div class="dash-links card">
-          <h2>Site (maquette)</h2>
+          <h2>Site overview</h2>
           <p class="muted"><a href="#/services">${esc(t('nav_services'))}</a> · <a href="#/team">${esc(t('nav_team'))}</a> · <a href="#/blog">${esc(t('nav_blog'))}</a> · <a href="#/contact">${esc(t('nav_contact'))}</a></p>
           <p><a class="btn" href="#/app/appointments">${esc(t('sidebar_appts'))}</a> <a class="btn btn--ghost" href="#/therapist-demo">Therapist Demo</a> <a class="btn btn--ghost" href="#/sessions-demo">Sessions Demo</a> <a class="btn btn--ghost" href="#/records-demo">Records Demo</a></p>
         </div>
@@ -1051,7 +1051,7 @@ function viewAppointments() {
         ${bookingWizardHtml(state.booking, esc, state.user, state.cms?.bundle?.services)}
         ${state.formError ? `<p class="error-msg" role="alert">${esc(state.formError)}</p>` : ''}
         <div class="card">
-          <h2>Your appointments (DEMO / FICTIONAL + API)</h2>
+          <h2>Your appointments ([DRAFT] + API)</h2>
           <div class="table-wrap">
             <table>
               <thead><tr><th>ID</th><th>Category/Service</th><th>Status</th><th>Starts</th><th>Ends/Type</th><th>Notes/Patient</th><th>Actions</th></tr></thead>
@@ -1159,7 +1159,7 @@ function viewAdmin() {
        <p class="muted">${esc(t('admin_lead'))}</p>
        <p><a class="btn" href="#/app/cms">Open content CMS</a></p>
        <div class="admin-grid">
-         <div class="card admin-stat"><h3>Patients (fictif)</h3><p class="admin-stat__n">12</p></div>
+         <div class="card admin-stat"><h3>Patients [DRAFT]</h3><p class="admin-stat__n">12</p></div>
          <div class="card admin-stat"><h3>Rendez-vous (7 j)</h3><p class="admin-stat__n">28</p></div>
          <div class="card admin-stat"><h3>Journal</h3><p class="admin-stat__n muted" style="font-size:0.85rem;">audit mock — vide</p></div>
        </div>`
@@ -1180,16 +1180,16 @@ function viewMessagesMock() {
   const L = uiLang();
   const them =
     L === 'fr'
-      ? 'Bonjour, rappel : votre séance de démo est confirmée (fictif).'
+      ? 'Bonjour, rappel : votre séance est confirmée [DRAFT].'
       : L === 'es'
         ? 'Hola: tu cita de demostración está confirmada (ficticia).'
-        : 'Hello: your demo session is confirmed (fictional).';
+        : 'Hello: your session is confirmed [DRAFT].';
   const me =
     L === 'fr'
-      ? 'Merci, je confirmais la réception (maquette).'
+      ? 'Merci, je confirme la réception [DRAFT].'
       : L === 'es'
         ? 'Gracias, acuso recibo (maqueta).'
-        : 'Thanks — acknowledged (mockup).';
+        : 'Thanks — acknowledged [DRAFT].';
   return `
     <div class="layout">
       ${shellSidebar(true)}
@@ -1199,7 +1199,7 @@ function viewMessagesMock() {
         <h1 style="margin-top:0;">${esc(t('msgs_title'))}</h1>
         <p class="muted">${esc(t('msgs_lead'))}</p>
         <div class="msg-thread card">
-          <div class="msg-bubble msg-bubble--them"><span class="msg-bubble__who">Clinicien·ne (fictif)</span>${esc(them)}</div>
+          <div class="msg-bubble msg-bubble--them"><span class="msg-bubble__who">Clinicien·ne [DRAFT]</span>${esc(them)}</div>
           <div class="msg-bubble msg-bubble--me"><span class="msg-bubble__who">Vous</span>${esc(me)}</div>
         </div>
         ${siteFooterDisclaimer()}
@@ -1400,7 +1400,7 @@ function viewTherapistDemo() {
     .join('');
   return publicPageWrap(
     `<h1 class="public-h1">Therapist Demo Workspace</h1>
-    <p class="muted public-lead">DEMO / FICTIONAL data only. Use to test patient, therapist, messages, email activity, records and appointment confirmation workflows.</p>
+    <p class="muted public-lead">[DRAFT] data only. Use to test patient, therapist, messages, email activity, records and appointment confirmation workflows.</p>
     <p class="status-bar"><a href="#/">← Home</a> · <a href="#/book">Book</a> · <a href="#/team">Therapists</a> · <a href="#/sessions-demo">Sessions Demo</a> · <a href="#/records-demo">Records Demo</a></p>
     <section class="card therapist-demo-profile">
       <img class="therapist-demo-profile__img" src="${esc(primary.avatarUrl)}" alt="" width="108" height="108" />
@@ -1518,7 +1518,7 @@ function viewSessionsDemo() {
 
   return publicPageWrap(
     `<h1 class="public-h1">Virtual Sessions Demo</h1>
-    <p class="muted public-lead">DEMO / FICTIONAL module. Placeholder links only unless provider credentials are configured.</p>
+    <p class="muted public-lead">[DRAFT] module. Placeholder links only unless provider credentials are configured.</p>
     <p class="status-bar"><a href="#/">← Home</a> · <a href="#/book">Book</a> · <a href="#/therapist-demo">Therapist Demo</a> · <a href="#/records-demo">Records Demo</a></p>
     ${state.demo.sessionBanner ? `<p class="pill">${esc(state.demo.sessionBanner)}</p>` : ''}
     <section class="card">
@@ -1563,7 +1563,7 @@ function viewRecordsDemo() {
     .join('');
   return publicPageWrap(
     `<h1 class="public-h1">Records Demo</h1>
-    <p class="muted public-lead">DEMO / FICTIONAL records only. Export actions generate frontend downloads using Blob (no backend).</p>
+    <p class="muted public-lead">[DRAFT] records only. Export actions generate frontend downloads using Blob (no backend).</p>
     <p class="status-bar"><a href="#/therapist-demo">← Therapist Demo</a> · <a href="#/">Home</a> · <a href="#/book">Book</a></p>
     <section class="card">
       <h2>Patient records table</h2>
@@ -2297,7 +2297,7 @@ function onAppClickDemo(e) {
     const id = viewRecBtn.getAttribute('data-demo-view-record');
     const rec = state.demo.records.find((r) => r.id === id);
     if (rec) {
-      window.alert(`Record ${rec.id}\nPatient: ${rec.patient}\nSummary: ${rec.summary}\n\nDEMO / FICTIONAL`);
+      window.alert(`Record ${rec.id}\nPatient: ${rec.patient}\nSummary: ${rec.summary}\n\n[DRAFT]`);
     }
     return;
   }
