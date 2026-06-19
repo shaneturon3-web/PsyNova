@@ -2353,3 +2353,24 @@ button.category-card:hover,
   color: #2a3f87;
 }
 
+
+/* PsyNova public home hero width correction */
+.main.public-page > .hero,
+.main.public-page > .hero--wide,
+.main.public-page > .hero.hero--split {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main.public-page > .hero .hero__content,
+.main.public-page > .hero.hero--split .hero__content {
+  max-width: none;
+}
+
+.main.public-page > .hero .hero__lead,
+.main.public-page > .hero--wide .hero__lead,
+.main.public-page > .hero.hero--split .hero__lead {
+  max-width: 48rem;
+}
