@@ -478,8 +478,8 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
       <div class="booking-draft-badge" role="status">DRAFT</div>
       <h2 id="booking-wizard-title" class="booking-wizard__h">${tx('Prendre rendez-vous', 'Book a session', 'Reservar cita')}</h2>
       <p class="booking-wizard__sub">${tx(
-        'Colonne de gauche : contexte. Colonne de droite : calendrier, horaires, puis confirmation. Aperçu du parcours.',
-        'Left: context. Right: calendar, time slots, details, then confirmation. Pathway preview.',
+        'Choisissez un motif, une date et une heure. La confirmation du compte arrive à la dernière étape.',
+        'Select a reason, date, and time. Account confirmation happens at the final step.',
         'Columna izquierda: contexto. Derecha: calendario, horarios, confirmación. Solo maqueta.',
       )}</p>
       ${stepper}

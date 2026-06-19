@@ -21,7 +21,7 @@ function escapeAttr(s) {
 /** Near form inputs: mockup + non-clinical + crisis. */
 export function formDisclaimerBlock() {
   return `<aside class="form-disclaimer" aria-label="${t('disclaimer_aria')}">
-    <p class="form-disclaimer__mockup"><strong>${t('disclaimer_banner_line')}</strong></p>
+    
     <p class="form-disclaimer__title">${t('disclaimer_form_title')}</p>
     <p class="form-disclaimer__p">${t('disclaimer_form_p1')}</p>
     <p class="form-disclaimer__p">${t('disclaimer_form_p2')}</p>

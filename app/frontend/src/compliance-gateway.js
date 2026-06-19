@@ -72,7 +72,7 @@ function portalView() {
   const top = `<section class="narrow"><p class="eyebrow">Patient gateway</p><h1>Continue in the appropriate secure system</h1><p class="lead">These links leave PsyNova and open the clinic-approved platform for each task.</p><div class="portal-grid"><article class="portal-tile"><h2>Book</h2><p>Schedule or modify appointments.</p>${externalLink('booking', 'Open booking')}</article><article class="portal-tile"><h2>Telehealth</h2><p>Join a video session.</p>${externalLink('telehealth', 'Join telehealth')}</article><article class="portal-tile"><h2>Forms</h2><p>Complete intake and consent forms.</p>${externalLink('forms', 'Open forms')}</article><article class="portal-tile"><h2>Documents</h2><p>Exchange secure documents.</p>${externalLink('documents', 'Open documents')}</article><article class="portal-tile"><h2>Billing</h2><p>View invoices and payment links.</p>${externalLink('billing', 'Open billing')}</article></div>`;
 
   const bookingTestIntro = `<section class="portal-booking-test narrow" aria-labelledby="portal-booking-test-title"><h2 id="portal-booking-test-title">Local booking (DRAFT draft) — in-app test</h2>
-    <p class="muted" style="margin-top:0;">This block previews the PsyNova appointment pathway. It is separate from the <strong>Open booking</strong> tile above, which is reserved for a clinic-approved third-party system.</p>
+    <p class="muted" style="margin-top:0;">Continue with the PsyNova booking pathway or use the clinic-approved external booking option above.</p>
     <p class="muted">For compliance posture, production booking should go through the approved platform; this section is for developer/staff testing only.</p>
     ${state.bookingSuccess ? `<p class="status-ok" role="status">${esc(state.bookingSuccess)}</p>` : ''}
     ${state.bookingError ? `<p class="error">${esc(state.bookingError)}</p>` : ''}
@@ -86,11 +86,11 @@ function privacyView() {
   return page(`<section class="narrow"><h1>Privacy, consent, and custody notice</h1><p>PsyNova is not the clinic system of record. It does not intentionally collect clinical notes, psychotherapy records, telehealth recordings, diagnostic material, or uploaded patient documents.</p><p>Private patient workflows are handled by third-party systems selected by the clinic. Review the clinic privacy policy, vendor privacy notices, and consent documents before using those systems.</p><p>Never send urgent clinical information through this public interface.</p>${externalLink('privacy', 'Open full privacy policy', 'button button--secondary')}</section>`);
 }
 function registerView() {
-  return page(`<section class="auth-card"><h1>Create account</h1><p>Patient account — same pathway as the full portal preview. You can return to your booking after registration.</p><form id="form-register"><label>Email <input name="email" type="email" autocomplete="email" required /></label><label>Password (min 8) <input name="password" type="password" autocomplete="new-password" minlength="8" required /></label><label>Role <select name="role"><option value="patient">Patient</option><option value="clinician">Clinician</option><option value="admin">Admin</option></select></label><label>Preferred language <select name="preferredLanguage"><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option></select></label>${state.formError ? `<p class="error">${esc(state.formError)}</p>` : ''}<button class="button" type="submit">Register</button><p class="muted"><a href="#/login">Sign in</a> · <a href="#/book">Back to booking</a> · <a href="#/">Home</a></p></form></section>`);
+  return page(`<section class="auth-card"><h1>Create account</h1><p>Create an account to continue your booking.</p><form id="form-register"><label>Email <input name="email" type="email" autocomplete="email" required /></label><label>Password (min 8) <input name="password" type="password" autocomplete="new-password" minlength="8" required /></label><label>Role <select name="role"><option value="patient">Patient</option><option value="clinician">Clinician</option><option value="admin">Admin</option></select></label><label>Preferred language <select name="preferredLanguage"><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option></select></label>${state.formError ? `<p class="error">${esc(state.formError)}</p>` : ''}<button class="button" type="submit">Register</button><p class="muted"><a href="#/login">Sign in</a> · <a href="#/book">Back to booking</a> · <a href="#/">Home</a></p></form></section>`);
 }
 function bookView() {
   const pre = !state.user?.sub
-    ? '<p class="muted" style="margin-top:0">Choose a reason, date, and time first. You will be asked to create an account or sign in only on the <strong>last</strong> step.</p>'
+    ? '<p class="muted" style="margin-top:0">Choose a reason, date, and time first. Account sign-in happens only at the final step.</p>'
     : '<p class="status-ok" role="status">Signed in — confirm below or use the patient portal.</p>';
   return page(
     `<section class="narrow portal-booking-test"><h1>Book a session (draft)</h1>${pre}${state.bookingSuccess ? `<p class="status-ok" role="status">${esc(state.bookingSuccess)}</p>` : ''}${state.bookingError ? `<p class="error">${esc(state.bookingError)}</p>` : ''}<div class="main main--booking" id="main-booking">${bookingWizardHtml(state.booking, esc, state.user, null)}</div><p class="muted" style="margin-top:1rem">Vendor systems: <a href="#/portal">Patient portal</a></p></section>`,
@@ -98,7 +98,7 @@ function bookView() {
 }
 function loginView() {
   const hint = state.postRegisterHint ? `<p class="status-ok" role="status">${esc(state.postRegisterHint)}</p>` : '';
-  return page(`<section class="auth-card"><h1>Sign in</h1><p>Use the same account as the portal preview to confirm a booking draft.</p>${hint}<form id="form-login"><label>Email <input name="email" type="email" autocomplete="email" required /></label><label>Password <input name="password" type="password" autocomplete="current-password" required /></label>${state.formError ? `<p class="error">${esc(state.formError)}</p>` : ''}<button class="button" type="submit">Sign in</button><p class="muted"><a href="#/register">Create account</a> · <a href="#/book">Book a session</a> · <a href="#/">Home</a></p></form></section>`);
+  return page(`<section class="auth-card"><h1>Sign in</h1><p>Sign in to continue your booking.</p>${hint}<form id="form-login"><label>Email <input name="email" type="email" autocomplete="email" required /></label><label>Password <input name="password" type="password" autocomplete="current-password" required /></label>${state.formError ? `<p class="error">${esc(state.formError)}</p>` : ''}<button class="button" type="submit">Sign in</button><p class="muted"><a href="#/register">Create account</a> · <a href="#/book">Book a session</a> · <a href="#/">Home</a></p></form></section>`);
 }
 function adminView() {
   if (!state.user) return loginView();
@@ -355,7 +355,7 @@ async function onAppSubmitBooking(e) {
         /* */
       }
     }
-    state.bookingSuccess = 'Draft appointment recorded for pathway preview.';
+    state.bookingSuccess = 'Appointment request recorded.';
     render();
   } catch (err) {
     state.bookingError = err.body?.message || err.message || 'Request failed';
