@@ -4,11 +4,11 @@ import { t } from './i18n.js';
 /** Compact strip for in-app shell (canonical Phase 1 line). */
 export function mockupStripHtml() {
   return `<div class="mockup-strip" role="status" data-mockup-banner="${escapeAttr(MOCKUP_BANNER_PRIMARY)}">
-    <span lang="en">This is a mockup</span>
+    <span lang="en">PsyNova public preview</span>
     <span class="mockup-strip__sep" aria-hidden="true"> / </span>
-    <span lang="fr">Ceci est une maquette</span>
+    <span lang="fr">Aperçu public PsyNova</span>
     <span class="mockup-strip__sep" aria-hidden="true"> / </span>
-    <span lang="es">Esto es un prototipo</span>
+    <span lang="es">Vista pública PsyNova</span>
     <span class="mockup-strip__sep" aria-hidden="true"> – </span>
     <span lang="mul">no real services or data</span>
   </div>`;
