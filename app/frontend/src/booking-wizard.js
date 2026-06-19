@@ -2,7 +2,7 @@
 /**
  * Multi-step booking: category → calendar → time → session → confirm.
  * Inline split layout: context / specialty (left) · calendar + slots (right).
- * This mock does not collect or persist clinical notes, documents, or PHI.
+ * This draft does not collect or persist clinical notes, documents, or PHI.
  */
 // BOOKING_FLOW_RESTORE_END
 
@@ -463,7 +463,7 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
           <li><strong>Appointment time:</strong> ${esc(displayTimeLabel(booking.timeStr))} (${durMin} min)</li>
           <li><strong>Join instructions:</strong> ${esc(joinInstructions)}</li>
         </ul>
-        <p class="muted">${tx('Crée une demande', 'Creates a', 'Crea una solicitud')} <code>pending</code> ${tx('via l’API (maquette) — sans notes cliniques dans cette appli.', 'via API (mock) — this app does not store clinical free text.', 'por API (maqueta) — sin notas clínicas en esta app.')}</p>
+        <p class="muted">${tx('Crée une demande', 'Creates a', 'Crea una solicitud')} <code>pending</code> ${tx('via l’API — sans notes cliniques dans cette interface publique.', 'via API — this public interface does not store clinical free text.', 'por API — sin notas clínicas en esta interfaz pública.')}</p>
         <form id="form-appt-booking" novalidate>
           <div class="booking-actions">
             <button type="button" class="btn btn--ghost" id="booking-back-5">${tx('Retour', 'Back', 'Atrás')}</button>
@@ -478,8 +478,8 @@ export function bookingWizardHtml(booking, esc, user, cmsServices) {
       <div class="booking-draft-badge" role="status">DRAFT</div>
       <h2 id="booking-wizard-title" class="booking-wizard__h">${tx('Prendre rendez-vous', 'Book a session', 'Reservar cita')}</h2>
       <p class="booking-wizard__sub">${tx(
-        'Colonne de gauche : contexte. Colonne de droite : calendrier, puis horaires, puis confirmation. Maquette seulement.',
-        'Left: context. Right: calendar, then time slots, then details and confirm. Mockup only.',
+        'Colonne de gauche : contexte. Colonne de droite : calendrier, horaires, puis confirmation. Aperçu du parcours.',
+        'Left: context. Right: calendar, time slots, details, then confirmation. Pathway preview.',
         'Columna izquierda: contexto. Derecha: calendario, horarios, confirmación. Solo maqueta.',
       )}</p>
       ${stepper}
